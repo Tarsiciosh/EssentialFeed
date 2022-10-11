@@ -1,18 +1,23 @@
 import XCTest
 
 class RemoteFeedLoader {
+    var client: HTTPClient
+    
+    init(client: HTTPClient) {
+        self.client = client
+    }
+    
     func load() {
-        HTTPClient.shared.get(from: URL(string: "http://a-url.com")!)
+        client.get(from: URL(string: "http://a-url.com")!)
     }
 }
 
-class HTTPClient {
-    static var shared = HTTPClient()
-    func get(from url: URL) {}
+protocol HTTPClient {
+    func get(from url: URL)
 }
 
 class HTTPClientSpy: HTTPClient {
-    override func get(from url: URL) {
+    func get(from url: URL) {
         requestedURL = url
     }
     var requestedURL: URL?
@@ -23,9 +28,7 @@ final class RemoteFeedLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
         let client = HTTPClientSpy()
-        HTTPClient.shared = client
-        
-        _ = RemoteFeedLoader()
+        _ = RemoteFeedLoader(client: client)
     
         XCTAssertNil(client.requestedURL)
     }
@@ -33,9 +36,7 @@ final class RemoteFeedLoaderTests: XCTestCase {
     func test_load_requestDataFromURL() {
         //ARRANGE (GIVEN)
         let client = HTTPClientSpy()
-        HTTPClient.shared = client
-        
-        let sut = RemoteFeedLoader()
+        let sut = RemoteFeedLoader(client: client)
         
         //ACT (WHEN)
         sut.load()
@@ -54,8 +55,15 @@ final class RemoteFeedLoaderTests: XCTestCase {
 To test using a singleton:
 
 1) make "shared" in the singleton class be a variable
-2) move the test logic form the RemoteFeedLoader to the HTTPClient (capturing the url after calling get)
-3) create a spy subclassing the singleton class with old things needed to the test and then change the singleton shared with the spy
-4) remove the private initializer to let the spy initialize
+2) move the test logic form the RemoteFeedLoader to the HTTPClient (capturing the url)
+3) to do that then we create a get method in the HTTPClient and capture the url there
+4) create a spy subclassing the singleton class with old things needed to the test and then change the singleton shared with the spy
+5) remove the private initializer to let the spy initialize
 
+ 
+To start removing the singleton
+1) inject the client into the RemoteFeedLoader (constructor injection)
+2) remove the shared instance of the singleton class
+3) transform the abstract class HTTPClient to a protocol
+4) then the spy instead of inheriting the HTTPClient it implements the HTTPClient protocol
 */
