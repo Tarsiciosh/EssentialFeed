@@ -1,25 +1,6 @@
 import XCTest
-
-class RemoteFeedLoader {
-    var client: HTTPClient
-    var url: URL
-    
-    init(url: URL, client: HTTPClient) {
-        self.client = client
-        self.url = url
-    }
-    
-    func load() {
-        client.get(from: url)
-    }
-}
-
-protocol HTTPClient {
-    func get(from url: URL)
-}
-
-
-
+//@testable import EssentialFeed -> can have acces to all of these files
+import EssentialFeed //test componenet only with public interfaces
 
 final class RemoteFeedLoaderTests: XCTestCase {
     
