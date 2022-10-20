@@ -40,11 +40,9 @@ final class RemoteFeedLoaderTests: XCTestCase {
         
         client.error = NSError(domain: "Test", code: 0)
         
-        var captureError: RemoteFeedLoader.Error?
-        sut.load { error in
-            captureError = error
-        }
-        XCTAssertEqual(captureError, .connectivity)
+        var captureErrors = [RemoteFeedLoader.Error]()
+        sut.load { captureErrors.append($0) }
+        XCTAssertEqual(captureErrors, [.connectivity])
     }
     
     //MARK: - Helpers
@@ -100,5 +98,7 @@ Check response:
 - add a completion block for the load function first only receiving an error
 - add a default completion block so the other test don't fail
 - create specific types of Error in theRemoteFeedLoader
+ 
+- create an array of errors and compare this array
 */
 
