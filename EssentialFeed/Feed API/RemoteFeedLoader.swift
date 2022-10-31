@@ -1,6 +1,6 @@
 import Foundation
 
-public final class RemoteFeedLoader {
+public final class RemoteFeedLoader: FeedLoader {
     private var url: URL
     private var client: HTTPClient
     
