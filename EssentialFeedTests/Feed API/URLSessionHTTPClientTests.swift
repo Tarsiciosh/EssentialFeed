@@ -1,7 +1,7 @@
 import XCTest
 import EssentialFeed
 
-class URLSessionHTTPClient {
+class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
     init(session: URLSession = .shared) { //CONSTRUCTOR INJECTION
@@ -53,10 +53,10 @@ final class URLSessionHTTPClientTests: XCTestCase {
     func test_getFromURL_failsOnRequestError() {
         let requesError = anyNSError()
         
-        let receivedError = resultErrorFor(data: nil, response: nil, error: requesError) as? NSError
+        let receivedError = resultErrorFor(data: nil, response: nil, error: requesError)! as NSError
         
-        XCTAssertEqual(receivedError!.domain, requesError.domain)
-        XCTAssertEqual(receivedError!.code, requesError.code)
+        XCTAssertEqual(receivedError.domain, requesError.domain)
+        XCTAssertEqual(receivedError.code, requesError.code)
     }
     
     func test_getFromURL_failsOnAllInvalidRepresentationCases() {
@@ -70,7 +70,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHTTPURLResponse(), error: nil))
     }
     
-    func test_getFromURL_suceedsOnHTTPURLResponseWithData() {
+    func test_getFromURL_succeedsOnHTTPURLResponseWithData() {
         let data = anyData()
         let response = anyHTTPURLResponse()
         
@@ -81,7 +81,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
     }
     
-    func test_getFromURL_suceedsWithEmptyDataOnHTTPURLResponseWithNilData() {
+    func test_getFromURL_succeedsWithEmptyDataOnHTTPURLResponseWithNilData() {
         let response = anyHTTPURLResponse()
         
         let receivedValues = resultValuesFor(data: nil, response: response, error: nil)
@@ -94,16 +94,13 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
     
-    private func resultValuesFor(
-        data: Data?,
-        response: URLResponse?,
-        error: Error?,
+    private func resultValuesFor(data: Data?, response: URLResponse?, error: Error?,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (data: Data, response: HTTPURLResponse)? {
@@ -118,10 +115,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private func resultErrorFor(
-        data: Data?,
-        response: URLResponse?,
-        error: Error?,
+    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> Error? {
@@ -136,10 +130,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private func resultFor(
-        data: Data?,
-        response: URLResponse?,
-        error: Error?,
+    private func resultFor(data: Data?, response: URLResponse?, error: Error?,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> HTTPClientResult {
