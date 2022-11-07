@@ -257,10 +257,14 @@ Check response:
  
  
  
+ 
 - TEST IMPROVEMENTS
  
  EssentialFeed -> edit scheme -> Test -> Options (EssentialFeedTests) -> Randomize execution order
  EssentialFeed -> edit scheme -> Test -> Options (top Tab) -> gather converage for: EssentialFeed
+ 
+ Add a new target to the project:
+ EssentialFeed -> + button -> Unit test bundle -> EssentialFeedEndToEndTests
  
 */
 
