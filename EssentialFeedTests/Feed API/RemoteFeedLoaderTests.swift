@@ -256,5 +256,10 @@ Check response:
  ****
  
  
+ 
+- TEST IMPROVEMENTS
+ 
+ EssentialFeed -> edit scheme -> Test -> Options (EssentialFeedTests) -> Randomize execution order
+ 
 */
 
