@@ -261,12 +261,15 @@ Check response:
 - TEST IMPROVEMENTS
  
  EssentialFeed -> edit scheme -> Test -> Options (EssentialFeedTests) -> Randomize execution order
- EssentialFeed -> edit scheme -> Test -> Options (top Tab) -> gather converage for: EssentialFeed
+ EssentialFeed -> edit scheme -> Test -> Options (top Tab) -> gather coverage for: EssentialFeed
  
  Add a new target to the project:
  EssentialFeed -> + button -> Unit test bundle -> EssentialFeedEndToEndTests
  
  select the trackForMemoryLeaks file and Target membership to EssentialFeedEndToEndTests
+ 
+ create a new scheme (from scheme right click) -> CI
+ edit CI scheme -> test -> info -> add EssentialFeedAPIEndToEndTests and EssentialFeedTests (add randomize execution order and gather covergare for: EssentialFeed)
  
 */
 
