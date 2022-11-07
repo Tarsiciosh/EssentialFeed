@@ -1,0 +1,11 @@
+version: "Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)"
+options: "7df1fa5b9846228b7a30a3dcb0f120d3aec846b5353734ae61f2f819758a5863"
+build_start_time: [1667859799, 661417007]
+build_end_time: [1667859811, 280702114]
+inputs:
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed API/FeedItemsMapper.swift": [1667248598, 754813909]
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed API/HTTPClient.swift": [1666986276, 182359933]
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed API/RemoteFeedLoader.swift": [1667248598, 770168066]
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed API/URLSessionHTTPClient.swift": [1667603657, 48643589]
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed Feature/FeedItem.swift": [1666982891, 58461904]
+  "/Users/tar/github/EssentialFeed/EssentialFeed/Feed Feature/FeedLoader.swift": [1667248987, 748789787]

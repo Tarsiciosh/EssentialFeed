@@ -1,0 +1,14 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/tar/github/EssentialFeed/build/Release/EssentialFeed.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/tar/github/EssentialFeed/build/EssentialFeed.build/Release/EssentialFeed.build/unextended-module.modulemap",
+    }]
+  }]
+}
