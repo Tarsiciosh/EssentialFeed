@@ -260,6 +260,7 @@ Check response:
 - TEST IMPROVEMENTS
  
  EssentialFeed -> edit scheme -> Test -> Options (EssentialFeedTests) -> Randomize execution order
+ EssentialFeed -> edit scheme -> Test -> Options (top Tab) -> gather converage for: EssentialFeed
  
 */
 
