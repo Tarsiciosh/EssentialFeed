@@ -266,5 +266,7 @@ Check response:
  Add a new target to the project:
  EssentialFeed -> + button -> Unit test bundle -> EssentialFeedEndToEndTests
  
+ select the trackForMemoryLeaks file and Target membership to EssentialFeedEndToEndTests
+ 
 */
 
