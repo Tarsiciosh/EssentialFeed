@@ -271,5 +271,10 @@ Check response:
  create a new scheme (from scheme right click) -> CI
  edit CI scheme -> test -> info -> add EssentialFeedAPIEndToEndTests and EssentialFeedTests (add randomize execution order and gather covergare for: EssentialFeed)
  
+ 
+ - THREAD SANITIZER
+ 
+ EssentialFeed -> edit scheme -> Run -> Diagnostics -> Thread Sanitizer
+ 
 */
 
