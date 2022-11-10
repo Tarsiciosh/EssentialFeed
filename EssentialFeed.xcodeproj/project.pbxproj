@@ -55,6 +55,7 @@
 		57DCAA3028F0BFAA00EEFCAF /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		57DCAA3228F0C03100EEFCAF /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 		57DCAA5028F61D9000EEFCAF /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
+		57EABE90291D9BDB002BEBDB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +125,7 @@
 		57DCAA0E28F0BF7C00EEFCAF = {
 			isa = PBXGroup;
 			children = (
+				57EABE90291D9BDB002BEBDB /* README.md */,
 				57DCAA1A28F0BF7C00EEFCAF /* EssentialFeed */,
 				57DCAA2428F0BF7C00EEFCAF /* EssentialFeedTests */,
 				571EB53929199CA60042BAA4 /* EssentialFeedEndToEndTests */,
