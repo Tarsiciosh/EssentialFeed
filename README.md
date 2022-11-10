@@ -69,6 +69,7 @@ Check response:
 
 ### 1) URLCache as a Persistence Alternative & Solving The Infamous “But it works on my machine!” Caching Problem
 
+#### code to demostrate some options:
 ``` swift 
 let cache = URLCache(memoryCapacity: 10 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, directory: nil)
 let configuration = URLSessionConfiguration.default
@@ -78,9 +79,6 @@ configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
 
 let session = URLSession(configuration: configuration)
 
-
 let url = URL(string: "http://a-url")!
 let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeoutInterval: 30) 
 ```
-
-
