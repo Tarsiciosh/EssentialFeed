@@ -276,5 +276,8 @@ Check response:
  
  EssentialFeed -> edit scheme -> Run -> Diagnostics -> Thread Sanitizer
  
+ at the end we leave it in the CI scheme to avoid CPU usage
+ 
+ add runtime issue breakpoint
 */
 
