@@ -2,6 +2,7 @@ import XCTest
 import EssentialFeed
 
 final class EssentialFeedEndToEndTests: XCTestCase {
+    
     func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
         switch getFeedResult() {
         case let .success(items)?:
@@ -16,7 +17,7 @@ final class EssentialFeedEndToEndTests: XCTestCase {
             XCTAssertEqual(items[7], expectedItem(at: 7))
             
         case let .failure(error)?:
-            XCTFail("Expected successful feed result, but got \(error) instead")
+            XCTFail("Expected successful feed result, but got \(error) error instead")
         
         default:
             XCTFail("Expected successful feed result, got no result instead")
@@ -27,7 +28,7 @@ final class EssentialFeedEndToEndTests: XCTestCase {
     
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> LoadFeedResult? {
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
-        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let loader = RemoteFeedLoader(url: testServerURL, client: client)
         
         trackForMemoryLeaks(client, file: file, line: line)
