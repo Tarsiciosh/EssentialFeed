@@ -2,7 +2,7 @@ import XCTest
 //@testable import EssentialFeed -> can have acces to all of these files
 import EssentialFeed //test componenet only with public interfaces
 
-final class RemoteFeedLoaderTests: XCTestCase {
+final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()

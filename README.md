@@ -82,3 +82,11 @@ let session = URLSession(configuration: configuration)
 let url = URL(string: "http://a-url")!
 let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeoutInterval: 30) 
 ```
+####cache folder
+```
+/Users/{your-user-name}/Library/Caches/com.apple.dt.xctest.tool
+```
+### 2) Clarifying Requirements, Enhancing Cross-Team Domain Knowledge, and Iterative vs. Big Upfront Design
+
+- narrative 
+- use cases
