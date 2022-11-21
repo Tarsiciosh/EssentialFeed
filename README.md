@@ -97,5 +97,5 @@ let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeou
 #### there is going to be an intermediate object (LocalFeedLoader - sut) that will have a store (FeedStore) to communicate to the actual framework responsible of storing the data (could be a db, file system etc.)
 
 #### 1. the localFeedLoader (sut) does not invoke the delete command to the store upon creation (deleteChaedFeedCallCount = 0)
-#### 2. save command on sut request cache deletion (save command receives also the items to be saved) (create helper methods for the items) 
-#### 3. 
+#### 2. save command on sut requests cache deletion (save command receives also the items to be saved - create helper methods for the items uniqueItems) 
+#### 3. create the helper method makeSUT that returns the sut and the store as a named tuple
