@@ -90,3 +90,11 @@ let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeou
 
 - narrative 
 - use cases
+
+
+### 3) Decoupling Use-Case Business Logic From Framework Details + Controlling Time + Multi-Method Abstractions Following The Interface Segregation and Single Responsibility Principles
+
+#### there is going to be an intermediate object (LocalFeedLoader - sut) that will have a store (FeedStore) to communicate to the actual framework responsible of storing the data (could be a db, file system etc.)
+
+#### 1. the localFeedLoader (sut) does not invoke the delete command to the store upon creation (deleteChaedFeedCallCount = 0)
+#### 2.  
