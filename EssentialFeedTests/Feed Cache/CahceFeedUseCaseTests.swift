@@ -26,7 +26,7 @@ protocol FeedStore {
     typealias InsertionCompletion = (Error?) -> Void
     
     func deleteCacheFeed(completion: @escaping DeletionCompletion)
-    func insert (_ items: [FeedItem], timestamp: Date, completion: @escaping (Error?) -> Void)
+    func insert (_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
 }
 
 final class CahceFeedUseCaseTests: XCTestCase {
