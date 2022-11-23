@@ -99,4 +99,11 @@ let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeou
 #### the localFeedLoader (sut) does not invoke the delete command to the store upon creation (deleteChaedFeedCallCount = 0)
 #### save command on sut requests cache deletion (save command receives also the items to be saved - create helper methods for the items uniqueItems) 
 #### create the helper method makeSUT that returns the sut and the store as a named tuple
-#### save commmand does not request insert command if deletion error ocurred (after we save we tell the store to complete the deletion command with an error - completeDeletion(with error: Error, at index: Int = 0)  
+#### save commmand does not request insert command if deletion error ocurred (after we save we tell the store to complete the deletion command with an error - completeDeletion(with error: Error, at index: Int = 0) (only create the function and run the test)
+#### save command requests New Cache Insertion On Successful Deletion: 
+
+only create the funtion completeDeletionSuccessfully first then add the completion block to the deleteCacheFeed. Modify the FeedStore logic to capture these completions blocks and then update the completeDeletion(with: error) and completeDeletionSuccessfully. Then implement the insert command that only increments the insertCallCount. 
+
+
+
+
