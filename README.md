@@ -137,7 +137,8 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - completes insertion with error
 - add weak 
 (guarantee that the `LocalFeedLoader` does not deliver insertion error after instance has been deallocated)
-- refactor code to return if error inmediatelly - change name cacheDeletionError
+- refactor code to return if error immediatelly - change name cacheDeletionError
+
 (extract cache insertion into helper function to make logic inside closure callbacks easier to follow)
 
 (move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production)
