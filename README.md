@@ -140,8 +140,9 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - refactor code to return if error immediatelly - change name cacheDeletionError
 (invert if logic to make code paths easier to follow)
 - create and use cache(items, with: completion)
-(extract cache insertion into helper function to make logic inside closure callbacks easier to follow)
-
+(extract cache insertion into a helper function to make logic inside closure callbacks easier to follow)
+- move to `Feed Cache` folder
+- make it public - only the needed parts
 (move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production)
 (move `FeedStore` to its own file)
 (add SaveResult type alias to protect code from potential breaking changes)
