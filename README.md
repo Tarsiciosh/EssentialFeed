@@ -93,14 +93,22 @@ let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeou
 
 
 ### 3) Decoupling Use-Case Business Logic From Framework Details + Controlling Time + Multi-Method Abstractions Following The Interface Segregation and Single Responsibility Principles
+```
+there is going to be an intermediate object (LocalFeedLoader - sut) that will have a store (FeedStore) to communicate to the actual framework responsible of storing the data (could be a db, file system etc.)
 
-#### there is going to be an intermediate object (LocalFeedLoader - sut) that will have a store (FeedStore) to communicate to the actual framework responsible of storing the data (could be a db, file system etc.)
+T: the localFeedLoader (sut) does not invoke the delete command to the store upon creation (deleteChaedFeedCallCount = 0)
 
-#### the localFeedLoader (sut) does not invoke the delete command to the store upon creation (deleteChaedFeedCallCount = 0)
-#### save command on sut requests cache deletion (save command receives also the items to be saved - create helper methods for the items uniqueItems) 
-#### create the helper method makeSUT that returns the sut and the store as a named tuple
-#### save commmand does not request insert command if deletion error ocurred (after we save we tell the store to complete the deletion command with an error - completeDeletion(with error: Error, at index: Int = 0) (only create the function and run the test)
-#### save command requests New Cache Insertion On Successful Deletion: create the funtion completeDeletionSuccessfully first then add the completion block to the deleteCacheFeed. Modify the FeedStore logic to capture these completions blocks and then update the completeDeletion(with: error) and completeDeletionSuccessfully. Then implement the insert command that only increments the insertCallCount. 
+T: save command on sut requests cache deletion (save command receives also the items to be saved - create helper methods for the items uniqueItems) 
+
+create the helper method makeSUT that returns the sut and the store as a named tuple
+
+T: save commmand does not request insert command if deletion error ocurred (after we save we tell the store to complete the deletion command with an error - completeDeletion(with error: Error, at index: Int = 0) (only create the function and run the test)
+
+T: save command requests New Cache Insertion On Successful Deletion: 
+- create the funtion completeDeletionSuccessfully
+- add the completion block to the deleteCacheFeed. 
+- modify the FeedStore logic to capture these completions blocks and then update the completeDeletion(with: error) and completeDeletionSuccessfully. 
+- implement the insert command that only increments the insertCallCount. 
 
 #### save command requests New Cache Insertion With Time Stamp On Successful Deletion: make the currentDate be a dependency of the LocalFeedLoader. It is a closure that returns a Date. modify the tests to check the store insertions (not implemented) count to be 1, the items of the first element to be the passed items and the timestamp of the firt element to be the passed timestamp. remove previous test because it is redundant now. delete also the deleteCallCount. create the recevedMessages (private set) to store the receive message (ReceiveMessage enum) 
 
@@ -109,3 +117,33 @@ let request = URLRequest(url: url, cachePolicy: .returnCacheDataDontLoad, timeou
 #### save commands fails On Insertion Error. create the test with insertionError, completes deletion successfully and completes insertions with error. create the insertionsCompletions in the FeedStore to hold the completions then use new created completeInsertion(with:error) in the test. we can use the save completion to pass it to the insert completion because the both have the same signature.
 
 #### test_save_succeedsOnSuccessfulCacheInsertion: add completeInsertionsSuccessfully to the store and make the test pass  
+```
+
+### 4) Proper Memory-Management of Captured References Within Deeply Nested Closures + Identifying Highly-Coupled Modules
+```
+T) test_save_DoesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated
+- create a store and a sut
+- inovoke save and capture the results in an array (receiveResults)
+- deallocate sut
+- completes deletion with error
+- check for emptyness in the array
+- change unknown to weak 
+(guarantee that the `LocalFeedLoader` does not deliver deletion error after instance has been dallocated)
+
+T) 
+- repeat the same tests but with the insertion
+- completes deletion succesfully 
+- dallocat sut 
+- completes insertion with error
+- add weak 
+- refactor code to return if error inmediatelly - change name cacheDeletionError
+(extract cache insertion into helper function to make logic inside closure callbacks easier to follow)
+
+(move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production)
+(move `FeedStore` to its own file)
+(add SaveResult type alias to protect code from potential breaking changes)
+
+
+T)
+- 
+```
