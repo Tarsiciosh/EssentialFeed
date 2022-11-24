@@ -130,12 +130,13 @@ T) test_save_DoesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated
 - change unknown to weak 
 (guarantee that the `LocalFeedLoader` does not deliver deletion error after instance has been dallocated)
 
-T) 
+T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - repeat the same tests but with the insertion
 - completes deletion succesfully 
 - dallocat sut 
 - completes insertion with error
 - add weak 
+(guarantee that the `LocalFeedLoader` does not deliver insertion error after instance has been deallocated)
 - refactor code to return if error inmediatelly - change name cacheDeletionError
 (extract cache insertion into helper function to make logic inside closure callbacks easier to follow)
 
