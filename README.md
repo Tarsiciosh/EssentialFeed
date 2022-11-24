@@ -145,6 +145,7 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - make it public - only the needed parts
 (move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production)
 (move `FeedStore` to its own file)
+- create SaveResult type in LocalFeedLoader
 (add SaveResult type alias to protect code from potential breaking changes)
 
 
