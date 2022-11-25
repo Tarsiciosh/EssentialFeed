@@ -159,7 +159,7 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - create a uniqueItems funtion that return both models and local representation of the items as a named tuple
 - replace all tests with this new helper
 [simplify test setup and assertions with a factory helper method]
-- remove the RemoteFeedItem from the FeedItemsMapper class to the root of the file 
+- remove the RemoteFeedItem from the FeedItemsMapper class to the root of the filemake it internal implicitly - remove computed property converter
 - make the mapper response with RemoteFeedItems or throws the error (RemoteFeedLoader.Error.invalidData)
 - the RemoteFeedLoader nows try to get the items and completes with error if an error ocurr 
 - if it get the items it convert them to FeedItems (private extension on array toModels() ) 
