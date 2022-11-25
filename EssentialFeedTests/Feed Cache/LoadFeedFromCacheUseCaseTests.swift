@@ -4,7 +4,7 @@ import EssentialFeed
 final class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_init_doesNotRequestDataFromURL() {
         let (_, store) = makeSUT()
-        XCTAssertEqual(store.receiveMessages, [])
+        XCTAssertEqual(store.receivedMessages, [])
     }
     
     //MARK: - Helpers

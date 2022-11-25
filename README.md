@@ -185,7 +185,7 @@ T) test_init_doesNotRequestDataFromURL
 T) test_load_requestCacheRetrieval 
 - create a sut and a store 
 - execute the load command on the sut
-- compare the recievedMessages with the .retrieve message 
+- compare the receivedMessages with the .retrieve message 
 - add the retrieve command to the store (FeedStore)
 - catch the command by the spy (FeedStoreSpy)
 [load command requests cache retrieval]
