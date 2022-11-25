@@ -191,10 +191,10 @@ T) test_load_requestsCacheRetrieval
 [load command requests cache retrieval]
 T) test_load_failsOnRetrievalError 
 - copy the setup
-- capture the error received in a closure (not available yet) into a receiveError variable (Error?)
-- add and expectattion since it is asynchronous code ("Wait for load completion")
+- capture the error received in a closure (not available yet) into a receivedError variable (Error?)
+- add and expectation since it is asynchronous code ("Wait for load completion")
 - ask the store to complete with a retrievalError (completeRetrieval with:)
-- add retrievalCompletions etc ..
+- add retrievalCompletions etc .. as NSError? (completion: completion)
 [load command fails on retrieval error]
 T) test_load_deliversNoImagesOnEmptyCache
 - copy the setup
