@@ -170,6 +170,65 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - rename LocalFeedItems to LocalFeedImage (and imageURL to url)
 - rename FeedItem to FeedImage (and imageURL to url)
 - search for 'item'
-- renames item to image feed (unique initializers, end to end tests ) 
+- renames item to image feed (unique initializers, end to end tests etc, also seraching for names of the functions) 
 [remove references of `Items` in favor of `Images` which is a domain term used by domain experts in the specs]
+```
+
+### 6) Performing Calendrical Calculations Correctly, Dealing With Coincidental Duplication While Respecting the DRY Principle, Decoupling Tests From Implementation With Tiny DSLs, and Test Triangulation to Increase Coverage & Confidence
+```
+- create test LoadFeedFromCacheUseCaseTests
+T) test_init_doesNotRequestDataFromURL
+- copy makeSUT and FeedStoreSpy to this test (helpers) 
+[LocalFeedLoader does not message store upon creation (before loading the feed from the cache store)]
+- move the FeedStoreSpy to the Helpers folder (remove private)
+[extract `FeedStoreSpy` into a shared scope to remove duplication]
+T) test_load_requestCacheRetrieval 
+- create a sut and a store 
+- execute the load command on the sut
+- compare the recievedMessages with the .retrieve message 
+- add the retrieve command to the store (FeedStore)
+- catch the command by the spy (FeedStoreSpy)
+[load command requests cache retrieval]
+T) test_load_failsOnRetrievalError 
+- copy the setup
+- capture the error received in a closure (not available yet) into a receiveError variable (Error?)
+- add and expectattion since it is asynchronous code ("Wait for load completion")
+- ask the store to complete with a retrievalError (completeRetrieval with:)
+- add retrievalCompletions etc ..
+[load command fails on retrieval error]
+T) test_load_deliversNoImagesOnEmptyCache
+- copy the setup
+- capture the receiveImages in the closure (use LoadFeedResult)
+- create typeAlias LoadResult in LocalFeedLoader
+- change the previous test 
+- default: XCTFail ("Expected failure, got \(result) instead"
+[replace load command completion to return a result type rather than an option error]
+- ask the store to complete with an emtpy cache (completeRetrievalWithEmptyCache)
+[load command delivers no images on empty cache]
+- create the expect function 
+- use the switch (receivedResult, expectedResult)
+- pass the file and line 
+[extract duplicate test code into a shared helper method]
+T) test_load_deliversCachedImagesOnLessThanSevenDaysOldCache
+- coppy setup
+- ask the store to complete with a feed (completeRetrieval with: timestap:)
+- add extension to Date to add 7 days and extract one second using calendar (adding days:, adding seconds:)
+- calendar.date(byAdding:value:to) (identifier gregorian)
+- use the fixedCurrentDate
+- add completeRetrieval with feed: timestap: to spy 
+- create RetrieveCahedFeedResult (empty, found, failure) in the FeedStore protocol file
+- fix the load func in local (LocalFeedLoader)
+- add converion to models  
+[load command delivers cached images on less than seven days old cache] 
+T) test_load_deliversNoImagesOnSevenDaysOldCache
+- copy the setup
+- add a where clause to the found case validate(timestap) - use the calendar 
+- calendar.date(byAdding:value:to)
+[load command delivers no images on seven day old cache]
+- create a private property for the calendar
+- create maxCacheAgeInDays 
+[extract local members into properties]
+T) test_load_deliversNoImagesOnMoreThanSevenDaysOldCache
+- moreThanSevenDaysOldTimestamp 
+[load command delivers no images on more than seven days old cache]
 ```
