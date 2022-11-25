@@ -182,11 +182,11 @@ T) test_init_doesNotRequestDataFromURL
 [LocalFeedLoader does not message store upon creation (before loading the feed from the cache store)]
 - move the FeedStoreSpy to the Helpers folder (remove private)
 [extract `FeedStoreSpy` into a shared scope to remove duplication]
-T) test_load_requestCacheRetrieval 
+T) test_load_requestsCacheRetrieval 
 - create a sut and a store 
-- execute the load command on the sut
+- execute the load command on the sut (add it to the local)
 - compare the receivedMessages with the .retrieve message 
-- add the retrieve command to the store (FeedStore)
+- add the retrieve command to store (FeedStore)
 - catch the command by the spy (FeedStoreSpy)
 [load command requests cache retrieval]
 T) test_load_failsOnRetrievalError 
