@@ -164,7 +164,7 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - the RemoteFeedLoader nows try to get the items and completes with error if an error ocurr 
 - if it get the items it convert them to FeedItems (private extension on array toModels() ) 
 - create a helper private static func map(_ data: Data, from response: HTTPURLResponse) -> Result
-[add `RemoteDeedItem` data transfer representation to decouple the items mapper from `FeedItem` data models]
+[add `RemoteFeedItem` data transfer representation to decouple the items mapper from `FeedItem` data models]
 [move `RemoteFeedItem` to its own file]
 [move `LocalFeedItem` to its own file] 
 - rename LocalFeedItems to LocalFeedImage (and imageURL to url)
