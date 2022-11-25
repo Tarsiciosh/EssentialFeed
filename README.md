@@ -128,7 +128,7 @@ T) test_save_DoesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated
 - completes deletion with error
 - check for emptyness in the array
 - change unknown to weak 
-(guarantee that the `LocalFeedLoader` does not deliver deletion error after instance has been dallocated)
+[guarantee that the `LocalFeedLoader` does not deliver deletion error after instance has been dallocated]
 
 T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - repeat the same tests but with the insertion
@@ -136,19 +136,40 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - dallocat sut 
 - completes insertion with error
 - add weak 
-(guarantee that the `LocalFeedLoader` does not deliver insertion error after instance has been deallocated)
+[guarantee that the `LocalFeedLoader` does not deliver insertion error after instance has been deallocated]
 - refactor code to return if error immediatelly - change name cacheDeletionError
-(invert if logic to make code paths easier to follow)
+[invert if logic to make code paths easier to follow]
 - create and use cache(items, with: completion)
-(extract cache insertion into a helper function to make logic inside closure callbacks easier to follow)
+[extract cache insertion into a helper function to make logic inside closure callbacks easier to follow]
 - move to `Feed Cache` folder
 - make it public - only the needed parts
-(move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production)
-(move `FeedStore` to its own file)
+[move `LocalFeedLoader` (and `FeedStore` collaborator) to its own file in production]
+[move `FeedStore` to its own file]
 - create SaveResult type in LocalFeedLoader
-(add SaveResult type alias to protect code from potential breaking changes)
+[add SaveResult type alias to protect code from potential breaking changes]
+```
 
-
-T)
-- 
+### 5) Visualizing and Solving High-Coupling Issues by Decentralizing Components Using Data Transfer Model Representations
+```
+- the FeedStore creates an own LocalFeedItem and use it in the insert command
+- the LocalFeedLoader creates a private extension of Array to map the FeedItems into LocalFeedItems
+- fix the test code
+- make the map of the items also in the tests
+[add `LocalFeedItem` data transfer representation to decouple storage frameworks from `FeedItem` data models]
+- create a uniqueItems funtion that return both models and local representation of the items as a named tuple
+- replace all tests with this new helper
+[simplify test setup and assertions with a factory helper method]
+- remove the RemoteFeedItem from the FeedItemsMapper class to the root of the file 
+- make the mapper response with RemoteFeedItems or throws the error (RemoteFeedLoader.Error.invalidData)
+- the RemoteFeedLoader nows try to get the items and completes with error if an error ocurr 
+- if it get the items it convert them to FeedItems (private extension on array toModels() ) 
+- create a helper private static func map(_ data: Data, from response: HTTPURLResponse) -> Result
+[add `RemoteDeedItem` data transfer representation to decouple the items mapper from `FeedItem` data models]
+[move `RemoteFeedItem` to its own file]
+[move `LocalFeedItem` to its own file] 
+- rename LocalFeedItems to LocalFeedImage (and imageURL to url)
+- rename FeedItem to FeedImage (and imageURL to url)
+- search for 'item'
+- renames item to image feed 
+[remove references of `Items` in favor of `Images` which is a domain term used by domain experts in the specs]
 ```
