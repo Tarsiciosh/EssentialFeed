@@ -170,6 +170,6 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 - rename LocalFeedItems to LocalFeedImage (and imageURL to url)
 - rename FeedItem to FeedImage (and imageURL to url)
 - search for 'item'
-- renames item to image feed 
+- renames item to image feed (unique initializers, end to end tests ) 
 [remove references of `Items` in favor of `Images` which is a domain term used by domain experts in the specs]
 ```
