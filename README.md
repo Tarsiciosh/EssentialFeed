@@ -224,8 +224,9 @@ T) test_load_deliversCachedImagesOnLessThanSevenDaysOldCache
 [load command delivers cached images on less than seven days old cache] 
 T) test_load_deliversNoImagesOnSevenDaysOldCache
 - copy the setup
-- add a where clause to the found case validate(timestap) - use the calendar 
+- add a where clause to the found case validate(timestamp) - use the calendar 
 - calendar.date(byAdding:value:to)
+- add a guard let to prevent crashing the app (production code)
 [load command delivers no images on seven day old cache]
 - create a private property for the calendar
 - create maxCacheAgeInDays 
