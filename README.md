@@ -212,14 +212,15 @@ T) test_load_deliversNoImagesOnEmptyCache
 [extract duplicate test code into a shared helper method]
 T) test_load_deliversCachedImagesOnLessThanSevenDaysOldCache
 - coppy setup
-- ask the store to complete with a feed (completeRetrieval with: timestap:)
-- add extension to Date to add 7 days and extract one second using calendar (adding days:, adding seconds:)
+- ask the store to complete with a feed (completeRetrieval with: localFeed, timestap: lessThanSevenDaysOldTimestamp)
+- add extension to Date to add 7 days and extract one second using calendar adding(days:7).adding(seconds:-1)
 - calendar.date(byAdding:value:to) (identifier gregorian)
-- use the fixedCurrentDate
+- use the fixedCurrentDate (every time the production code ask for the current date we return the same fixed date)
 - add completeRetrieval with feed: timestap: to spy 
 - create RetrieveCahedFeedResult (empty, found, failure) in the FeedStore protocol file
+- fix the spy 
 - fix the load func in local (LocalFeedLoader)
-- add converion to models  
+- add conversion toModels  
 [load command delivers cached images on less than seven days old cache] 
 T) test_load_deliversNoImagesOnSevenDaysOldCache
 - copy the setup
