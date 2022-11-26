@@ -198,9 +198,10 @@ T) test_load_failsOnRetrievalError
 [load command fails on retrieval error]
 T) test_load_deliversNoImagesOnEmptyCache
 - copy the setup
-- capture the receiveImages in the closure (use LoadFeedResult)
+- capture the receivedImages in the closure (use LoadFeedResult)
+- change completion closure signature to match this 
 - create typeAlias LoadResult in LocalFeedLoader
-- change the previous test 
+- change the previous test commenting the current one
 - default: XCTFail ("Expected failure, got \(result) instead"
 [replace load command completion to return a result type rather than an option error]
 - ask the store to complete with an emtpy cache (completeRetrievalWithEmptyCache)
