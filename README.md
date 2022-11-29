@@ -274,4 +274,38 @@ T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 T) test_init_doesNotMessageStoreUponCreation
 - copy makeSUT
 [LocalFeedLoader does not message store upon creation (before validating the cached feed)]
+- change test_load_(hasNoSideEffectes)deletesCacheOnRetrievalError
+- .retrieve only 
+- fix the code
+T) test_validateCache_deletesCacheOnRetrievalError
+- call validateCache on sut 
+- create the validateCache with the minimum to make the test pass
+[extract cache deletion side-effect from retrieval error from `load` method to the `validateCache` method]
+- change test_load_(hasNoSideEffects)DoesNotdeleteCacheOnEmptyCache
+- .retrieve only
+T) test_validateCache_doesNotDeleteCacheOnEmptyCache
+- change validateCache logic
+[validate cache command does not delete cache when cache is already empty]
+- change test_load_(hasNoSideEffects)DoesNotDeleteCacheOnLessThanSevenDaysOldCache
+T) test_validateCacheDoesNotDeleteLessThanSevenDaysOldCache
+[validate cache command does not delete less than seven days old cache]
+- create the FeedCacheTestHelpers 
+- create SharedTestHelpers
+[extract duplicate helpers into a shared scope]
+- change test_load_(hasNoSideEffects)deletesCacheOnSevenDaysOldCache
+- change test_load_(hasNoSideEffects)deletesCacheOnMoreThanSevenDaysOldCache
+T) test_validateCache_deletesSevenDaysOldCache
+T) test_validateCache_seletesMoreThanSevenDaysOldCache
+add case found with no cache where not valid
+[extract cache deletion side-effects on expired cache from the `load` method to the `validateCache` method]
+T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocated
+- complete retrieval with an error
+[validate cache command does not delete invalid cache after instance has been deallocated]
+- conbine found and empty cases 
+[group cases to remove duplication]
+- create extesion for the methods in LocalFeedLoader - func cache 
+[segment functionality into extensions]
+- make LocalFeedLoader conform to FeedLoader
+[make LocalFeedLoader conform to FeedLoader]
+[move typealiases to appropiate segments ]
 ```
