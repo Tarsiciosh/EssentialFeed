@@ -249,7 +249,7 @@ T) test_load_DoesNotdeleteCacheOnEmptyCache
 [load command does not delete cache when cache is already empty]
 T) test_DoesNotDeleteCacheOnLessThanSevenDaysOldCache
 - get the setup from the other test
-- complete retrieval with feeed and timestamp
+- complete retrieval with feeed and less that seven day old timestamp
 [load command does not delete less than seven days old cache]
 T) test_load_deletesCacheOnSevenDaysOldCache
 - copy setup 
