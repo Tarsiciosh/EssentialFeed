@@ -243,8 +243,8 @@ T) test_load_deletesCacheOnRetrievalError
 - invoke load on sut 
 - completes retrieval with an error 
 - assert messeges received .retrieve .deleteCacheFeed
-[deletes cahce on retrival error]
-T) test_load_DoesNotdeleteCacheOnRetrievalError
+[deletes cache on retrieval error]
+T) test_load_DoesNotdeleteCacheOnEmptyCache
 - only .retrieve
 [load command does not delete cache when cache is already empty]
 T) test_DoesNotDeleteCacheOnLessThanSevenDaysOldCache
