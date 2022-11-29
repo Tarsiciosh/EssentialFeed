@@ -177,7 +177,7 @@ T) test_save_DoesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated
 ### 6) Performing Calendrical Calculations Correctly, Dealing With Coincidental Duplication While Respecting the DRY Principle, Decoupling Tests From Implementation With Tiny DSLs, and Test Triangulation to Increase Coverage & Confidence
 ```
 - create test LoadFeedFromCacheUseCaseTests
-T) test_init_doesNotRequestDataFromURL
+T) test_init_doesNotMessageStoreUponCreation
 - copy makeSUT and FeedStoreSpy to this test (helpers) 
 [LocalFeedLoader does not message store upon creation (before loading the feed from the cache store)]
 - move the FeedStoreSpy to the Helpers folder (remove private)
@@ -266,4 +266,10 @@ T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - expect empty receivedResults
 - fix failing test
 [load command does not deliver a load result after the instance has been deallocated to prevent unexpected behaviours in client's code]
+```
+
+### Separating Queries & Side-effects for Simplicity and Reusability, Choosing Between Enum Switching Strategies, and Differentiating App-Specific from App-Agnostic Logic
+```
+- create test ValidateFeedCacheUseCaseTests 
+T) test_
 ```
