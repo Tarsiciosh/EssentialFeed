@@ -289,8 +289,8 @@ T) test_validateCache_doesNotDeleteCacheOnEmptyCache
 - change test_load_(hasNoSideEffects)DoesNotDeleteCacheOnLessThanSevenDaysOldCache
 T) test_validateCacheDoesNotDeleteLessThanSevenDaysOldCache
 [validate cache command does not delete less than seven days old cache]
-- create the FeedCacheTestHelpers 
-- create SharedTestHelpers
+- create the FeedCache/Helpers/FeedCacheTestHelpers
+- create Helpers/SharedTestHelpers (anyNSError)
 [extract duplicate helpers into a shared scope]
 - change test_load_(hasNoSideEffects)deletesCacheOnSevenDaysOldCache
 - change test_load_(hasNoSideEffects)deletesCacheOnMoreThanSevenDaysOldCache
