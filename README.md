@@ -302,7 +302,7 @@ T) test_validateCache_deletesMoreThanSevenDaysOldCache
 T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocated
 - complete retrieval with an error
 [validate cache command does not delete invalid cache after instance has been deallocated]
-- conbine found and empty cases 
+- combine found and empty cases 
 [group cases to remove duplication]
 - create extesion for the methods in LocalFeedLoader - func cache 
 [segment functionality into extensions]
