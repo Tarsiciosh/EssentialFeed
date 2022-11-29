@@ -260,7 +260,7 @@ T) test_load_deletesCacheOnMoreThanSevenDaysOldCache
 [load command deletes more than seven days old cache upon retrieval]
 T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - optional reference to the sut 
-- capture the results (recievedResults
+- capture the results (recievedResults)
 - deallocate sut
 - complete retrieval with empty cache
 - expect empty receivedResults
