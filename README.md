@@ -295,8 +295,9 @@ T) test_validateCacheDoesNotDeleteLessThanSevenDaysOldCache
 - change test_load_(hasNoSideEffects)deletesCacheOnSevenDaysOldCache
 - change test_load_(hasNoSideEffects)deletesCacheOnMoreThanSevenDaysOldCache
 T) test_validateCache_deletesSevenDaysOldCache
-T) test_validateCache_seletesMoreThanSevenDaysOldCache
-add case found with no cache where not valid
+T) test_validateCache_deletesMoreThanSevenDaysOldCache
+- add case found with no cache where not valid
+- explicit case .found, .empty: break
 [extract cache deletion side-effects on expired cache from the `load` method to the `validateCache` method]
 T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocated
 - complete retrieval with an error
