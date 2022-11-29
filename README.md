@@ -271,5 +271,7 @@ T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 ### Separating Queries & Side-effects for Simplicity and Reusability, Choosing Between Enum Switching Strategies, and Differentiating App-Specific from App-Agnostic Logic
 ```
 - create test ValidateFeedCacheUseCaseTests 
-T) test_
+T) test_init_doesNotMessageStoreUponCreation
+- copy makeSUT
+[LocalFeedLoader does not message store upon creation (before validating the cached feed)]
 ```
