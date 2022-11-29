@@ -235,3 +235,35 @@ T) test_load_deliversNoImagesOnMoreThanSevenDaysOldCache
 - moreThanSevenDaysOldTimestamp 
 [load command delivers no images on more than seven days old cache]
 ```
+
+### 7) Test-driving Cache Invalidation + Identifying Complex (Bloated) Functionality With The Command–Query Separation Principle
+```
+T) test_load_deletesCacheOnRetrievalError
+- get a sut and store
+- invoke load on sut 
+- completes retrieval with an error 
+- assert messeges received .retrieve .deleteCacheFeed
+[deletes cahce on retrival error]
+T) test_load_DoesNotdeleteCacheOnRetrievalError
+- only .retrieve
+[load command does not delete cache when cache is already empty]
+T) test_DoesNotDeleteCacheOnLessThanSevenDaysOldCache
+- get the setup from the other test
+- complete retrieval with feeed and timestamp
+[load command does not delete less than seven days old cache]
+T) test_load_deletesCacheOnSevenDaysOldCache
+- copy setup 
+- expect .retrieve .deleteCacheFeed
+- refactor load in LocalFeedLoader to make the test pass
+[load command deletes seven days old cache upon retrieval]
+T) test_load_deletesCacheOnMoreThanSevenDaysOldCache
+[load command deletes more than seven days old cache upon retrieval]
+T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- optional reference to the sut 
+- capture the results (recievedResults
+- deallocate sut
+- complete retrieval with empty cache
+- expect empty receivedResults
+- fix failing test
+[load command does not deliver a load result after the instance has been deallocated to prevent unexpected behaviours in client's code]
+```
