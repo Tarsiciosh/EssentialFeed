@@ -268,7 +268,7 @@ T) test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 [load command does not deliver a load result after the instance has been deallocated to prevent unexpected behaviours in client's code]
 ```
 
-### Separating Queries & Side-effects for Simplicity and Reusability, Choosing Between Enum Switching Strategies, and Differentiating App-Specific from App-Agnostic Logic
+### 8) Separating Queries & Side-effects for Simplicity and Reusability, Choosing Between Enum Switching Strategies, and Differentiating App-Specific from App-Agnostic Logic
 ```
 - create test ValidateFeedCacheUseCaseTests 
 T) test_init_doesNotMessageStoreUponCreation
@@ -308,5 +308,27 @@ T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocate
 [segment functionality into extensions]
 - make LocalFeedLoader conform to FeedLoader
 [make LocalFeedLoader conform to FeedLoader]
-[move typealiases to appropiate segments ]
+[move typealiases to appropiate segment]
+```
+
+### 9) Separating App-specific, App-agnostic & Framework logic, Entities vs. Value Objects, Establishing Single Sources of Truth, and Designing Side-effect-free (Deterministic) Domain Models with Functional Core, Imperative Shell Principles
+
+```
+- create FeedCachePolicy
+- inject it in the LocalFeedLoader
+[extract cache validation policy into the new `FeedCachePolicy` type]
+- add againt date: Date to the validate instead of having the currentDate
+[make the `FeedCachePolicy` a pure type with no side-effects (deterministic)]
+-
+[make `FeedCachePolicy` static sice it doesn't keep any state]
+- move it to the Feed Cache/FeedCachePolicy
+[move `FeedCachePolicy` to its own file]
+- change test (OnNonExpiredCache) nonExpiredTimestamp
+- create the minusFeedCacheMaxAge
+- change test (OnCacheExpiration) expirationTimestamp
+- change test (OnExpiredCache) expiredTimestamp
+- chang all other tests (from both use cases)
+[hide cache expiration details from tests with a new DSL method to protect tests from breaking changes]
+[move feed cache max age (7 days) to a computed var to clarify intent in code]
+[separate `Date` extension helpers into distinct contexts to clarify their scope (one is a cache-policy specific DSL and the other is just a reusable DSL helper)]
 ```
