@@ -319,7 +319,6 @@ T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocate
 [extract cache validation policy into the new `FeedCachePolicy` type]
 - add against date: Date to the validate instead of having the currentDate
 [make the `FeedCachePolicy` a pure type with no side-effects (deterministic)]
--
 [make `FeedCachePolicy` static sice it doesn't keep any state]
 - move it to the Feed Cache/FeedCachePolicy
 [move `FeedCachePolicy` to its own file]
