@@ -328,6 +328,7 @@ T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocate
 - change test (OnExpiredCache) expiredTimestamp
 - chang all other tests (from both use cases)
 [hide cache expiration details from tests with a new DSL method to protect tests from breaking changes]
+- create feedCacheMaxAgeInDays (in the extension)
 [move feed cache max age (7 days) to a computed var to clarify intent in code]
 [separate `Date` extension helpers into distinct contexts to clarify their scope (one is a cache-policy specific DSL and the other is just a reusable DSL helper)]
 ```
