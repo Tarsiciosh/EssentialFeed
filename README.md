@@ -323,7 +323,7 @@ T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocate
 - move it to the Feed Cache/FeedCachePolicy
 [move `FeedCachePolicy` to its own file]
 - change test (OnNonExpiredCache) nonExpiredTimestamp
-- create the minusFeedCacheMaxAge
+- create the minusFeedCacheMaxAge (FeedCacheTestHelpers)
 - change test (OnCacheExpiration) expirationTimestamp
 - change test (OnExpiredCache) expiredTimestamp
 - chang all other tests (from both use cases)
