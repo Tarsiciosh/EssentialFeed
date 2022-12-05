@@ -379,13 +379,14 @@ T) test_retrieve_hasNoSideEffectOnEmptyCache()
 [retrieving from empty cache twice delivers same empty result (no side-effects)]
 T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 - copy previous test 
-- call insert and the retrieve (in cascade)
+- call insert and then retrieve (in cascade)
 - create insert command on CodableFeedStore
 - create a feed and a timestamp
 - assert insertionError to be nil ("Expected feed to be inserted successfully")
 - aim for the retrievedFeed and retrievedTimestamp of the found case
 - assert they match the previous created ones
 - fail on all other cases "Expected found result with feed and timestamp, got retrieveResult instead"
+- test to complete insert with error and nil to see the results
 - implement insert on CodableFeedStore 
 - create an enconder (JSONEncoder)
 - create private struct Cache (feed and timestamp) encodable
@@ -396,7 +397,8 @@ T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 - in retrieve method do the oposite
 - get data from file / Data(contentsOf: storeURL) use guard to complete with empty
 - decode data to cache / decoder.decode(Cache.self, from: data)
-- remove file after test in the tearDown function
+- remove file after test in the tearDown function (FileManager.default.removeItem(at: storeURL))
+- add a breakpoint to not let the tearDown execute 
 - and also in the setUp  
 [retrieving after inserting to empty cache delivers inserted values]
 - remove conformance to Codable from LocalFeedImage
