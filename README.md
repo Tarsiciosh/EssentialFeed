@@ -403,10 +403,10 @@ T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 [retrieving after inserting to empty cache delivers inserted values]
 - remove conformance to Codable from LocalFeedImage
 - create CodableFeedImage conforming to Codable with the same properties (private)
-- add localFeed property to map the feed into [LocalFeedImage]
-- add computed var local to convert to LoacalFeedImage
+- add localFeed property in Cache to map the feed into [LocalFeedImage]
+- add computed var local in CodableFeedImage to convert to LoacalFeedImage
 - add initilizer for CodableFeedImage receiving a LocalFeedImage
-- map the feed with the initializer
+- map the feed with the initializer (using () instead of {})
 [move `Codable` conformance from the framework-agnostic `LocalFeedImage` type to the new framework-specific `CodableFeedImage` type. The `CodableFeedImage` is a private type within the framework implementation since the `Codable` requirement is a framework-specific detail]
 - create the makeSUT factory 
 [extract system under test (sut) creation into a factory method]
