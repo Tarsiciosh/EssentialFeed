@@ -412,7 +412,7 @@ T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 [extract system under test (sut) creation into a factory method]
 - add memory leak tracking
 [add memory leak tracking]
-- make storeURL be a explicit dependency (creating injection)
+- make storeURL be a explicit dependency (constructor injection)
 - inject it in the makeSUT upon creation
 [extract hardcoded store URL from the `CodableFeedStore` production type making it an explicit dependency (passed in by the tests so far)]
 - create a factory method to create the storeURL
