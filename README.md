@@ -375,7 +375,7 @@ T) test_retrieve_hasNoSideEffectOnEmptyCache()
 - copy previous test
 - call retrieve twice (in cascade)
 - use patern matching to aim for the two empty results 
-- fail on all other cases "Expected retrieving twice from empty cache to deliver same empty result, got firsResutl and secondResult instead"
+- fail on all other cases "Expected retrieving twice from empty cache to deliver same empty result, got firstResult and secondResult instead"
 [retrieving from empty cache twice delivers same empty result (no side-effects)]
 T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 - copy previous test 
