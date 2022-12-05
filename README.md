@@ -333,9 +333,93 @@ T) test_validateCache_DoesNotDeleteInvalidCacheAfterSUTInstanceHasBeenDeallocate
 [separate `Date` extension helpers into distinct contexts to clarify their scope (one is a cache-policy specific DSL and the other is just a reusable DSL helper)]
 ```
 
-
 ### 10) Dependency Inversion Anatomy (High-level | Boundary | Low-level), Defining Inbox Checklists and Contract Specs to Improve Collaboration and Avoid Side-effect Bugs in Multithreaded Environments
+```
+- Retrieve 
+    - Empty cache returns empty
+    - Empty cache twice returns empty (no-side-effects)
+    - Non-empty cache returs data
+    - Non-empty cache twice returns the same data (no side-effects)
+    - Error retuns error (if applicable, e.g., invalid data)
+    - Error twice returns same error (if applicable, e.g., invalid data)
 
+- Insert 
+    - To empty cache stores data
+    - To Non-empty cache overrides previous data with new data
+    - Error (if applicable, e.g., no write persmission)
+
+- Delete 
+    - Empty cache does nothing (cache stays empty and does not fail)
+    - Non-empty cache leaves cache empty
+    - Error (if applicable, e.g., no delete permission)
+
+- Side-effects must run serially to avoid race-conditions
+    
 ```
 
+### 11) Persisting/Retrieving Models with Codable+FileSystem, Test-driving in Integration with Real Frameworks Instead of Mocks & Measuring Test Times Overhead with `xcodebuild`
+
+```
+- create test file CodableFeedStoreTests
+T) test_retrieve_deliversEmptyOnEmptyCache
+- create the sut (CodableFeedStore)
+- create actual CodableFeedStore
+- invoke command retrieve with the corresponding closure
+- create retrieve command on CodableFeedStore
+- aim for empty result (switch break) 
+- fail on all others cases "Expected empty result, got result instead"
+- add expectation "Wait for cache retrieval"
+- make CodableFeedStore complete with empty case
+[retrieving from empty cache delivers empty result]
+T) test_retrieve_hasNoSideEffectOnEmptyCache() 
+- copy previous test
+- call retrieve twice (in cascade)
+- use patern matching to aim for the two empty results 
+- fail on all other cases "Expected retrieving twice from empty cache to deliver same empty result, got firsResutl and secondResult instead"
+[retrieving from empty cache twice delivers same empty result (no side-effects)]
+T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
+- copy previous test 
+- call insert and the retrieve (in cascade)
+- create insert command on CodableFeedStore
+- create a feed and a timestamp
+- assert insertionError to be nil ("Expected feed to be inserted successfully")
+- aim for the retrievedFeed and retrievedTimestamp of the found case
+- assert they match the previous created ones
+- fail on all other cases "Expected found result with feed and timestamp, got retrieveResult instead"
+- implement insert on CodableFeedStore 
+- create an enconder (JSONEncoder)
+- create private struct Cache (feed and timestamp) encodable
+- encode struct / encoder.encode(Cache(feed: feed, timestamp: timestamp))
+- write to file / encoded.write(to: storeURL)
+- storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+- complete with nil
+- in retrieve method do the oposite
+- get data from file / Data(contentsOf: storeURL) use guard to complete with empty
+- decode data to cache / decoder.decode(Cache.self, from: data)
+- remove file after test in the tearDown function
+- and also in the setUp  
+[retrieving after inserting to empty cache delivers inserted values]
+- remove conformance to Codable from LocalFeedImage
+- create CodableFeedImage conforming to Codable with the same properties (private)
+- add localFeed property to map the feed into [LocalFeedImage]
+- add computed var local to convert to LoacalFeedImage
+- add initilizer for CodableFeedImage receiving a LocalFeedImage
+- map the feed with the initializer
+[move `Codable` conformance from the framework-agnostic `LocalFeedImage` type to the new framework-specific `CodableFeedImage` type. The `CodableFeedImage` is a private type within the framework implementation since the `Codable` requirement is a framework-specific detail]
+- create the makeSUT factory 
+[extract system under test (sut) creation into a factory method]
+- add memory leak tracking
+[add memory leak tracking]
+- make storeURL be a explicit dependency (creating injection)
+- inject it in the makeSUT upon creation
+[extract hardcoded store URL from the `CodableFeedStore` production type making it an explicit dependency (passed in by the tests so far)]
+- create a factory method to create the storeURL
+[extract duplicate store URL creation into a helper factory method]
+- change the file name to the name of the test / \(type(of: self))
+- change to caches directory (cachesDirectory)
+- rename to testSpecificStoreURL
+[replace production store url with a test-specific store URL to avoid sharing state/artifacts with other parts of the system (including other tests)]
+- create setupEmptyStoreState, undoStoreSideEffects and deleteStoreArtifacts
+[add helper methods to provide documentation, context and clarify test `setUp` and `tearDown` intent regarding side-effects]
+-  
 ```
