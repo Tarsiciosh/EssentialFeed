@@ -449,7 +449,9 @@ T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
 - rename test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues -> deliversFoundValuesOnNonEmptyCache
 [improve test name to follow convention]
 T) test_retrieve_deliversFailureOnRetrievalError
-- create sut then try! "invalid data" write to atomically false encoding utf8)
+- create sut 
+- write file with invalid json (try! "invalid data" write to atomically false encoding utf8)
+- expect sut to retrieve with failure (anyNSError)
 - refactor retrieve into do catch block 
 - refactor expect to break also on matching failure
 [retrieve delivers failure on retrival error (invalid cached data)]
