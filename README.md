@@ -439,8 +439,8 @@ T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
 - refactor test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues (call insert and then expect after the wait)
 - refactor test_retrieve_deliversEmptyOnEmptyCache (call expect)
 [extract duplicate retrieve test code into a reusable helper method]
-- create expect(sut toRetrieveTwice expectedResult) calling expect twice
 - refactor test_retrieve_hasNoSideEffectsOnEmptyCache
+- create expect(sut toRetrieveTwice expectedResult) calling expect twice
 - refactor test_retrieve_hasNoSideEffectsOnNonEmptyCache expectation "Wait for cache insertion"
 [extract duplicate no-side-effects-on-retrive test code into a reusable helper method]
 - create insert(cache, to sut)
