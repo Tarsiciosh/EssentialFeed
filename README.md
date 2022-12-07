@@ -456,7 +456,7 @@ T) test_retrieve_deliversFailureOnRetrievalError
 - refactor expect to break also on matching failure
 [retrieve delivers failure on retrival error (invalid cached data)]
 - make a correlation of the url with the sut 
-- change makeSUT to receive the url with a default value nil (if passed one use that othewise use the default)
+- change makeSUT to receive the url with a default value nil (if passed one use that otherwise use the default)
 [make the storeURL explicit within the test to facilitate debugging if this test ever fails (all relevant details within a test method should be clearly visible)]
 T) test_retrieve_hasNoSideEffectsOnFailure
 - create the invalid file and expect to retrieve twice with failure
