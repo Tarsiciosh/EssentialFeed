@@ -525,11 +525,11 @@ T) test_storeSideEffects_runSerially
 [dispatch `CodableFeedStore` operations in a serial background queue to avoid blocking clients]
 - change queue to be concurrent (attributes: .concurrent)
 - add barrier flags to the operations that has side-effects (flags: .barrier)
-[make `CodableFeedStore` queue concurrent to allow multiple `retrieve`to be processed in parallel (since it has no side-effects) and user `barriers` when performing side-effects to guarantee data consistency and avoid race conditions]
+[make `CodableFeedStore` queue concurrent to allow multiple `retrieve`  to be processed in parallel (since it has no side-effects) and user `barriers` when performing side-effects to guarantee data consistency and avoid race conditions]
 - add comments to the functions of the FeedStore protocol
-" The completion handler can be invoked in any thread"
-" Clients are resposible to dispatch to appropriate threads, if needed"
-[add comments to document thata completion handlers in any `FeedStore` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
+"/// The completion handler can be invoked in any thread."
+"/// Clients are resposible to dispatch to appropriate threads, if needed."
+[add comments to document that a completion handlers in any `FeedStore` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
 - add same comments to HTTPClient protocol 
-[add comments to document thata completion handlers in any `HTTPClient` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
+[add comments to document that a completion handlers in any `HTTPClient` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
 ``` 
