@@ -423,5 +423,78 @@ T) test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues
 [replace production store url with a test-specific store URL to avoid sharing state/artifacts with other parts of the system (including other tests)]
 - create setupEmptyStoreState, undoStoreSideEffects and deleteStoreArtifacts
 [add helper methods to provide documentation, context and clarify test `setUp` and `tearDown` intent regarding side-effects]
--  
+- xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "EssentialFeed" 
+```
+
+### 12) Deleting Models and Handling Errors with Codable+FileSystem, Making Async Code Look Sync in Tests to Eliminate Arrow Anti-Pattern, and More Essential Test Guidelines to Improve Code Quality and Team Communication
+
+```
+T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
+- copy previous test
+- retrieve twice (in cascade)
+- compare firstResult and secondResult using pattern matching (firstFound, secondFound) with feed and timestamp
+- fail is other case "Expected retrieving twice from non empty cache to deliver same found result with (feed) and (timestamp), got (firstResult) and (secondResult) instead"
+[retrieving from no-empty cache twice delivers same found result (no side-effects)]
+- create expect(sut, toRetrieve expectedResult) (empty and found) 
+- refactor test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues (call insert and then expect after the wait)
+- refactor test_retrieve_deliversEmptyOnEmptyCache (call expect)
+[extract duplicate retrieve test code into a reusable helper method]
+- create expect(sut toRetrieveTwice expectedResult) calling expect twice
+- refactor test_retrieve_hasNoSideEffectsOnEmptyCache
+- refactor test_retrieve_hasNoSideEffectsOnNonEmptyCache expectation "Wait for cache insertion"
+[extract duplicate no-side-effects-on-retrive test code into a reusable helper method]
+- create insert(cache, to sut)
+- refactor tests with insert 
+[extract duplicate insert code into a reusable helper mehod]
+- rename test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues -> deliversFoundValuesOnNonEmptyCache
+[improve test name to follow convention]
+T) test_retrieve_deliversFailureOnRetrievalError
+- create sut then try! "invalid data" write to atomically false encoding utf8)
+- refactor retrieve into do catch block 
+- refactor expect to break also on matching failure
+[retrieve delivers failure on retrival error (invalid cached data)]
+- make a correlation of the url with the sut 
+- change makeSUT to receive the url with a default value nil (if passed one use that othewise use the default)
+[make the storeURL explicit within the test to facilitate debugging if this test ever fails (all relevant details within a test method should be clearly visible)]
+T) test_retrieve_hasNoSideEffectsOnFailure
+- create the invalid file and expect to retrieve twice with failure
+[retrieving from invalid cache twice delivers same failure result (no side-effects)]
+T) test_insert_overridesPreviouslyInsertedCacheValues
+- first insert with in line data (assert nil firstInsertionError) 
+- second insert with latestFeed latestTimestamp and latestInsertionError
+- expect to retrieve found latestFeed and latestTimestamp
+- refactor insert to capture the insertionError and return it
+- add @discardableResult 
+[inserting to non-empty cache overrides previously inserted cache values]
+T) test_insert_deliversErrorOnInsertionError
+- create a invalidStoreURL "invalid://store-url"
+- create the sut with that url
+- insert and expect insertionError to be not nil
+- refactor insert code with do catch 
+[insert delivers error on insertion error (invalid store URL)]
+- create deleteCache from sut returning a the deletionError
+T) test_delete_hasNoSideEffectsOnEmptyCache 
+- create sut
+- call delete
+- expect deletionResult to be nil
+- expect sut to retrieve empty
+T) test_delete_emptiesPreviouslyInsertedCache
+- create sut 
+- insert feed
+- delete cache
+- expect deletionResult to be nil
+- expect sut to retrieve empty
+T) test_delete_deliversErrorOnDeletionError
+- create sut with noDeletePermissionURL (cachesDirectory)
+- delete cache
+- expect deletionResult to be not nil
+- make CodableFeedStore conform to FeedStore
+- delete namespacing 
+[make `CodableFeedStore` conforms to `FeedStore`]
+- replace CodableFeedStore references with FeedStore
+[replace concrete `CodableFeedStore` dependency in tests with the `FeedStore` protocol to make tests more decoupled from the concrete production implementations (also proving we respect the Liskov Substitution Principle)]
+"Types in a program should be replaceable with instances of their subtypes without altering the correctness of that program"
+- move CodableFeedStore to FeedCache/
+- make public what necessary
+[move `CodableFeedStore` to its own file in production]
 ```
