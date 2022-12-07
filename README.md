@@ -474,7 +474,8 @@ T) test_insert_deliversErrorOnInsertionError
 - insert and expect insertionError to be not nil
 - refactor insert code with do catch 
 [insert delivers error on insertion error (invalid store URL)]
-- create deleteCache from sut returning a the deletionError
+- create deleteCache in CodableFeedStore 
+- create a (deleteCache from sut) helper
 T) test_delete_hasNoSideEffectsOnEmptyCache 
 - create sut
 - call delete
@@ -490,6 +491,7 @@ T) test_delete_deliversErrorOnDeletionError
 - create sut with noDeletePermissionURL (cachesDirectory)
 - delete cache
 - expect deletionResult to be not nil
+- add guard FileManager.default.fileExists(atPath:)
 - make CodableFeedStore conform to FeedStore
 - delete namespacing 
 [make `CodableFeedStore` conforms to `FeedStore`]
