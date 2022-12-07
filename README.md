@@ -516,9 +516,10 @@ T) test_storeSideEffects_runSerially
 - wait for the expectation (waitForExpectations)
 - assert the operations are in right order "Expected side-effects to run serially but operations finish in the wrong order"
 [proved that the `CodableFeedStore` side-effects run serially]
-- dispath retrieve code to the global queue
+- dispath retrieve code to the global queue (DispatchQueue.global().async)
 - create a storeURL constant and capture only this value instead of the hole object
 - copy the same for all other methods
+- run test to see failing 
 - create a shared queue (DispatchQueue(label: "\(CodableFeedStore.self)Queue", qos: .userInitialed))
 - use the shared queue (private constant property of CodableFeedStore)
 [dispatch `CodableFeedStore` operations in a serial background queue to avoid blocking clients]
