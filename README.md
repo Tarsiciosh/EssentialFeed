@@ -462,7 +462,7 @@ T) test_retrieve_hasNoSideEffectsOnFailure
 - create the invalid file and expect to retrieve twice with failure
 [retrieving from invalid cache twice delivers same failure result (no side-effects)]
 T) test_insert_overridesPreviouslyInsertedCacheValues
-- first insert with in line data (assert nil firstInsertionError) 
+- first insert with in-line data (assert nil firstInsertionError) 
 - second insert with latestFeed latestTimestamp and latestInsertionError
 - expect to retrieve found latestFeed and latestTimestamp
 - refactor insert to capture the insertionError and return it
