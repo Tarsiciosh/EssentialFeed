@@ -435,7 +435,7 @@ T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
 - compare firstResult and secondResult using pattern matching (firstFound, secondFound) with feed and timestamp
 - fail is other case "Expected retrieving twice from non empty cache to deliver same found result with (feed) and (timestamp), got (firstResult) and (secondResult) instead"
 [retrieving from no-empty cache twice delivers same found result (no side-effects)]
-- create expect(sut, toRetrieve expectedResult) (empty and found) 
+- create expect(sut, toRetrieve expectedResult) (empty and found) add file and line "Expected to retrieve \(expectedResult), got \(retrieveResult) instead"
 - refactor test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues (call insert and then expect after the wait)
 - refactor test_retrieve_deliversEmptyOnEmptyCache (call expect)
 [extract duplicate retrieve test code into a reusable helper method]
