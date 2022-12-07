@@ -502,3 +502,33 @@ T) test_delete_deliversErrorOnDeletionError
 - make public what necessary
 [move `CodableFeedStore` to its own file in production]
 ```
+
+### 13) Designing and Testing Thread-safe Components with DispatchQueue, Serial vs. Concurrent Queues, Thread-safe Value Types, and Avoiding Race Conditions
+
+```
+T) test_storeSideEffects_runSerially
+- create a sut 
+- create an op1 operation (expectation) with a insert command
+- create p2 with deleteCacheFeed
+- create completedOperationsInOrder array of XCTestExpectation
+- append the operations to the array
+- create p3 with insert 
+- wait for the expectation (waitForExpectations)
+- assert the operations are in right order "Expected side-effects to run serially but operations finish in the wrong order"
+[proved that the `CodableFeedStore` side-effects run serially]
+- dispath retrieve code to the global queue
+- create a storeURL constant and capture only this value instead of the hole object
+- copy the same for all other methods
+- create a shared queue (DispatchQueue(label: "\(CodableFeedStore.self)Queue", qos: .userInitialed))
+- use the shared queue (private constant property of CodableFeedStore)
+[dispatch `CodableFeedStore` operations in a serial background queue to avoid blocking clients]
+- change queue to be concurrent (attributes: .concurrent)
+- add barrier flags to the operations that has side-effects (flags: .barrier)
+[make `CodableFeedStore` queue concurrent to allow multiple `retrieve`to be processed in parallel (since it has no side-effects) and user `barriers` when performing side-effects to guarantee data consistency and avoid race conditions]
+- add comments to the functions of the FeedStore protocol
+" The completion handler can be invoked in any thread"
+" Clients are resposible to dispatch to appropriate threads, if needed"
+[add comments to document thata completion handlers in any `FeedStore` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
+- add same comments to HTTPClient protocol 
+[add comments to document thata completion handlers in any `HTTPClient` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
+``` 
