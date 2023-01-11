@@ -532,4 +532,34 @@ T) test_storeSideEffects_runSerially
 [add comments to document that a completion handlers in any `FeedStore` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
 - add same comments to HTTPClient protocol 
 [add comments to document that a completion handlers in any `HTTPClient` implementation can be invoked in any thread. Clients are responsible to dispath to appropriate threads, if needed]
+- xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "EssentialFeed"
 ``` 
+
+### 14) Protocol vs Class Inheritance, Composite Reuse Principle, and Extracting Reusable Test Specs with Protocol Inheritance, Extensions and Composition
+
+```
+- create a protocol CodableFeedStoreSpecs (in CodableFeedStoreTests)
+- see the generated interface (Ctrl + Cmd + up)
+- copy the methods to the protocol
+- create a another protocosl for the errors called 
+- FailableRetrieveFeedStoreSpecs
+- FailableInsertFeedStoreSpecs
+- FailableDeleteFeedStoreSpecs
+- brake down tests with two assertions into to single tests
+[break down `CodableFeedStore` tests to guarantee there's only one assertion per test. The goal is to clarify the behavior under test in small units, so we can extract the behavior tests into reusable specs. ]
+- use protocol inheritance to force FailableRetrieveFeedStoreSpecs also conform to FeedStoreSpecs
+- make CodableFeedStoreTests conform to all Failable protocolos
+- use protocol composition to have one FailableFeedStore (typealias wiht &)
+- move protolos to there own file EssentialFeedTests/FeedCache/FeedStoreSpecs
+[create `FeedStoreSpecs` that must be implemented by any `FeedStore` test implementation to guarantee it meets spec]
+
+- extract FeedStore helper methods to a helper file XCTestCase+FeedStoreSpecs
+(extension of the FeedStoreSpecs (where Self: XCTestCase)
+- paste the method and remove the private access control
+[extract reusable `FeedStoreSpecs` helper methods into a shared scope so it can be used by other `FeedStore` implementation tests]
+
+- add assertThatRetrieveDeliversEmptyOnEmptyCache(on sut)
+- change alls tests to assertion functions
+
+
+```
