@@ -538,7 +538,7 @@ T) test_storeSideEffects_runSerially
 ### 14) Protocol vs Class Inheritance, Composite Reuse Principle, and Extracting Reusable Test Specs with Protocol Inheritance, Extensions and Composition
 
 ```
-- create a protocol CodableFeedStoreSpecs (in CodableFeedStoreTests)
+- create a protocol FeedStoreSpecs (in CodableFeedStoreTests)
 - see the generated interface (Ctrl + Cmd + up)
 - copy the methods to the protocol
 - create a another protocosl for the errors called 
