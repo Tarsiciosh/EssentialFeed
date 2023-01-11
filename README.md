@@ -556,9 +556,8 @@ T) test_storeSideEffects_runSerially
 (extension of the FeedStoreSpecs (where Self: XCTestCase)
 - paste the method and remove the private access control
 [extract reusable `FeedStoreSpecs` helper methods into a shared scope so it can be used by other `FeedStore` implementation tests]
-
 - add assertThatRetrieveDeliversEmptyOnEmptyCache(on sut)
 - change alls tests to assertion functions
-
+[]
 
 ```
