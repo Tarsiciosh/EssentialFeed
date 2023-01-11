@@ -552,7 +552,6 @@ T) test_storeSideEffects_runSerially
 - use protocol composition to have one FailableFeedStore (typealias wiht &)
 - move protolos to there own file EssentialFeedTests/FeedCache/FeedStoreSpecs
 [create `FeedStoreSpecs` that must be implemented by any `FeedStore` test implementation to guarantee it meets spec]
-
 - extract FeedStore helper methods to a helper file XCTestCase+FeedStoreSpecs
 (extension of the FeedStoreSpecs (where Self: XCTestCase)
 - paste the method and remove the private access control
