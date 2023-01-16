@@ -584,4 +584,6 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 - add container (NSPersistentContainer) to CoreDataFeedStore
 - create init(bundle:) for CoreDataFeedStore (initilizing the container)
 [load persistent container store upon CoreDataFeedStore initialization]
+- add context (NSManagedObjectContext) to CoreDataFeedStore
+[add private background context to perform store operations]
 ```
