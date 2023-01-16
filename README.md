@@ -563,7 +563,13 @@ T) test_storeSideEffects_runSerially
 ```
 ### 15) Core Data Overview, Implementation, Concurrency Model, Trade-offs, Modeling & Testing Techniques, and Implementing Reusable Protocol Specs
 ```
-- create CoreDataFeedStoreTests (EssentialFeedTests/FeedCache)
+- create EssentialFeedTests/FeedCache/CoreDataFeedStoreTests
 - add conformance to the FeedStoreSpecs (add protocol stubs)
-[]
+[add empty CoreData feed store specs]
+- create Feed Cache/CoreDataFeedStore 
+- add conformance to the FeedStore protocol (add protocol stubs)
+T) test_retrieve_deliversEmptyOnEmptyCache
+- add makeSUT 
+- complete with empty
+[`CoreDataFeedStore.retrieve()` delivers empty on empty cache]
 ```
