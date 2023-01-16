@@ -598,4 +598,6 @@ T) test_retrieve_deliversFoundValuesOnNonEmptyCache
 - add static image(from:in:) to ManagedFeedImage
 - add local to ManagedFeedImage
 [extract model translations into helper methods within the managed models]
+- create find(in:) in ManagedCache
+[extract ManagedCache fetch request logic into a helper method within the managed model class]
 ```
