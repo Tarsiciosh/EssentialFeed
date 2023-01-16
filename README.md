@@ -594,4 +594,8 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 T) test_retrieve_deliversFoundValuesOnNonEmptyCache
 - add retrieve and insert logic to CoreDataFeedStore
 [`CoreDataFeedStore.retrieve()` delivers found values on non-empty cache]
+- add localFeed to ManagedCache
+- add static image(from:in:) to ManagedFeedImage
+- add local to ManagedFeedImage
+[extract model translations into helper methods within the managed models]
 ```
