@@ -576,6 +576,9 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 - assertThatRetrieveHasNoSideEffectsOnEmptyCache
 [`CoreDataFeedStore.retrieve() has no side-effects on empty cache]
 - add CoreDataFeedStore model Feed Cache/FeedStore (add file Core Data)
+- add entities 
+- set Codegen to Manual/None (for the entities)
+- add relationships cache <-> feed (with inverse feature)
 [add CoreDataFeedStore data model]
 - add ManagedCache and ManagedFeedImage (CoreDataFeedStore file)
 [add ManagedCache and ManagedFeedImage model representations]
@@ -588,4 +591,7 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 [add private background context to perform store operations]
 - add description(url) to the container 
 [make storeURL an explicit dependency so we can inject test-specific URLs (such as `/dev/null`) to avoid sharing state with production (and other tests!)] 
+T) test_retrieve_deliversFoundValuesOnNonEmptyCache
+- add retrieve and insert logic to CoreDataFeedStore
+[`CoreDataFeedStore.retrieve()` delivers found values on non-empty cache]
 ```
