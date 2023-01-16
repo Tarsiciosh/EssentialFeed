@@ -579,4 +579,9 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 [add CoreDataFeedStore data model]
 - add ManagedCache and ManagedFeedImage (CoreDataFeedStore file)
 [add ManagedCache and ManagedFeedImage model representations]
+- add load(modelName:in:) extension to NSPersistentContainer (CoreDataFeedStore file)
+- add with(name:in:) extension to NSManagedObjectModel (CoreDataFeedStore file)
+- add container (NSPersistentContainer) to CoreDataFeedStore
+- create init(bundle:) for CoreDataFeedStore (initilizing the container)
+[load persistent container store upon CoreDataFeedStore initialization]
 ```
