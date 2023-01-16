@@ -572,4 +572,7 @@ T) test_retrieve_deliversEmptyOnEmptyCache
 - add makeSUT 
 - complete with empty
 [`CoreDataFeedStore.retrieve()` delivers empty on empty cache]
+T) test_retrieve_hasNoSideEffectsOnEmptyCache
+- assertThatRetrieveHasNoSideEffectsOnEmptyCache
+[]
 ```
