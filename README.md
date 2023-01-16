@@ -586,4 +586,6 @@ T) test_retrieve_hasNoSideEffectsOnEmptyCache
 [load persistent container store upon CoreDataFeedStore initialization]
 - add context (NSManagedObjectContext) to CoreDataFeedStore
 [add private background context to perform store operations]
+- add description(url) to the container 
+[make storeURL an explicit dependency so we can inject test-specific URLs (such as `/dev/null`) to avoid sharing state with production (and other tests!)] 
 ```
