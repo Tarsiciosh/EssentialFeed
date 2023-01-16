@@ -561,3 +561,9 @@ T) test_storeSideEffects_runSerially
 []
 
 ```
+### 15) Core Data Overview, Implementation, Concurrency Model, Trade-offs, Modeling & Testing Techniques, and Implementing Reusable Protocol Specs
+```
+- create CoreDataFeedStoreTests (EssentialFeedTests/FeedCache)
+- add conformance to the FeedStoreSpecs (add protocol stubs)
+[]
+```
