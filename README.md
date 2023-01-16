@@ -574,5 +574,7 @@ T) test_retrieve_deliversEmptyOnEmptyCache
 [`CoreDataFeedStore.retrieve()` delivers empty on empty cache]
 T) test_retrieve_hasNoSideEffectsOnEmptyCache
 - assertThatRetrieveHasNoSideEffectsOnEmptyCache
-[]
+[`CoreDataFeedStore.retrieve() has no side-effects on empty cache]
+- add CoreDataFeedStore model Feed Cache/FeedStore (add file Core Data)
+[Add CoreDataFeedStore data model]
 ```
