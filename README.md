@@ -609,6 +609,9 @@ T) test_insert_deliversNoErrorOnNonEmptyCache
 T) test_insert_overridesPreviouslyInsertedCacheValues
 - add newUniqueInstance to ManagedCache (delete all found caches)
 [`CoreDataFeedStore.insert()` overrides previously inserted cache values]
+T) test_delete_deliversNoErrorOnEmptyCache
+- complete delete with nil
+[`CoreDataFeedStore.deleteCachedFeed()` delivers no error on empty cache]
 ```
 
 
