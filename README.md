@@ -600,4 +600,8 @@ T) test_retrieve_deliversFoundValuesOnNonEmptyCache
 [extract model translations into helper methods within the managed models]
 - create find(in:) in ManagedCache
 [extract ManagedCache fetch request logic into a helper method within the managed model class]
+T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
+[`CoreDataFeedStore.retrieve()` has no side-effects on non-empty cache]
 ```
+
+
