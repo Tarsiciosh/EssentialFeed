@@ -612,6 +612,8 @@ T) test_insert_overridesPreviouslyInsertedCacheValues
 T) test_delete_deliversNoErrorOnEmptyCache
 - complete delete with nil
 [`CoreDataFeedStore.deleteCachedFeed()` delivers no error on empty cache]
+T) test_delete_hasNoSideEffectsOnEmptyCache
+[`CoreDataFeedStore.deleteCachedFeed()` has no side-effects on empty cache]
 ```
 
 
