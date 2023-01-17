@@ -621,6 +621,9 @@ T) test_delete_emptiesPreviouslyInsertedCache
 [`CoreDataFeedStore.deleteCachedFeed() empties previously inserted cache]
 T) test_storeSideEffects_runSerially
 [proved that `CoreDataFeedStore` side-effects run serially]
+- create "perform" helper in CoreDataFeedStore (take an action that receives a context and return Void)
+[extract duplicate code into a reusable helper method]
+
 ```
 
 
