@@ -624,6 +624,7 @@ T) test_storeSideEffects_runSerially
 - create "perform" helper in CoreDataFeedStore (take an action that receives a context and return Void)
 [extract duplicate code into a reusable helper method]
 [move `CoreDataFeedStore` files to the new infrastructure folder]
+[move `CodableFeedStore` to the new infrastructure folder]
 ```
 
 
