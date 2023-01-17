@@ -623,7 +623,7 @@ T) test_storeSideEffects_runSerially
 [proved that `CoreDataFeedStore` side-effects run serially]
 - create "perform" helper in CoreDataFeedStore (take an action that receives a context and return Void)
 [extract duplicate code into a reusable helper method]
-
+[move `CoreDataFeedStore` files to the new infrastructure folder]
 ```
 
 
