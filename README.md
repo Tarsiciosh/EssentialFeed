@@ -604,6 +604,8 @@ T) test_retrieve_hasNoSideEffectsOnNonEmptyCache
 [`CoreDataFeedStore.retrieve()` has no side-effects on non-empty cache]
 T) test_insert_deliversNoErrorOnEmptyCache
 [`CoreDataFeedStore.insert() delivers no error on empty cache]
+T) test_insert_deliversNoErrorOnNonEmptyCache
+[`CoreDataFeedStore.insert()` delivers no error on non-empty cache]
 ```
 
 
