@@ -616,6 +616,9 @@ T) test_delete_hasNoSideEffectsOnEmptyCache
 [`CoreDataFeedStore.deleteCachedFeed()` has no side-effects on empty cache]
 T) test_delete_deliversNoErrorOnNonEmptyCache
 [`CoreDataFeedStore.deleteCachedFeed()` delivers no error on non-empty cache]
+T) test_delete_emptiesPreviouslyInsertedCache
+- add code to find delete and save
+[`CoreDataFeedStore.deleteCachedFeed() empties previously inserted cache]
 ```
 
 
