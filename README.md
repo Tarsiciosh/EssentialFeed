@@ -625,6 +625,7 @@ T) test_storeSideEffects_runSerially
 [extract duplicate code into a reusable helper method]
 [move `CoreDataFeedStore` files to the new infrastructure folder]
 [move `CodableFeedStore` to the new infrastructure folder]
+[extract reusable CoreData helpers into a separate file]
 ```
 
 
