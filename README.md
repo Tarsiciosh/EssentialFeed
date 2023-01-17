@@ -606,6 +606,9 @@ T) test_insert_deliversNoErrorOnEmptyCache
 [`CoreDataFeedStore.insert() delivers no error on empty cache]
 T) test_insert_deliversNoErrorOnNonEmptyCache
 [`CoreDataFeedStore.insert()` delivers no error on non-empty cache]
+T) test_insert_overridesPreviouslyInsertedCacheValues
+- add newUniqueInstance to ManagedCache (delete all found caches)
+[`CoreDataFeedStore.insert()` overrides previously inserted cache values]
 ```
 
 
