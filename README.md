@@ -619,6 +619,8 @@ T) test_delete_deliversNoErrorOnNonEmptyCache
 T) test_delete_emptiesPreviouslyInsertedCache
 - add code to find delete and save
 [`CoreDataFeedStore.deleteCachedFeed() empties previously inserted cache]
+T) test_storeSideEffects_runSerially
+[proved that `CoreDataFeedStore` side-effects run serially]
 ```
 
 
