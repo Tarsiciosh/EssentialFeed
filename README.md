@@ -626,6 +626,7 @@ T) test_storeSideEffects_runSerially
 [move `CoreDataFeedStore` files to the new infrastructure folder]
 [move `CodableFeedStore` to the new infrastructure folder]
 [extract reusable CoreData helpers into a separate file]
+[extract CoreData managed model classes into separate files]
 ```
 
 
