@@ -672,7 +672,7 @@ T) test_save_overridesItemsSavedOnASeparateInstance
 [`LocalFeedLoader` in integration with `CoreDataFeedStore` overrides items saved by separate instances, proving we correctly managed the data models on disk]
 - create save(:with) helper method (
 [extract duplicate cache save operation into a shared helper method]
-- change CoreDataFeedStore with CodableFeedStore and the tests pass also
+- change CoreDataFeedStore with CodableFeedStore and see that tests are passing
 [delete the `CodableFeedStore` in favor of the `CoreDataFeedStore` (we just need one in this project). If needed, of course, we can revert this commit and restore the `Codable` implementation]
 - configure the CI scheme to include the integration test:
 - Test(left-tab)->Info(top-tab) + EssentialFeedCacheIntegrationTests 
