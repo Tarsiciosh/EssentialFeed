@@ -669,8 +669,8 @@ T) test_load_deliversItemsSavedOnASeparateInstance
 [extract duplicate cache load expectations into a shared helper method]
 T) test_save_overridesItemsSavedOnASeparateInstance
 - sutToPerformFirstSave, sutToPerformLoad, sutToPerformLastSave, firstFeed, latestFeed
-[`LocalFeedLoader` in integration with `CoreDataFeedStore` overrides items saved by separate intances, proving we correctly managed the data models on disk]
-- add save helper method
+[`LocalFeedLoader` in integration with `CoreDataFeedStore` overrides items saved by separate instances, proving we correctly managed the data models on disk]
+- create save(:with) helper method (
 [extract duplicate cache save operation into a shared helper method]
 - change CoreDataFeedStore with CodableFeedStore and the tests pass also
 [delete the `CodableFeedStore` in favor of the `CoreDataFeedStore` (we just need one in this project). If needed, of course, we can revert this commit and restore the `Codable` implementation]
