@@ -668,6 +668,7 @@ T) test_load_deliversItemsSavedOnASeparateInstance
 - add expect(toLoad:) helper method, use example: expect(sut, toLoad: [])
 [extract duplicate cache load expectations into a shared helper method]
 T) test_save_overridesItemsSavedOnASeparateInstance
+- sutToPerformFirstSave, sutToPerformLoad, sutToPerformLastSave, firstFeed, latestFeed
 [`LocalFeedLoader` in integration with `CoreDataFeedStore` overrides items saved by separate intances, proving we correctly managed the data models on disk]
 - add save helper method
 [extract duplicate cache save operation into a shared helper method]
