@@ -561,6 +561,7 @@ T) test_storeSideEffects_runSerially
 []
 
 ```
+
 ### 15) Core Data Overview, Implementation, Concurrency Model, Trade-offs, Modeling & Testing Techniques, and Implementing Reusable Protocol Specs
 ```
 - create EssentialFeedTests/FeedCache/CoreDataFeedStoreTests
@@ -628,6 +629,49 @@ T) test_storeSideEffects_runSerially
 [extract reusable CoreData helpers into a separate file]
 [extract CoreData managed model classes into separate files]
 [separate CoreData managed model classes data from helpers with extensions]
+```
+
+### 16) Finishing the Cache Implementation with Business Logic + Core Data Integration Tests—Unit vs. Integration: Pros/Cons, Performance, Complexity & How to Achieve The ideal Testing Pyramid Distribution
+
+```
+- create a new test target for the cache integration tests:
+- (+ in the project -> macOS -> macOS Unit Testing Bundle)
+- Product Name: EssentialFeedCacheIntegrationTests 
+- in the scheme chooser select: Manage Schemes
+- select EssentialFeedCacheIntegrationTests -> Edit
+- go to Test tab
+- Info -> options -> select Randomize execution order
+- Options -> Gather coverage (some targets) for EssentialFeed
+- now there is a new folder with a new file for the integration tests
+[add `EssentialFeedCacheIntegrationTests` target to separate the potentially-slower cache integration tests from the the fast unit/isolated tests]
+T) test_load_deliversNoItemsOnEmptyCache
+- create a sut 
+- perfom a load operation expecting a success result with an empty array
+- add helper functions to integration target (to be able to use them)
+- to see a failing test change the implementation of the CoreDataFeedStore to return an error instead of a successful response (return completion(.failure(NSError(domain: "error", code: 0))) )
+[include memory leak tracking helper in the cache integration tests target]
+[`LocalFeedLoader` in integration with the `CoreDataFeedStore` delivers no items on empty cache]
+T) test_load_deliversItemsSavedOnASeparateInstance
+- sutToPerformSave
+- sutToPerformLoad
+- add helper functions to integration target (to be able to use them)
+[include cache test helper in the cache integration tests target]
+- add setUp and tearDown methods
+[clean up and undo all cache side effects on `setUp` and `tearDown` to avoid sharing state between tests]
+[`LocalFeedLoader` in integration with the `CoreDataFeedStore` delivers items saved on separate instances, proving we correctly persist the data models to disk]
+- add expect helper method
+[extract duplicate cache load expectations into a shared helper method]
+T) test_save_overridesItemsSavedOnASeparateInstance
+[`LocalFeedLoader` in integration with `CoreDataFeedStore` overrides items saved by separate intances, proving we correctly managed the data models on disk]
+- add save helper method
+[extract duplicate cache save operation into a shared helper method]
+- change CoreDataFeedStore with CodableFeedStore and the tests pass also
+[delete the `CodableFeedStore` in favor of the `CoreDataFeedStore` (we just need one in this project). If needed, of course, we can revert this commit and restore the `Codable` implementation]
+- configure the CI scheme to include the integration test:
+- Test(left-tab)->Info(top-tab) + EssentialFeedCacheIntegrationTests 
+- then in the options select Randomize execution order 
+[include `EssentialFeedCacheIntegrationTests` test target in the CI scheme to guarantee we build and run all cache integration tests as part of the continuous integration pipeline]
+see the logs for test times (last option in the left top tabs)
 ```
 
 
