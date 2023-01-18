@@ -658,9 +658,11 @@ T) test_load_deliversNoItemsOnEmptyCache
 T) test_load_deliversItemsSavedOnASeparateInstance
 - sutToPerformSave
 - sutToPerformLoad
-- add helper functions to integration target (to be able to use them)
+- create a imageFeed and compare it with the loadedImageFeed
+- add helper functions uniqueImageFeed and anyURL to integration target to be able to use them
 [include cache test helper in the cache integration tests target]
-- add setUp and tearDown methods
+- add setUp (setupEmptStoreState) and tearDown (undoStoreSideEffects) methods:
+- deleteStoreArtifacts(): try? FileManager.default.removeItem(at: testSpecificStoreURL()) 
 [clean up and undo all cache side effects on `setUp` and `tearDown` to avoid sharing state between tests]
 [`LocalFeedLoader` in integration with the `CoreDataFeedStore` delivers items saved on separate instances, proving we correctly persist the data models to disk]
 - add expect helper method
