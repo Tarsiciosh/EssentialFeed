@@ -645,9 +645,13 @@ T) test_storeSideEffects_runSerially
 - now there is a new folder with a new file for the integration tests
 [add `EssentialFeedCacheIntegrationTests` target to separate the potentially-slower cache integration tests from the the fast unit/isolated tests]
 T) test_load_deliversNoItemsOnEmptyCache
-- create a sut 
+- create a sut (add createSUT with LocalFeedLoader)
 - perfom a load operation expecting a success result with an empty array
-- add helper functions to integration target (to be able to use them)
+- for the LocalFeedLoader we use a CoreDataStore and Date.init
+- configured with testSpecificStoreURL:
+- FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
+- and storeBundle: Bundle(for: CoreDataFeedStore.self)
+- add helper function trackForMemoryLeaks to the integration target (to be able to use them)
 - to see a failing test change the implementation of the CoreDataFeedStore to return an error instead of a successful response (return completion(.failure(NSError(domain: "error", code: 0))) )
 [include memory leak tracking helper in the cache integration tests target]
 [`LocalFeedLoader` in integration with the `CoreDataFeedStore` delivers no items on empty cache]
