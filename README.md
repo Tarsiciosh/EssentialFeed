@@ -719,9 +719,10 @@ see the logs for test times (last option in the left top tabs)
 [refactor `CachedFeed` type from `enum` to `tuple` since we can represent the absence of a value with an `Optional`]
 - add typealias DeletionResult and InsertionResult (Error?)
 [add typealias for `FeedStore.DeletionResult` and `FeedStore.InsertionResult`]
-- change DeletionResult to Result<Void, Error>
-- change SaveResult
-- deletionResult
+- change DeletionResult and InsertionResult to Result<Void, Error>
+- in LocalFeedLoader save func change completion code to use the result and switch statement (deletionResult)
+- in LocalFeedLoader also change SaveResult
+- IMPORTANT CODE: < if case let Result.failure(error) = result { deletionError = error } > 
 [replace occurrences of `Error?` for representing operation sucess/failure with `Result<Void, Error>`]
 - refactor code in CoreDataFeedStore
 - completion(Result(catching: { if .. return ... else .. return))
