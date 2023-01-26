@@ -708,10 +708,10 @@ see the logs for test times (last option in the left top tabs)
 - HTTPClientResult (repeat the same steps - typealias, nesting) fix - put values inside a tuple
 [replace custom `HTTPClientResult` enum with a nested typealias over the standard `Swift.Result`]
 - RetrieveCachedFeedResult 
-- create new CachedFeed (empty and found) compose the Swift.Result with that
-- fix all breaking changes
+- create new CachedFeed (empty and found) compose the RetrieveCachedFeedResult with that
+- fix all type errorsf
 - move inside the protocol as RetrievalResult
-[replace custom `RetrieveCachedFeedResult` enum with a nested typealias over the standard `Swift.Result` (`FeedStore.RetrievalResult`]
+[replace custom `RetrieveCachedFeedResult` enum with a nested typealias over the standard `Swift.Result` (`FeedStore.RetrievalResult`)]
 - replace CachedFeed with a struct holding a feed and a timestamp (add public init)
 - use an optional CachedFeed in the RetrievalResult  
 - fix braking changes (.some .none) 
