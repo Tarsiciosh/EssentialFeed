@@ -576,12 +576,12 @@ T) test_retrieve_deliversEmptyOnEmptyCache
 T) test_retrieve_hasNoSideEffectsOnEmptyCache
 - assertThatRetrieveHasNoSideEffectsOnEmptyCache
 [`CoreDataFeedStore.retrieve() has no side-effects on empty cache]
-- add CoreDataFeedStore model Feed Cache/FeedStore (add file Core Data)
-- add entities 
+- add CoreDataFeedStore model Feed Cache/FeedStore (add FeedStore.xcdatamodeld file)
+- add entities to the file
 - set Codegen to Manual/None (for the entities)
 - add relationships cache <-> feed (with inverse feature)
 [add CoreDataFeedStore data model]
-- add ManagedCache and ManagedFeedImage (CoreDataFeedStore file)
+- add ManagedCache and ManagedFeedImage (CoreDataFeedStore)
 [add ManagedCache and ManagedFeedImage model representations]
 - add load(modelName:in:) extension to NSPersistentContainer (CoreDataFeedStore file)
 - add with(name:in:) extension to NSManagedObjectModel (CoreDataFeedStore file)
@@ -681,4 +681,58 @@ T) test_save_overridesItemsSavedOnASeparateInstance
 see the logs for test times (last option in the left top tabs)
 ```
 
+### 17) bonus - Improving Model Composability With Swift’s Standard Result and Optional Types, Map, Functors, and Powerful Refactorings Backed by Tests and Types (Compiler!)
 
+```
+- Warning Swift convertion: Convertion to Swift 5 is available
+- select all the targets
+- result: no source changes necessary
+- run the test in CI scheme
+[migrate to Swift 5 (no source changes nedded)]
+- enable base internationalization
+- run tests again
+[enable Base Intenationalization (a recommended setting in the Xcode 10.2.1)]
+- global search for intenal an remove it globally
+- run teh test
+[remove redundant internal access control declarations]
+[replace depricated initializer]
+- no more warnings
+- change the compactMapValues
+[replace `reduce` implementation to remove `nil` values from the dictionary with the `compactMapValues` method]
+- serach for Result (custom)
+- LoadFeedResult (transform into a typealias) Result<[FeedImage], Error>
+[replace custom `LoadFeedResult` enum with the standard `Swift.Result`]
+- move the LoadFeedResult to the FeedLoader protocol and rename it to Result (using Swift.Result for the Swift Result)
+- fix the braking changes (FeedLoader.Result)
+[nest `LoadFeedResult` into the `FeedLoader` protocol as `FeedLoader.Result` since they're closely related]
+- HTTPClientResult (repeat the same steps) fix - put values inside a tuple
+[replace custom `HTTPClientResult` enum with a nested typealias over the standard `Swift.Result`]
+- RetrieveCachedFeedResult 
+- create new CachedFeed (empty and found) compose the Swift.Result with that
+- fix all breaking changes
+- move inside the protocol as RetrievalResult
+[replace custom `RetrieveCachedFeedResult` enum with a nested typealias over the standard `Swift.Result` (`FeedStore.RetrievalResult`]
+- replace CachedFeed with a struct holding a feed and a timestamp (add public init)
+- use an optional CachedFeed in the RetrievalResult  
+- fix braking changes (.some .none) 
+- convert struct CachedFeed to tuple
+[refactor `CachedFeed` type from `enum` to `tuple` since we can represent the absence of a value with an `Optional`]
+- add typealias DeletionResult and InsertionResult (Error?)
+[add typealias for `FeedStore.DeletionResult` and `FeedStore.InsertionResult`]
+- change DeletionResult to Result<Void, Error>
+- change SaveResult
+- deletionResult
+[replace occurrences of `Error?` for representing operation sucess/failure with `Result<Void, Error>`]
+- refactor code in CoreDataFeedStore
+- completion(Result(catching: { if .. return ... else .. return))
+- for success it wraps the values to sucess case. when throwing it wraps the error into a failure case
+- map the find value into cache and return 
+- remove the catching 
+- replace the cache with the $0
+- repeat the same for the other methods
+[simplify `CoreDataFeedStore` completion code with the new `Result` APIs]
+- do the same with the URLSessionHTTPClient
+[simplify `URLSessionHTTPClient` completion code with the new `Result` APIs]
+- change vim .travis.yml (osx_image: xcode10.2)
+[update Travis CI config to build and test with Xcode 10.2]
+``` 
