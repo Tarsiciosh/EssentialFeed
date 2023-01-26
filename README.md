@@ -709,12 +709,12 @@ see the logs for test times (last option in the left top tabs)
 [replace custom `HTTPClientResult` enum with a nested typealias over the standard `Swift.Result`]
 - RetrieveCachedFeedResult 
 - create new CachedFeed (empty and found) compose the RetrieveCachedFeedResult with that
-- fix all type errorsf
+- fix all type errors
 - move inside the protocol as RetrievalResult
 [replace custom `RetrieveCachedFeedResult` enum with a nested typealias over the standard `Swift.Result` (`FeedStore.RetrievalResult`)]
-- replace CachedFeed with a struct holding a feed and a timestamp (add public init)
+- replace CachedFeed with a struct holding a public feed and a timestamp (add public init)
 - use an optional CachedFeed in the RetrievalResult  
-- fix braking changes (.some .none) 
+- fix all type errors (.some .none and CachedFeed)
 - convert struct CachedFeed to tuple
 [refactor `CachedFeed` type from `enum` to `tuple` since we can represent the absence of a value with an `Optional`]
 - add typealias DeletionResult and InsertionResult (Error?)
