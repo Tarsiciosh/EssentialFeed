@@ -705,7 +705,7 @@ see the logs for test times (last option in the left top tabs)
 - move the LoadFeedResult to the FeedLoader protocol and rename it to Result (using Swift.Result for the Swift Result)
 - fix the braking changes (FeedLoader.Result)
 [nest `LoadFeedResult` into the `FeedLoader` protocol as `FeedLoader.Result` since they're closely related]
-- HTTPClientResult (repeat the same steps) fix - put values inside a tuple
+- HTTPClientResult (repeat the same steps - typealias, nesting) fix - put values inside a tuple
 [replace custom `HTTPClientResult` enum with a nested typealias over the standard `Swift.Result`]
 - RetrieveCachedFeedResult 
 - create new CachedFeed (empty and found) compose the Swift.Result with that
