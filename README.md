@@ -695,9 +695,9 @@ see the logs for test times (last option in the left top tabs)
 - global search for intenal an remove it globally
 - run teh test
 [remove redundant internal access control declarations]
-[replace depricated initializer]
+[replace depricated initializer for Data]
 - no more warnings
-- change the compactMapValues
+- change the reduce code with the new compactMapValues
 [replace `reduce` implementation to remove `nil` values from the dictionary with the `compactMapValues` method]
 - serach for Result (custom)
 - LoadFeedResult (transform into a typealias) Result<[FeedImage], Error>
