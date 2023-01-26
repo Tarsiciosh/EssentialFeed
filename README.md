@@ -699,7 +699,7 @@ see the logs for test times (last option in the left top tabs)
 - no more warnings
 - change the reduce code with the new compactMapValues
 [replace `reduce` implementation to remove `nil` values from the dictionary with the `compactMapValues` method]
-- serach for Result (custom)
+- search for Result (custom)
 - LoadFeedResult (transform into a typealias) Result<[FeedImage], Error>
 [replace custom `LoadFeedResult` enum with the standard `Swift.Result`]
 - move the LoadFeedResult to the FeedLoader protocol and rename it to Result (using Swift.Result for the Swift Result)
