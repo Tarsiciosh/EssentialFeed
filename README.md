@@ -726,10 +726,11 @@ see the logs for test times (last option in the left top tabs)
 [replace occurrences of `Error?` for representing operation sucess/failure with `Result<Void, Error>`]
 - refactor code in CoreDataFeedStore
 - completion(Result(catching: { if .. return ... else .. return))
-- for success it wraps the values to sucess case. when throwing it wraps the error into a failure case
-- map the find value into cache and return 
-- remove the catching 
+- for success it wraps the values to a success case. When throwing an error it wraps the error into a failure case
+- map the find value into cache and use it to return the CachedFeed (find returns an optional ManagedCache) a tuple with (nil, nil) is handle as nil?
+- remove the unneeded catching 
 - replace the cache with the $0
+- can even delete the return statemnt (T)
 - repeat the same for the other methods
 [simplify `CoreDataFeedStore` completion code with the new `Result` APIs]
 - do the same with the URLSessionHTTPClient
