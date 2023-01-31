@@ -792,7 +792,7 @@ see the logs for test times (last option in the left top tabs)
 - set title for navigation bar (My Feed) (Navigation Item - left panel)
 - ammend the changes (only storyboard file)
 [add `FeedViewController` rendering 10 cells]
-- create FeedImageViewModel (description, location, imageName) in the controller file
+- create FeedImageViewModel struct (description(?), location(?), imageName) in the controller file
 - create FeedImageViewModel+PrototypeData file
 - create an extension of FeedImageModel with a static var prototypeFeed with an array of FeedImageViewModels
 - add images to the assets catalog
