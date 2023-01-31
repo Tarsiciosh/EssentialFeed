@@ -788,8 +788,8 @@ see the logs for test times (last option in the left top tabs)
 - set the FeedViewController as the class of the table view controller in storyboard
 - we should see 10 cell in screen
 - add views to the table header and footer
-- set height (16)
-- set title for navigation bar (My Feed)
+- set height (16) for both (right panel)
+- set title for navigation bar (My Feed) (Navigation Item - left panel)
 - ammend the changes (only storyboard file)
 [add `FeedViewController` rendering 10 cells]
 - create FeedImageViewModel (description, location, imageName) in the controller file

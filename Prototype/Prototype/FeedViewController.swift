@@ -1,8 +1,12 @@
-//
-//  FeedViewController.swift
-//  Prototype
-//
-//  Created by Tarsicio Spraggon on 31/01/2023.
-//
+import UIKit
 
-import Foundation
+final class FeedViewController: UITableViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: "FeedImageCell")!
+    }
+}
+
