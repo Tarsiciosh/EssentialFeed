@@ -753,19 +753,20 @@ see the logs for test times (last option in the left top tabs)
 - set the navigations controller as initial view controller (Is Initial View Controller) 
 - configure protoype cell (two labels and two images):
 - stack name and pin view in ah horizontal stack view (Editor  -> Embed in -> Stack View) (spacing 6)
-- add the asset image for the pin
+- add the asset images for the pin
 - set the image as the pin 
 - rename the stack to Location Container
-- stack the remaining tree view vertically (spacing 10)
-- pin this stack to the (bottom gear - all set to 0 - Constraints to margins)  
-- add extra bottom and top space (6) set low priority (999) (vertical constraints) to avoid contraints warnings
+- stack now the tree views vertically (spacing 10)
+- pin this stack to the content view (bottom gear - all set to 0 - Constrain to margins)  
+- add extra bottom and top space (6) set low priority (999) (right panel) to avoid contraints warnings
+- IMPORTANT ADVICE: SET LOW PRIORITY TO THE VERTICAL CONSTRAINTS FOR THE CELL 
 - embed the image view in a view (Image Container)
-- set background color (E3E3E3)
-- User Defined Runtime Attributes - layer.cornerRadius (number) value 22
+- set background color (E3E3E3) (RGB Sliders)
+- User Defined Runtime Attributes (Identity inpector) - layer.cornerRadius (number) value 22
 - add Clip to Bounds
-- make the image container have equal width with the Stack View (ctr + drag) 
-- add aspect ration Multiplier 1:1
-- pin the imaga inside the container to all of the sides with no margin (no constraint to marging) 
+- make the image container have equal width with the parent Stack View (ctrl + drag) 
+- add aspect ration Multiplier 1:1 (ctrl drag to itself)
+- pin the imaga inside the container to all of the sides with no margin (no Constrain to margings) 
 - add long content to the description label (change lines to 6)
 - set the color (4A4A4A) font size (16)
 - add long content to the location label (change line to 2)
@@ -773,11 +774,11 @@ see the logs for test times (last option in the left top tabs)
 - embed the pin view into a view (Pin Container)
 - set the width (10)
 - pin the image to the top and leading and make height (14)
-- set the Location Container to be equal width of the superview 
-- set Stack Allignment to top
+- set the Location Container to be equal width of the superview (Stack View)
+- set Location Container Stack Allignment to top
 - change row height 580 (only for pre viewing purposes)
 - pin top constraint (3)
-- add Reusable indentifier: FeedImageCell
+- add Reusable indentifier: FeedImageCell (Attibutes Inspector)
 - Table View - Separator None
 - Cell - Selection None
 [add prototype storyboard with table view and feed cell layout]
