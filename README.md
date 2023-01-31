@@ -802,8 +802,9 @@ see the logs for test times (last option in the left top tabs)
 - change the class type in storyboard
 - connect the outlets with ctrl + drag
 [add `FeedImageCell` with storyboard connections]
-- add feed (with prototypes) to the FeedViewController
+- add private feed (with FeedImageViewModel.prototypeFeedc) to the FeedViewController
 - update the table view functions
+- cast the cell to the FeedImageCell
 - then cell.configure(with: model) 
 - add and extension to the FeedImageCell (in the FeedViewController file)
 - create the configure(with:) func
