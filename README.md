@@ -735,6 +735,82 @@ see the logs for test times (last option in the left top tabs)
 [simplify `CoreDataFeedStore` completion code with the new `Result` APIs]
 - do the same with the URLSessionHTTPClient
 [simplify `URLSessionHTTPClient` completion code with the new `Result` APIs]
-- change vim .travis.yml (osx_image: xcode10.2)
+- update CI config to support swift 5 (vim .travis.yml (osx_image: xcode10.2))
 [update Travis CI config to build and test with Xcode 10.2]
 ``` 
+
+## THIRD MODULE - UI + PRESENTATION
+
+### 1) Gathering Fast Feedback and Validating UI Design and Dev Decisions Through Realistic App Prototypes
+```
+- create new project called Prototype (iOS Single View App) no Core Data, Unit Tests or UI Tests in the same project folder
+- chose device orientation portrait (disable landscape left and right)
+- Bundle Indetifier: (..).EssetialFeed.Prototype
+- remove ViewController file (also the class in the storyboard)
+[add empty project for prototype]
+- remove the old viewcontroller and add a table view controller
+- embed it in a navigation controller (Editor -> Embed in)
+- set the navigations controller as initial view controller (Is Initial View Controller) 
+- configure protoype cell (two labels and two images):
+- stack name and pin view in ah horizontal stack view (Editor  -> Embed in -> Stack View) (spacing 6)
+- add the asset image for the pin
+- set the image as the pin 
+- rename the stack to Location Container
+- stack the remaining tree view vertically (spacing 10)
+- pin this stack to the (bottom gear - all set to 0 - Constraints to margins)  
+- add extra bottom and top space (6) set low priority (999) (vertical constraints) to avoid contraints warnings
+- embed the image view in a view (Image Container)
+- set background color (E3E3E3)
+- User Defined Runtime Attributes - layer.cornerRadius (number) value 22
+- add Clip to Bounds
+- make the image container have equal width with the Stack View (ctr + drag) 
+- add aspect ration Multiplier 1:1
+- pin the imaga inside the container to all of the sides with no margin (no constraint to marging) 
+- add long content to the description label (change lines to 6)
+- set the color (4A4A4A) font size (16)
+- add long content to the location label (change line to 2)
+- set the color (9B9B9B) font size (15)
+- embed the pin view into a view (Pin Container)
+- set the width (10)
+- pin the image to the top and leading and make height (14)
+- set the Location Container to be equal width of the superview 
+- set Stack Allignment to top
+- change row height 580 (only for pre viewing purposes)
+- pin top constraint (3)
+- add Reusable indentifier: FeedImageCell
+- Table View - Separator None
+- Cell - Selection None
+[add prototype storyboard with table view and feed cell layout]
+- create a view controller FeedViewController (UITableViewController)
+- number of rows (10)
+- cell for row return the cell with the "FeedImageCell" identifier
+- set the FeedViewController as the class of the table view controller in storyboard
+- we should see 10 cell in screen
+- add views to the table header and footer
+- set height (16)
+- set title for navigation bar (My Feed)
+- ammend the changes (only storyboard file)
+[add `FeedViewController` rendering 10 cells]
+- create FeedImageViewModel (description, location, imageName) in the controller file
+- create FeedImageViewModel+PrototypeData file
+- create an extension of FeedImageModel with a static var prototypeFeed with an array of FeedImageViewModels
+- add images to the assets catalog
+[add prototype feed data for demoing puposes]
+- create FeedImageCell with outlets (locationContainer, locationLabel, feedImageView, descriptionLabel)
+- e.g. @IBOutlet private(set) var locationContainer: UIView!
+- change the class type in storyboard
+- connect the outlets with ctrl + drag
+[add `FeedImageCell` with storyboard connections]
+- add feed (with prototypes) to the FeedViewController
+- update the table view functions
+- then cell.configure(with: model) 
+- add and extension to the FeedImageCell (in the FeedViewController file)
+- create the configure(with:) func
+- set all the data olso the hidden views
+- e.g. description.isHidden = model.description == nil
+[render prototype feed data on the table view]
+- create the fadeIn method to simulate the loading of the views
+[add fade-in animation to simulate "asynchronous image loading"]
+[add app icon] 
+
+```
