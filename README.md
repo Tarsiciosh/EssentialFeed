@@ -828,8 +828,8 @@ see the logs for test times (last option in the left top tabs)
  - add iphoneos and iphonesimulator to the EssentialFeedCacheIntegrationTests (with an scheme already)
  [make `EssentialFeedCacheIntegrationTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
  - add new framework EssentialFeediOS (+ in the project) (Cocoa Touch Framework) include unit tests
- - it add two new targets that support only iOS (EssentialFeediOS and EssentialFeediOSTests)
- - delete apple added files (.h)
+ - it added two new targets that support only iOS (EssentialFeediOS and EssentialFeediOSTests)
+ - delete apple added files (EssentialFeediOS.h and EssentialFeediOSTests.swift)
  - configure the EssentialFeediOS scheme (randomize order, gather coverage for EssentialFeediOS)
  [add `EssentialFeediOS` framework (prod and test) target for iOS platform-specific components]
  - add this new framework to the CI (canot add in the current CI scheme because it is macOS)
