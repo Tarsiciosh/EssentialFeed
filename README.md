@@ -825,7 +825,7 @@ see the logs for test times (last option in the left top tabs)
  - create a new scheme EssentialFeedEndToEndTests (to run the end to end test in isolation)
  - Test tab (Options) Gather covarage for EssentialFeed target, (Info) Randomize execution order  
  [make `EssentialFeedAPIEndToEndTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
- - add iphoneos and iphonesimulator to the EssentialFeedAPIEndToEndTests (with an scheme already)
+ - add iphoneos and iphonesimulator to the EssentialFeedCacheIntegrationTests (with an scheme already)
  [make `EssentialFeedCacheIntegrationTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
  - add new framework EssentialFeediOS (+ in the project) (Cocoa Touch Framework) include unit tests
  - it add two new targets that support only iOS (EssentialFeediOS and EssentialFeediOSTests)
