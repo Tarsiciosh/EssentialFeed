@@ -821,7 +821,7 @@ see the logs for test times (last option in the left top tabs)
  - EssentialFeed Project -> EssentialFeed Target -> Build Settings (all - combined) -> architectures -> supported platforms: add (iphoneos iphonesimultator) 
  - add iphoneos and iphonesimulator to the EssentialFeedTests target
  [make `EssentialFeed` and `EssentialFeedTests` targets support macOS and iOS since they're platform-independent (can run on any platform!)]
- - add iphone and iphonesimulator support to the EssentialFeedAPIEndToEndTests target
+ - add iphoneos and iphonesimulator support to the EssentialFeedAPIEndToEndTests target
  - create a new scheme EssentialFeedEndToEndTests (to run the end to end test in isolation)
  - Test tab (Options) Gather covarage for EssentialFeed target, (Info) Randomize execution order  
  [make `EssentialFeedAPIEndToEndTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
