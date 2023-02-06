@@ -816,26 +816,30 @@ see the logs for test times (last option in the left top tabs)
 [add app icon] 
 ```
 
- ### 2) Supporting Multiple Platforms with Swift Frameworks While Separating Platform-specific Components to Facilitate Loose Coupling and Speed up Development
+### 2) Supporting Multiple Platforms with Swift Frameworks While Separating Platform-specific Components to Facilitate Loose Coupling and Speed up Development
  ```
- - EssentialFeed Project -> EssentialFeed Target -> Build Settings (all - combined) -> architectures -> supported platforms: add (iphoneos iphonesimultator) 
- - add iphoneos and iphonesimulator to the EssentialFeedTests target
- [make `EssentialFeed` and `EssentialFeedTests` targets support macOS and iOS since they're platform-independent (can run on any platform!)]
- - add iphoneos and iphonesimulator support to the EssentialFeedAPIEndToEndTests target
- - create a new scheme EssentialFeedEndToEndTests (to run the end to end test in isolation)
- - Test tab (Options) Gather covarage for EssentialFeed target, (Info) Randomize execution order  
- [make `EssentialFeedAPIEndToEndTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
- - add iphoneos and iphonesimulator to the EssentialFeedCacheIntegrationTests (with an scheme already)
- [make `EssentialFeedCacheIntegrationTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
- - add new framework EssentialFeediOS (+ in the project) (Cocoa Touch Framework) include unit tests
- - it added two new targets that support only iOS (EssentialFeediOS and EssentialFeediOSTests)
- - delete apple added files (EssentialFeediOS.h and EssentialFeediOSTests.swift)
- - configure the EssentialFeediOS scheme (randomize order, gather coverage for EssentialFeediOS)
- [add `EssentialFeediOS` framework (prod and test) target for iOS platform-specific components]
- - add this new framework to the CI (canot add in the current CI scheme because it is macOS)
- - tap on duplicate scheme, rename to CI_iOS (add the EssentialFeediOSTests) (randomize execution order, gather coverage for EssentialFeediOS) tapped on Shared (to let the CI server have access)
- - rename old CI to CI_macOS
- - update the ci config file to run both, the macOS independent test on macos and macOS and iOS on iOS
- [add separate CI schemes for macOS and iOS as we now have an iOS-specific target that should no be tested on macOS]
-  
+- EssentialFeed Project -> EssentialFeed Target -> Build Settings (all - combined) -> architectures -> supported platforms: add (iphoneos iphonesimultator) 
+- add iphoneos and iphonesimulator to the EssentialFeedTests target
+[make `EssentialFeed` and `EssentialFeedTests` targets support macOS and iOS since they're platform-independent (can run on any platform!)]
+- add iphoneos and iphonesimulator support to the EssentialFeedAPIEndToEndTests target
+- create a new scheme EssentialFeedEndToEndTests (to run the end to end test in isolation)
+- Test tab (Options) Gather covarage for EssentialFeed target, (Info) Randomize execution order  
+[make `EssentialFeedAPIEndToEndTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
+- add iphoneos and iphonesimulator to the EssentialFeedCacheIntegrationTests (with an scheme already)
+[make `EssentialFeedCacheIntegrationTests` target support macOS and iOS since it's platform-independent (can run on any platform!)]
+- add new framework EssentialFeediOS (+ in the project) (Cocoa Touch Framework) include unit tests
+- it added two new targets that support only iOS (EssentialFeediOS and EssentialFeediOSTests)
+- delete apple added files (EssentialFeediOS.h and EssentialFeediOSTests.swift)
+- configure the EssentialFeediOS scheme (randomize order, gather coverage for EssentialFeediOS)
+[add `EssentialFeediOS` framework (prod and test) target for iOS platform-specific components]
+- add this new framework to the CI (canot add in the current CI scheme because it is platform independent)
+- tap on duplicate scheme, rename to CI_iOS (add the EssentialFeediOSTests) (randomize execution order, gather coverage for EssentialFeediOS also) tapped on Shared (to let the CI server have access)
+- rename old CI to CI_macOS
+- update the ci config file to run both, the macOS independent tests on macos on mac platform/destination and macOS and iOS tests on iOS platform/destination
+[add separate CI schemes for macOS and iOS as we now have an iOS-specific target that should no be tested on macOS]
+```
+
+### 3) Apple MVC, Test-driving UIViewControllers, Dealing with UIKit’s Inversion of Control & Temporal Coupling, and Decoupling Tests from UI Implementation Details
+ ```
+ 
  ```
