@@ -866,7 +866,7 @@ T) test_init_doesNotLoadFeed
 - create the FeedViewController
 - create LoaderSpy (private(set) loadCallCount = 0) 
 - create the instance of the loaderSpy (loader)
-- add init(loader:) to the FeedViewController that does nothing (using the loader spy type)
+- add init(loader:) to the FeedViewController that does nothing (using the loader spy type with namespace)
 [Does not load feed on init (before the view is loaded)]
 T) test_viewDidLoad_loadsFeed
 - create a loader (spy), create a sut with that loader
