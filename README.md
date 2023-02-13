@@ -890,11 +890,11 @@ T) test_pullToRefresh_loadsFeed
 - create a sut and a spy
 - call loadViewIfNeeded
 - make FeedViewController inherit from UTableViewController
-- iterate through all of the targets and actions in the refresh control for the control envent .valueChange and perform the action
-- create a refresh control and add a target action for the valueChanged event
-- create a load function (@objc)
+- iterate through all of the targets and actions in the refresh control for the control event .valueChange and perform the action
+- create a refresh control (asign it to the already existing optional refreshControl) and add a target action for the valueChanged event
+- create a private load function (@objc)
 - move the loader logic there and call load in viewDidLoad
-- move the code to simultate the pull to refresh to a UIRefreshControl extension called simulatePullToRefresh
+- move the code to simultate the pull to refresh to a UIRefreshControl private extension called simulatePullToRefresh
 - execute the code twice and expect 2 and 3 loadCallCounts
 [extract pull to refresh simulation into a reusable extension on `UIRefreshControl`]
 T) test_viewDidLoad_showsLoadingIndicator
