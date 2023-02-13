@@ -880,7 +880,7 @@ T) test_viewDidLoad_loadsFeed
 - change type of the loader to be FeedLoader 
 - import EssentialFeed 
 - link the EssetialFeed to the EssentialFeediOS
-- preject -> EssentialFeediOS -> Linked Frameworks and Libraries -> + -> EssentialFeed.framework
+- project -> EssentialFeediOS -> Frameworks and Libraries -> + -> EssentialFeed.framework
 - fix production and spy code
 [replace `FeedViewControllerTests.LoaderSpy` references in the production types with the production `FeedLoader` protocol abstraction]
 - create a makeSUT 
