@@ -874,7 +874,7 @@ T) test_viewDidLoad_loadsFeed
 - assert that loader.count is 1
 - change the current FeedViewController initializer to be convenience
 - add the call to the loader in viewDidLoad: loader?.load()
-- add a reference to the loader in the FeedViewController (optional)
+- add a private reference to the loader in the FeedViewController (optional)
 - add the load function to the spy and increment the count 
 [load feed on view did load]
 - change type of the loader to be FeedLoader 
