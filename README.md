@@ -933,7 +933,7 @@ T) test_pullToRefresh_hidesLoadingIndicatorOnLoaderCompletion
 - add the index of the completion block to run the correponding completion blocks (e.g. at: 0)
 - test should fail now 
 - move the beginRereshing to the load method 
-- add assertion names e.g. "Expected laoding indicator once view is loaded" "Expected no loading indicator once loading is completed"
+- add assertion names e.g. "Expected loading indicator once view is loaded" "Expected no loading indicator once loading is completed"
 [combine relevant tests to eliminate temporal coupling bugs]
 - move the FeedViewController to production
 - set the correct access control
