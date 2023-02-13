@@ -840,6 +840,101 @@ see the logs for test times (last option in the left top tabs)
 ```
 
 ### 3) Apple MVC, Test-driving UIViewControllers, Dealing with UIKit’s Inversion of Control & Temporal Coupling, and Decoupling Tests from UI Implementation Details
- ```
- 
+```
+(on the Prototype project)
+- change FeedViewController to start with an empty feed
+- when the view will appears call refresh (@IBAction func)
+- refresh first make the refreshControll beginRefreshing
+- and dispatch async (1.5) to load the data from prototypeFeed and reload table (if feed is emtpy). Then call endRefreshing
+- setup the refresh control in storyboard (set refreshing property to enabled) 
+- then connect the refresh action with the Refresh Control Value Changed event (from the refresh in the connector inspector to the refresh control on the document outline (left)) 
+[add `UIRefreshControl` to prototype to simulate async loading of the feed]
+- add a reference to the feedImageContainer (IBOutlet)
+- add extension to UIView for the shimmering animation
+- startShimmering in awakeFromNib and prepareForReuse
+- conect the image container outlet
+- return inmediately in fadeIn to see the animation
+- after the animation is done stopShimmering
+[add shimmering animation while loading Image in the prototype app]
+
+(on the EssentialFeed project)
+- create FeedViewControllerTests file
+T) test_init_doesNotLoadFeed
+- create a sut with a loader
+- assert loader.loadCallCount to be 0 
+- create the FeedViewController
+- create LoaderSpy (private(set) loadCallCount = 0) 
+- create the instance of the loaderSpy (loader)
+- add init(loader:) to the FeedViewController that does nothing (using the loader spy type)
+[Does not load feed on init (before the view is loaded)]
+T) test_viewDidLoad_loadsFeed
+- create a loader (spy), create a sut with that loader
+- invoke loadViewInNeeded in the sut (now FeedViewController must inherit from UIViewController)
+- assert that loader.count is 1
+- change the current FeedViewController initializer to be convenience
+- add the call to the loader in viewDidLoad: loader?.load()
+- add a reference to the loader in the FeedViewController (optional)
+- add the load function to the spy and increment the count 
+[load feed on view did load]
+- change type of the loader to be FeedLoader 
+- import EssentialFeed 
+- link the EssetialFeed to the EssentialFeediOS
+- preject -> EssentialFeediOS -> Linked Frameworks and Libraries -> + -> EssentialFeed.framework
+- fix production and spy code
+[replace `FeedViewControllerTests.LoaderSpy` references in the production types with the production `FeedLoader` protocol abstraction]
+- create a makeSUT 
+- track for memory leaks (add target membership to the XCTestCase+MemoryLeakTracking file to EssentialFeediOSTests)
+[extract system under test (sut) creation to a factory method]
+T) test_pullToRefresh_loadsFeed
+- create a sut and a spy
+- call loadViewIfNeeded
+- make FeedViewController inherit from UTableViewController
+- iterate through all of the targets and actions in the refresh control for the control envent .valueChange and perform the action
+- create a refresh control and add a target action for the valueChanged event
+- create a load function (@objc)
+- move the loader logic there and call load in viewDidLoad
+- move the code to simultate the pull to refresh to a UIRefreshControl extension called simulatePullToRefresh
+- execute the code twice and expect 2 and 3 loadCallCounts
+[extract pull to refresh simulation into a reusable extension on `UIRefreshControl`]
+T) test_viewDidLoad_showsLoadingIndicator
+- create a sut 
+- call loadViewIfNeeded
+- assert that the refreshControl isRefreshing is true
+- call beginRefreshing (refreshControl) in viewDidLoad
+[show loading indicator on view did load]
+T) test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion
+- create a sut and a loader
+- call lvin
+- and make the spy complete (completeFeedLoading)
+- add completeFeedLoading to the spy 
+- capture completion blocks in a private completions var
+- move loadCallCount to a computed var using the completions array count
+- call endRefreshing in the load completion closure
+- add weak self in the closure
+[hide loading indicator on loader completion]
+T) test_pullToRefresh_showsLoadingIndicator
+- create a sut 
+- call simulate pull to refresh 
+- assert that isRefresing is true
+T) test_pullToRefresh_hidesLoadingIndicatorOnLoaderCompletion
+- create a sut and loader
+- call simulate 
+- complete loading 
+- assert that isRefreshing is false
+[hide loading indicator on pull to refresh]
+- rename the tests that mention the pull to refresh to userInitiatedFeedReload
+- create a simulateUserInitiatedFeedReload (DSL = Domain Specific Languague) as a private extension of the FeedViewController
+[decouple tests from specific UI controls for user initiated reloads with test-specific DSL method]
+- add isShowingLoadingIndicator (DSL) to the FeedViewController
+[decouple tests from specific UI loading indicators with test-specific DSL method]
+- unify loader tests to test_loadFeedActions_requestFeedFromLoader
+- unify loading indicator tests to test_loadingIndicator_isVisibleWhileLoadingFeed
+- add the index of the completion block to run the correponding completion blocks (e.g. at: 0)
+- test should fail now 
+- move the beginRereshing to the load method 
+- add assertion names e.g. "Expected laoding indicator once view is loaded" "Expected no loading indicator once loading is completed"
+[combine relevant tests to eliminate temporal coupling bugs]
+- move the FeedViewController to production
+- set the correct access control
+[move `FeedViewController` to production target]
  ```
