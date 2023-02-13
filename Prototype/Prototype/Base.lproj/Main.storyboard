@@ -109,6 +109,7 @@
                                 <connections>
                                     <outlet property="descriptionLabel" destination="6io-r4-jyo" id="LUX-VB-kBc"/>
                                     <outlet property="feedImageView" destination="YqN-Wb-5Vk" id="ovE-P4-VLF"/>
+                                    <outlet property="imageContainer" destination="jug-hQ-uM4" id="bxJ-5j-3N2"/>
                                     <outlet property="locationContainer" destination="7bI-tT-QaU" id="hVC-mw-xwG"/>
                                     <outlet property="locationLabel" destination="1Dn-zC-1A7" id="tLw-Cq-cl8"/>
                                 </connections>
@@ -121,6 +122,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="My Feed" id="vEp-Ox-odQ"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ZP7-gZ-2R9">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <action selector="refresh" destination="HP1-aW-Z2f" eventType="valueChanged" id="HAT-YA-Dnq"/>

@@ -849,12 +849,13 @@ see the logs for test times (last option in the left top tabs)
 - setup the refresh control in storyboard (set refreshing property to enabled) 
 - then connect the refresh action with the Refresh Control Value Changed event (from the refresh in the connector inspector to the refresh control on the document outline (left)) 
 [add `UIRefreshControl` to prototype to simulate async loading of the feed]
-- add a reference to the feedImageContainer (IBOutlet)
-- add extension to UIView for the shimmering animation
+- add a reference to the feedImageContainer (IBOutlet) in FeedImageCell
+- add a private extension to UIView for the shimmering animation
 - startShimmering in awakeFromNib and prepareForReuse
-- conect the image container outlet
+- connect the image container outlet
 - return inmediately in fadeIn to see the animation
-- after the animation is done stopShimmering
+- after the animation is done stopShimmering (add completion parameter to the animation)
+- change withDuration: 0.35, delay: 1.25
 [add shimmering animation while loading Image in the prototype app]
 
 (on the EssentialFeed project)
