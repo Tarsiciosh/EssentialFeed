@@ -978,9 +978,9 @@ T) test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError
 - assert that sut is rendering image0
 - simulate user reload
 - complete with error
-- assert that sut is still rendering image0
-- create completeFeedLoaderWithError(at:)
-- change production code to switch the result 
+- assert that sut is still rendering image0 
+- create completeFeedLoaderWithError(at:) TF
+- change production code to switch the result TS 
 [does not alter current feed rendering state on load error]
 - change the test of the loading indicator
 - move the end refreshing outside the switch
