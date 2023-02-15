@@ -982,7 +982,7 @@ T) test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError
 - create completeFeedLoaderWithError(at:) TF
 - change production code to switch the result TS 
 [does not alter current feed rendering state on load error]
-- change the test of the loading indicator
+- change the test of the loading indicator to fail in the last one
 - move the end refreshing outside the switch
 - change switch with if let and result.get
 - change error messages on loading indicator test
