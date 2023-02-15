@@ -1012,14 +1012,18 @@ T) test_feedImageView_cancelsImageLoadingWhenNotVisibleAnymore
 - loadViewIfNeeded
 - completeFeedLoading with that images
 - expect loader.cancelledImageURLs to be empty
-- add it to the loader spy
+- add it to the loader spy TS
 - simulateFeedImageViewNotVisible(at:0) 
 - expect cancelledImageURLs array has the url of the first image
 - simulateFeedImageViewNotVisible(at:1)
-- expect cancelledImageURLs array has the urls of the two images
+- expect cancelledImageURLs array has the urls of the two images TF
 - add that simulateFeedImageViewVisible now return the view (FeedImageCell)
 - add discardableResult (to not break the other tests)
+- add simulateFeedImageViewNotVisible 
+- (get the view using simulateFeedImageViewVisible)
+- (add a delegate and ask for the didEndDisplaying func)
 - implement the didEndDisplaying cell func on production code
+- add self to be the delegate of the tableView
 - tell the image loader to cancel the request
 - add cancelImageDataLoad(from url: URL)
 - fix the spy 

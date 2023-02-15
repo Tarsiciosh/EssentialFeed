@@ -3,6 +3,7 @@ import EssentialFeed
 
 public protocol FeedImageDataLoader {
     func loadImageData(from: URL)
+    func cancelImageDataLoad(from: URL)
 }
 
 public final class FeedViewController: UITableViewController {
@@ -21,6 +22,8 @@ public final class FeedViewController: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        
+        tableView.delegate = self
         
         load()
     }
@@ -41,7 +44,7 @@ public final class FeedViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellModel = tableModel [indexPath.row]
+        let cellModel = tableModel[indexPath.row]
         let cell = FeedImageCell()
         cell.descriptionLabel.text = cellModel.description
         cell.locationContainer.isHidden = (cellModel.location == nil)
@@ -50,5 +53,10 @@ public final class FeedViewController: UITableViewController {
         imageLoader?.loadImageData(from: cellModel.url)
         
         return cell
+    }
+    
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellModel = tableModel[indexPath.row]
+        imageLoader?.cancelImageDataLoad(from: cellModel.url)
     }
 }
