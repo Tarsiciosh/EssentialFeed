@@ -990,18 +990,19 @@ T) test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError
 T) test_feedImageView_loadsImageURLWhenVisible
 - create two images with different urls
 - complete the loading with them
-- check that loader loadedImageUrls is empty
-- simluateFeedImageViewVisible(at:) (DSL on FeedViewController) 
-- assert that loadedImageUrls is iqual to image0.url
-- add the same for the second image
-- call imageLoader.loadImageData(from:) (not yet created) on cell for row
+- check that loader loadedImageUrls is empty TS
+- simulateFeedImageViewVisible(at:) (DSL on FeedViewController) 
+- assert that loadedImageURLs is iqual to image0.url
+- add the same for the second image TF
+- in cell for row call imageLoader.loadImageData(from:) (not yet created) on cell for row
 - add imageLoader of new type FeedImageDataLoader
-- create the protocol
+- add the FeedImageDataLoader protocol 
 - rename loader to feedLoader to give more context
 - add it to the init method
 - fix the makeSUT (pass the same spy)
 - add LoaderSpy conformance to FeedImageDataLoader 
-- change loadedImageURL (private(set) var with empty  
+- change loadedImageURLs (private(set) var with empty array
+- in loadImageData append the url TS
 - segment the methods with MARK 
 - rename completions to feedRequests
 - rename loadCallCount to loadFeedCallCount
