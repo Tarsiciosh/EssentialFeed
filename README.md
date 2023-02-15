@@ -939,3 +939,189 @@ T) test_pullToRefresh_hidesLoadingIndicatorOnLoaderCompletion
 - set the correct access control
 [move `FeedViewController` to production target]
  ```
+ 
+### 4) Effectively Test-driving MVC UI with Multiple Views/Models/State, Efficiently Loading/Prefetching/Cancelling Image Requests, Inside-Out vs. Outside-In Development, and Identifying the Massive View Controller Anti-pattern by Following Design Principles
+```
+T) test_loadFeedCompletion_rendersSuccessfullyLoadedFeed
+- call loadViewIfNeeded
+- assert that the sut numberOfRenderedFeedImageViews is 0  
+- add numberOfRenderedFeedImageViews DSL  
+- (in this case use numberOfRows - feedImageSection (0))
+- create an image0 (makeImage func with location, description and dafault url)
+- then call completeFeedLoading with that image (change completeFeedLoading)
+- expect 1 rendered image view TF
+- add numberOfRowsInSection to return tableModel (FeedImage array) count
+- in the load function set the tableModel with the received data (use result.get)
+- and reload the table view TS
+- in the test get a view with feedImageView(at:)
+- add feedImageView(at:) DSL (use tableView.dataSource and cellForRowAt)
+- cast the view as FeedImageCell
+- create FeedImageCell (UITableViewCell)
+- assert that the view is not nil
+- assert that isShowingLocation is true
+- assert that locationText is equal to the image0 location
+- assert that descriptionText is equal to the image0 description
+- add extension to the FeedImageCell to add those DSL
+- add the view elements to the FeedImageCell (locationLabel = UILabel()) TF
+- add cellForRowAt in sut (fill the cell with cellModel) TS 
+- add more images (with all combinations) 
+- to test many (4) TEST 0 TEST 1 AND TEST MANY 
+- assert that the views are 4 
+- move assertion of the cell to a helper function
+- assertThat(sut, hasViewConfiguredFor: image0, at: 0)
+- use this helper to check all cells TS
+- add helper method assertThat(sut, isRendering: [])
+[render loaded feed on successful load completion]
+T) test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError
+- loadViewIfNeeded
+- completeFeedLoading with image0
+- assert that sut is rendering image0
+- simulate user reload
+- complete with error
+- assert that sut is still rendering image0
+- create completeFeedLoaderWithError(at:)
+- change production code to switch the result 
+[does not alter current feed rendering state on load error]
+- change the test of the loading indicator
+- move the end refreshing outside the switch
+- change switch with if let and result.get
+- change error messages on loading indicator test
+[hide loading indicator on both load error and success]
+T) test_feedImageView_loadsImageURLWhenVisible
+- create two images with different urls
+- complete the loading with them
+- check that loader loadedImageUrls is empty
+- simluateFeedImageViewVisible(at:) (DSL on FeedViewController) 
+- assert that loadedImageUrls is iqual to image0.url
+- add the same for the second image
+- call imageLoader.loadImageData(from:) (not yet created) on cell for row
+- add imageLoader of new type FeedImageDataLoader
+- create the protocol
+- rename loader to feedLoader to give more context
+- add it to the init method
+- fix the makeSUT (pass the same spy)
+- add LoaderSpy conformance to FeedImageDataLoader 
+- change loadedImageURL (private(set) var with empty  
+- segment the methods with MARK 
+- rename completions to feedRequests
+- rename loadCallCount to loadFeedCallCount
+[load image URL when image view is visible]
+T) test_feedImageView_cancelsImageLoadingWhenNotVisibleAnymore
+- create two images
+- loadViewIfNeeded
+- completeFeedLoading with that images
+- expect loader.cancelledImageURLs to be empty
+- add it to the loader spy
+- simulateFeedImageViewNotVisible(at:0) 
+- expect cancelledImageURLs array has the url of the first image
+- simulateFeedImageViewNotVisible(at:1)
+- expect cancelledImageURLs array has the urls of the two images
+- add that simulateFeedImageViewVisible now return the view (FeedImageCell)
+- add discardableResult (to not break the other tests)
+- implement the didEndDisplaying cell func on production code
+- tell the image loader to cancel the request
+- add cancelImageDataLoad(from url: URL)
+- fix the spy 
+[cancel image loading when image view is not visible anymore]
+- add protocol FeedImageDataLoaderTask (func cancel())
+- change the FeedImageDataLoader to return that task
+- now the caller can store the tasks and cancel them (task[indexPath])
+- tasks is a dictionary with key of type IndexPath
+- fix the spy 
+- add TaskSpy conforming to the FeedImageDataLoaderTask
+- with a cancelCallBack (in this call back we increment the count as before)
+[extract `CancelImageDataLoad(from: URL)` method from `FeedImageDataLoader` protocol into a new `FeedImageDataLoaderTask` protocol that represents a task that can be cancelled. This way, we respect the Interface Segregation Principle and `FeedImageDataLoader` implementations are not force to be statefull]
+T) test_feedImageViewLoadingIndicator_isVisibleWhileLoadingImage
+- load two images 
+- get the images with simulateFeedImageViewVisible(at:0)
+- assert that isShowingImageLoadingIndicator is true for the two images 
+- then completeImageLoading(at: 0)
+- assert that isShowingImageLoadingIndicator is false for the first and true for the second
+- then completeImageLoading(at:1)
+- assert that both are false now
+- implement the completeImageLoading(with:at:) and completeImageLoadingWithError(at:) in the spy
+- add isShowingImageLoadingIndicator DSL to the FeedImageCell (isShimmering)
+- add feedImageContainer to FeedImageCell
+- add the shimmering extension to the UIView
+- implement the shimmering on the cell for row func 
+- add a callback to the imageLoader with a result (data or error) 
+- stop the shimmering on the callback
+- fix the spy 
+- add imageRequests (url, completions)
+- refactor loadedImageURLs to get the info from imageRequests
+- use the imageRequest in the completeImageLoading
+- and NSError in the completeImageLoadingWithError
+[feed image view loading indicator is visible while loading image]
+T) test_feedImageView_rendersImageLoadedFromURL
+- loadViewIfNeeded
+- completeLoading with two images
+- get the views with simulateFeedImageViewVisible(at: 0) and 1
+- assert that view0 and view1 renderedImage's are .none
+- create a UIImage imageData0 (using pngData)
+- completeImageLoading(with: imageData0, at: 0)
+- assert that view0 rendered image is equal to imageData0 and view1 is .none
+- repeat the step and assert both images are equal to the ones provided
+- add renderedImage DSL to the FeedImageCell (using pngData)
+- add feedImageView to the cell
+- add extension make(withColor:) to UIImage
+- implement cell for row code
+- set the image to nil before start loading (avoid issues when reusing cells) 
+- in the completion block get the data from the result and set the image 
+[render loaded images from URL]
+T) test_feedImageViewRetryButton_isVisibleOnImageURLLoadError
+- repeat the same principle with a isShowingRetryAction
+- add the DSL isShowingRetryAction to FeedImageCell (feedImageRetryButton)
+- add feedImageRetryButton to FeedImageCell
+- in the cell for row it start hidden 
+- and visible if couldn get data from result, isHidden = (data != nil)
+[feed image view retry button is visible on image url load error]
+T) test_feedImageViewRetryButton_isVisibleOnInvalidImageData
+- complete loading with an image
+- get the view of the cell 
+- assert that isShowingRetryAction is false
+- complete image loading with an invalid image
+- assert that isShowingRetryAction is true
+- refactor the code in production to check for the converted image 
+[feed image view retry button is visible on invalid loaded image data]
+T) test_feedImageViewRetryAction_retriesImageLoad
+- create two images (makeImage) with distinct urls ("http://url-0/1.com")
+- complete with those images
+- get the views with simulateFeedImageViewVisible 
+- assert that the loaded urls are the ones provided
+- completeImageLoadingWithError(at:0) and 1
+- check again for only two urls requests
+- view0 simulateRetryAction  
+- assert loadedImageUrls are now three urls in order (image0.url, 1, 0) 
+- view1 simulateRetryAction
+- assert loadedIamgeUrls are now the four urls
+- create simulateRetryAction DSL in FeedImageCell (simulateTap)
+- create extension on UIButton (going trough all target actions)
+- in cell for row add to the cell the onRetry code 
+- add onRetry property to the cell (optional closure)
+- configure the button with a target action (retryButtonTapped) pointing to self and perform the onRetry closure
+- add the same logic to load the image (copy and paste)
+- create a closure called loadImage 
+- use it in onRetry and also call it at the beginning
+[retry failed image load on retry action]
+T) test_feedImageView_preloadsImageURLWhenNearVisible
+- create two distint images 
+- completeFeedLoading
+- assert loadedImageURLs is empty
+- simulateFeedImageViewNearVisible(at:0)
+- assert loadedImageURLS has the first image url
+- add simulateFeedImageViewNearVisible(at row: Int) DSL to sut (using prefetchDataSource prefetchRowsAt)
+- change FeedViewControler implementation - make the prefetchedDataSource deleget to be self
+- conform to UITableViewDataSourcePrefetching
+- implement prefetchRowAt indexPath
+- going through all of the indexPaths 
+- make the loader to load the image
+[preload image URL when image view near visible]
+T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
+- very similar to the other test but with simulateFeedImageViewNotNearVisible  
+- add simulateFeedImageViewNotNearVisible DSL to sut (using cancelPrefetchingForRowsAt
+- add the implementation for the cancelPrefetchingForRowsAt (cancel the task) 
+- hold the task in the prefetchRowsAt
+- create a helper cancelTask(forRowAt indexPath)
+- use it in both places
+[cancel image URL preloading when image view is not near visible anymore]
+```
