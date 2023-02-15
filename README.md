@@ -1030,10 +1030,10 @@ T) test_feedImageView_cancelsImageLoadingWhenNotVisibleAnymore
 [cancel image loading when image view is not visible anymore]
 - add protocol FeedImageDataLoaderTask (func cancel())
 - change the FeedImageDataLoader to return that task
-- now the caller can store the tasks and cancel them (task[indexPath])
+- now the caller can store the tasks and cancel them (also tasks[indexPath]? = nil)
 - tasks is a dictionary with key of type IndexPath
 - fix the spy 
-- add TaskSpy conforming to the FeedImageDataLoaderTask
+- add TaskSpy (private struct) conforming to the FeedImageDataLoaderTask
 - with a cancelCallBack (in this call back we increment the count as before)
 [extract `CancelImageDataLoad(from: URL)` method from `FeedImageDataLoader` protocol into a new `FeedImageDataLoaderTask` protocol that represents a task that can be cancelled. This way, we respect the Interface Segregation Principle and `FeedImageDataLoader` implementations are not force to be statefull]
 T) test_feedImageViewLoadingIndicator_isVisibleWhileLoadingImage
