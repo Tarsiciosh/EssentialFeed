@@ -1037,7 +1037,7 @@ T) test_feedImageView_cancelsImageLoadingWhenNotVisibleAnymore
 - with a cancelCallBack (in this call back we increment the count as before)
 [extract `CancelImageDataLoad(from: URL)` method from `FeedImageDataLoader` protocol into a new `FeedImageDataLoaderTask` protocol that represents a task that can be cancelled. This way, we respect the Interface Segregation Principle and `FeedImageDataLoader` implementations are not force to be statefull]
 T) test_feedImageViewLoadingIndicator_isVisibleWhileLoadingImage
-- load two images 
+- load two images (any)
 - get the images with simulateFeedImageViewVisible(at:0)
 - assert that isShowingImageLoadingIndicator is true for the two images 
 - then completeImageLoading(at: 0)
@@ -1055,7 +1055,7 @@ T) test_feedImageViewLoadingIndicator_isVisibleWhileLoadingImage
 - add imageRequests (url, completions)
 - refactor loadedImageURLs to get the info from imageRequests
 - use the imageRequest in the completeImageLoading
-- and NSError in the completeImageLoadingWithError
+- and NSError in the completeImageLoadingWithError TS
 [feed image view loading indicator is visible while loading image]
 T) test_feedImageView_rendersImageLoadedFromURL
 - loadViewIfNeeded
