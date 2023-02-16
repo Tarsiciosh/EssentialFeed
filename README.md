@@ -1101,13 +1101,12 @@ T) test_feedImageViewRetryAction_retriesImageLoad
 - view1 simulateRetryAction
 - assert loadedIamgeUrls are now the four urls
 - create simulateRetryAction DSL in FeedImageCell (simulateTap)
-- create extension on UIButton (going trough all target actions)
+- create simulateTap extension on UIButton (going trough all target actions)
 - in cell for row add to the cell the onRetry code 
 - add onRetry property to the cell (optional closure)
 - configure the button with a target action (retryButtonTapped) pointing to self and perform the onRetry closure
 - add the same logic to load the image (copy and paste)
-- create a closure called loadImage 
-- use it in onRetry and also call it at the beginning
+- refactor duplicate code (using new loadImage) 
 [retry failed image load on retry action]
 T) test_feedImageView_preloadsImageURLWhenNearVisible
 - create two distint images 
