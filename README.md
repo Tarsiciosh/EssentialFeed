@@ -1077,8 +1077,8 @@ T) test_feedImageViewRetryButton_isVisibleOnImageURLLoadError
 - repeat the same principle with a isShowingRetryAction
 - add the DSL isShowingRetryAction to FeedImageCell (feedImageRetryButton)
 - add feedImageRetryButton to FeedImageCell
-- in the cell for row it start hidden 
-- and visible if couldn get data from result, isHidden = (data != nil)
+- in cell for row it start hidden 
+- and visible if it couldn't get data from result (isHidden = (data != nil))
 [feed image view retry button is visible on image url load error]
 T) test_feedImageViewRetryButton_isVisibleOnInvalidImageData
 - complete loading with an image
