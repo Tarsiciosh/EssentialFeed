@@ -1062,7 +1062,7 @@ T) test_feedImageView_rendersImageLoadedFromURL
 - completeLoading with two images
 - get the views with simulateFeedImageViewVisible(at: 0) and 1
 - assert that view0 and view1 renderedImage's are .none
-- create a UIImage imageData0 (using pngData)
+- create a imageData0 (using UIImage pngData)
 - completeImageLoading(with: imageData0, at: 0)
 - assert that view0 rendered image is equal to imageData0 and view1 is .none
 - repeat the step and assert both images are equal to the ones provided

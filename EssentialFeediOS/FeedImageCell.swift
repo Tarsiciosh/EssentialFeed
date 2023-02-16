@@ -5,4 +5,6 @@ public final class FeedImageCell: UITableViewCell {
     public var descriptionLabel = UILabel()
     public var locationLabel = UILabel()
     public var feedImageContainer = UIView()
+    public let feedImageView = UIImageView()
 }
+
