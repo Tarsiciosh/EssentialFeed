@@ -1084,6 +1084,7 @@ T) test_feedImageViewRetryButton_isVisibleOnInvalidImageData
 - complete loading with an image
 - get the view of the cell 
 - assert that isShowingRetryAction is false
+- simulate load refresh
 - complete image loading with an invalid image
 - assert that isShowingRetryAction is true
 - refactor the code in production to check for the converted image 
