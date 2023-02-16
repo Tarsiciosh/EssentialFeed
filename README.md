@@ -1118,8 +1118,7 @@ T) test_feedImageView_preloadsImageURLWhenNearVisible
 - change FeedViewControler implementation - make the prefetchedDataSource deleget to be self
 - conform to UITableViewDataSourcePrefetching
 - implement prefetchRowAt indexPath
-- going through all of the indexPaths 
-- make the loader to load the image
+- going through all of the indexPaths use the loader to load the images
 [preload image URL when image view near visible]
 T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - very similar to the other test but with simulateFeedImageViewNotNearVisible  
