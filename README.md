@@ -1121,8 +1121,8 @@ T) test_feedImageView_preloadsImageURLWhenNearVisible
 - going through all of the indexPaths use the loader to load the images
 [preload image URL when image view near visible]
 T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
-- very similar to the other test but with simulateFeedImageViewNotNearVisible  
-- add simulateFeedImageViewNotNearVisible DSL to sut (using cancelPrefetchingForRowsAt
+- very similar to the other test but with simulateFeedImageViewNotNearVisible (and cancelledImageURLs)
+- add simulateFeedImageViewNotNearVisible DSL to sut (using simulateFeedImageViewNearVisible and cancelPrefetchingForRowsAt)
 - add the implementation for the cancelPrefetchingForRowsAt (cancel the task) 
 - hold the task in the prefetchRowsAt
 - create a helper cancelTask(forRowAt indexPath)
