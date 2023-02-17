@@ -1134,6 +1134,53 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 
 ```
 - reorder file structure
-- 
+- (in the FeedViewController file)
+- add FeedRefreshViewController (inherited from NSObject because of target action)
+- add a private set lazy property view (UIRefreshControl) with a load action configured (cut the existing load func)
+- add a private let feedLoader property (injected it in init)
+- add an onRefresh closure to send the feeds back to the client when finish loading
+- remove the feedLoader property and  
+- add a refreshController to the FeedViewController (configure it in init)
+- in viewDidLoad set the refreshControl to be the view of the refreshController
+- and set the onRefresh closure (update the tableModel)
+- add a property observer to the tableModel to call a reload on the table 
+- the load function is called on the refreshController now (change the name to refresh)
+- move FeedRefreshViewController to its own file (controllers folder)
+[extract `UIRefreshControl` creation/configuartion and refresh logic with `FeedLoader` to the new `FeedRefreshViewController`]
+- add FeedImageCellController 
+- copy and paste cell creation func rename it to view(model:)
+- add private task property (to keep the running task)
+- add imageLoader (using creation injection)
+- use this cellController in cellForRow and invoke its view method
+- add cellControllers (dictionary with indexPaths) (to keep reference to them)
+- set the corresponding to nil in didEndDisplaying acording to the indexPath
+- add a deinit to cancel the task if any
+- remove cancel task call in didEndDisplaying (no more needed)
+- create a cellContrller also in prefetchRowsAt
+- in cancelTask set the controller of the correponding indexPath to nil (rename to removeCellController)
+- use it in didEndDisplaying
+- add cellController(forRowAt:) and use it cellForRow and prefetchRowsAt
+- add a prelod method in the controller
+- remove old tasks - move FeedImageCellController to its own file
+[extract `FeedImageCell` creation/configuration and image loading logic with `FeedImageDataLoader` to the new `FeedImageCellController`]
+- change tableModel to be an array of FeedImageCellController (to not depend any more on FeedImage or FeedImageDataLoader)
+- in the onRefresh we can cast the feed into FeedImageCellControllers
+- delete old cellControllers array
+- change the cellController(forRowAt:) to return the tableModel item (cellController) for that row
+- rename removeCellController to cancelCellControllerLoad (perform cancelLoad)
+- replace the deinit with cancelLoad
+- remove the reference to the imageLoader and move the cell creation to the initializer
+- and use directly the imageLoader
+- add FeedUIComposer public final class (move the init there)
+- refactor to a static func feedComposedWith(feedLoader:imageLoader:) that returns a FeedViewController
+- remove the creation of the refreshController from the FeedViewController init
+- received it instead from a dependency (only this one)
+- change conveninece to be internal (remove public) 
+- fix the tests 
+- move FeedUIComposer to its own file (new Composer folder)
+- add initializer private
+[extract dependency creation and composition logic from `FeedViewController` into the new `FeedUIComposer`]
+- add private static func adaptFeedToCellController(forwardingTo controller: loader:)
+[extract adapter pattern into a separate fucntions to clarify intent]
 ```
 
