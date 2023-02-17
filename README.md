@@ -1129,3 +1129,11 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - use it in both places
 [cancel image URL preloading when image view is not near visible anymore]
 ```
+
+### 5) Refactoring Massive View Controllers Into Multiple Tiny MVCs + Using Composers & Adapters to Reduce Coupling and Eliminate Redundant Dependencies
+
+```
+- reorder file structure
+- 
+```
+
