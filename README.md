@@ -1146,21 +1146,22 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - add a property observer to the tableModel to call a reload on the table 
 - the load function is called on the refreshController now (change the name to refresh)
 - move FeedRefreshViewController to its own file (controllers folder)
-[extract `UIRefreshControl` creation/configuartion and refresh logic with `FeedLoader` to the new `FeedRefreshViewController`]
-- add FeedImageCellController 
-- copy and paste cell creation func rename it to view(model:)
+[extract `UIRefreshControl` creation/configuration and refresh logic with `FeedLoader` to the new `FeedRefreshViewController`]
+- add FeedImageCellController (final public class)
+- copy and paste cell creation func rename it to view(model:) 
 - add private task property (to keep the running task)
 - add imageLoader (using creation injection)
+- also inject the model (creation)
 - use this cellController in cellForRow and invoke its view method
 - add cellControllers (dictionary with indexPaths) (to keep reference to them)
 - set the corresponding to nil in didEndDisplaying acording to the indexPath
-- add a deinit to cancel the task if any
+- add a deinit to cancel the task if any TS
 - remove cancel task call in didEndDisplaying (no more needed)
-- create a cellContrller also in prefetchRowsAt
+- create a cellController also in prefetchRowsAt
 - in cancelTask set the controller of the correponding indexPath to nil (rename to removeCellController)
 - use it in didEndDisplaying
 - add cellController(forRowAt:) and use it cellForRow and prefetchRowsAt
-- add a prelod method in the controller
+- add a prelod method in the new controller accepting a cellModel (use it in prefetchRowsAt)
 - remove old tasks - move FeedImageCellController to its own file
 [extract `FeedImageCell` creation/configuration and image loading logic with `FeedImageDataLoader` to the new `FeedImageCellController`]
 - change tableModel to be an array of FeedImageCellController (to not depend any more on FeedImage or FeedImageDataLoader)
