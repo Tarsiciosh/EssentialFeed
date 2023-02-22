@@ -1182,7 +1182,8 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - move FeedUIComposer to its own file (new Composers folder)
 - make the composer initializer private
 [extract dependency creation and composition logic from `FeedViewController` into the new `FeedUIComposer`]
-- add private static func adaptFeedToCellController(forwardingTo controller: loader:)
+- add private static func adaptFeedToCellController(forwardingTo controller: loader:) -> ([FeedImage]) -> Void
+- [FeedImage] -> Adapt -> [FeedImageCellController] 
 [extract adapter pattern into a separate fucntions to clarify intent]
 ```
 
