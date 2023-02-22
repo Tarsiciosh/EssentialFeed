@@ -38,11 +38,11 @@ final public class FeedImageCellController {
         return cell
     }
     
-    public func preload() {
+    func preload() {
         task = imageLoader.loadImageData(from: model.url) { _ in }
     }
     
-    deinit {
+    func cancelLoad() {
         task?.cancel()
     }
 }

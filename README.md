@@ -1164,22 +1164,23 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - add a prelod method in the new controller accepting a cellModel (use it in prefetchRowsAt)
 - remove old tasks - move FeedImageCellController to its own file
 [extract `FeedImageCell` creation/configuration and image loading logic with `FeedImageDataLoader` to the new `FeedImageCellController`]
+- discuss solution using a factory (unneded dependency)
 - change tableModel to be an array of FeedImageCellController (to not depend any more on FeedImage or FeedImageDataLoader)
-- in the onRefresh we can cast the feed into FeedImageCellControllers
+- in the onRefresh we can map the feed into FeedImageCellControllers
 - delete old cellControllers array
 - change the cellController(forRowAt:) to return the tableModel item (cellController) for that row
-- rename removeCellController to cancelCellControllerLoad (perform cancelLoad)
-- replace the deinit with cancelLoad
-- remove the reference to the imageLoader and move the cell creation to the initializer
+- rename removeCellController to cancelCellControllerLoad (now we perform cancelLoad)
+- replace the deinit with cancelLoad TS
+- now we can remove the reference to the imageLoader and move the cell creation to the initializer (FeedViewController)
 - and use directly the imageLoader
 - add FeedUIComposer public final class (move the init there)
 - refactor to a static func feedComposedWith(feedLoader:imageLoader:) that returns a FeedViewController
 - remove the creation of the refreshController from the FeedViewController init
 - received it instead from a dependency (only this one)
-- change conveninece to be internal (remove public) 
+- remove public from conveninece init (no more needed, since the composer should be the only way of creating FeedViewControllers) 
 - fix the tests 
-- move FeedUIComposer to its own file (new Composer folder)
-- add initializer private
+- move FeedUIComposer to its own file (new Composers folder)
+- make the composer initializer private
 [extract dependency creation and composition logic from `FeedViewController` into the new `FeedUIComposer`]
 - add private static func adaptFeedToCellController(forwardingTo controller: loader:)
 [extract adapter pattern into a separate fucntions to clarify intent]
