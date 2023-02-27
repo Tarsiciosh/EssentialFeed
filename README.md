@@ -1226,11 +1226,13 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - adding an onLoadingStateChange (closure that receive a bool) and pass the state transitions directly 
 - update the controller (weakify only the view)
 - add typealias Observer (with generic type) to clarify the intent (use it on both observers)
-[remove mutable state from `FeedViewModel`. The `FeedViewModel` only needs to forward state changes, so state in only transient]
+[remove mutable state from `FeedViewModel`. The `FeedViewModel` only needs to forward state changes, so state is only transient]
 - add a FeedImageViewModel (repeat the steps)
-- add imageTransformer (closure recieving Data and returning generic typy optional Image)
+- add imageTransformer (closure recieving Data and returning generic type optional Image)
 - add imageTransformer closure injection to the init method
 - fix the view model - fix the composer - fix the controller
+[move `FeedImageDataLoader` loading state management to `FeedImageViewModel`. Now the `FeedImageCellController` acts as a binder between the `View` and the `ViewModel`]
+
 [decouple `FeedImageViewModel` from `UIKit` by creating a transformation closure that converts an image `Data` value into a generic `Image` type. When composing wiht a UIKit user interface, we inject a closure to transform the image `Data` into `UIImage`]
 - remove EssentialFeed import from the FeedViewController (no longer needed)
 [remove `EssentialFeed` module import from `FeedViewController` file since it does not depend on any `EssentialFeed` component]
