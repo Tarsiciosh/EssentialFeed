@@ -1184,6 +1184,54 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 [extract dependency creation and composition logic from `FeedViewController` into the new `FeedUIComposer`]
 - add private static func adaptFeedToCellController(forwardingTo controller: loader:) -> ([FeedImage]) -> Void
 - [FeedImage] -> Adapt -> [FeedImageCellController] 
-[extract adapter pattern into a separate fucntions to clarify intent]
+[extract adapter pattern into a separate function to clarify intent]
 ```
 
+### 6) MVVM: Reducing Boilerplate, Shifting Reusable Presentation Logic from Controllers into Cross-Platform (Stateful & Stateless) ViewModels, and Decoupling Presentation from UI Frameworks with Swift Generics
+```
+- (in FeedRefreshViewController file)
+- create new FeedViewModel (final class) move init and refresh (rename to loadFeed and objc) 
+- remove the references to the view (e.g. beginRefreshing)
+- add onChange closure (to notify the changes - send the viewModel reference)
+- add State enum (pending, loading, loaded(with feed), failed)
+- add private property state (initialized at pending)
+- when a state change we notify with the onChange closure
+- add state transitions
+- add state accessor isLoading computed var (using switch)
+- add state accessor to the feed (using switch - loaded case)
+- in FeedRefreshViewController remove reference to FeedLoader
+- replace it be a viewModel (create it in the init method)
+- in the refresh set the onChange callback 
+- refactor it to receive a viewModel
+- when the viewModel isLoading the view can begin refreshing
+- also to endRefreshing
+- check if there is a feed and pass it forward
+- finally tell the viewModel to load the feed TS
+- add bind function (with this binding code accepts UIRefreshControl) - call it in the view creation
+- add the target action binding there too (now returning a UIRefreshControl)
+- use it in view creation closure 
+- change name to binded and remove the creation closure (one liner)
+- move viewModel to its own file (Models folder)
+- move the viewModel creation and injection to the composer
+- remove onRefresh closure from FeedRefreshViewController (it only forward the info)
+- and add it to the FeedViewModel (change name to onFeedLoad)
+- remove feed state loaded (in loadFeed func)
+- forward the feed to the onFeedLoad closure observer
+- after finish loading update the state to pending (remove the loaded and fail states)
+- use isLoading as a state, private(set) var (with a property observer) - remove old state
+- change the adaptFeedToCellController to the feedViewModel.onFeedLoad
+- remove the EssentialFeed import from FeedRefreshViewController (no more state management)
+[Move `FeedLoader` loading state management to `FeedViewModel`. Now, the `FeedRefreshViewController` acts as a binder between the `View` and the `ViewModel`]
+- now the FeedViewModel holds state but it can be eliminted by
+- adding an onLoadingStateChange (closure that receive a bool) and pass the state transitions directly 
+- update the controller (weakify only the view)
+- add typealias Observer (with generic type) to clarify the intent (use it on both observers)
+[remove mutable state from `FeedViewModel`. The `FeedViewModel` only needs to forward state changes, so state in only transient]
+- add a FeedImageViewModel (repeat the steps)
+- add imageTransformer (closure recieving Data and returning generic typy optional Image)
+- add imageTransformer closure injection to the init method
+- fix the view model - fix the composer - fix the controller
+[decouple `FeedImageViewModel` from `UIKit` by creating a transformation closure that converts an image `Data` value into a generic `Image` type. When composing wiht a UIKit user interface, we inject a closure to transform the image `Data` into `UIImage`]
+- remove EssentialFeed import from the FeedViewController (no longer needed)
+[remove `EssentialFeed` module import from `FeedViewController` file since it does not depend on any `EssentialFeed` component]
+```
