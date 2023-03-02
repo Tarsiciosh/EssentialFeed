@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		570DB3CA29AD3B040070EEA8 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570DB3C929AD3B040070EEA8 /* FeedViewModel.swift */; };
 		570DB3CC29AD4B050070EEA8 /* FeedImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570DB3CB29AD4B050070EEA8 /* FeedImageViewModel.swift */; };
 		5714002A299D916E005666BD /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57140029299D916E005666BD /* UIView+Shimmering.swift */; };
 		571C99D529A6A4AF0087AE1A /* FeedImageCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C99D429A6A4AF0087AE1A /* FeedImageCellController.swift */; };
@@ -117,7 +116,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		570DB3C929AD3B040070EEA8 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		570DB3CB29AD4B050070EEA8 /* FeedImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageViewModel.swift; sourceTree = "<group>"; };
 		57140029299D916E005666BD /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		571C99D429A6A4AF0087AE1A /* FeedImageCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCellController.swift; sourceTree = "<group>"; };
@@ -372,7 +370,6 @@
 			isa = PBXGroup;
 			children = (
 				570DB3CB29AD4B050070EEA8 /* FeedImageViewModel.swift */,
-				570DB3C929AD3B040070EEA8 /* FeedViewModel.swift */,
 				57CC5DD929B138DC00960D6E /* FeedPresenter.swift */,
 			);
 			path = "Feed Presentation";
@@ -716,7 +713,6 @@
 				57648052299C3CC800365642 /* FeedImageCell.swift in Sources */,
 				570DB3CC29AD4B050070EEA8 /* FeedImageViewModel.swift in Sources */,
 				571C99D529A6A4AF0087AE1A /* FeedImageCellController.swift in Sources */,
-				570DB3CA29AD3B040070EEA8 /* FeedViewModel.swift in Sources */,
 				571C99D829A6B59C0087AE1A /* FeedUIComposer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
