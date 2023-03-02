@@ -1268,8 +1268,8 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - remove the FeedViewModel
 [remove unused `FeedViewModel` (it was replaced by the new `FeedPresenter`)]
 - the presenters must translate model values into view data so
-- add FeedLoadingViewModel to replace the boolean of the protocol FeedLoadingView
-- this way we can add new properties and dont brake the protocol
+- add FeedLoadingViewModel struct to replace the boolean of the protocol FeedLoadingView
+- this way we can also add new properties and don't brake the protocol
 - add also FeedViewModel (update code)
 [add Presentable View Models as pure data to clarify communication between Presentation and UI]
 - in MVP the 'views' hold a reference to the presenter (in our case it is use to load the feed) 
