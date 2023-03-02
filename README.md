@@ -1276,7 +1276,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - in this case we can change the presenter with an injected loadFeed function (update composition)
 [decouple `FeedRefreshViewController` from the concrete `FeedPresenter` dependency with a closure]
 - the presenter can also don't need to communicate with domain services directly 
-- this is done via an adapter that receives the events of the view and talks back to the presenter
+- this can be done via an adapter that receives the events of the view and talks back to the presenter
 - after communitating with the domain services
 - remove the FeedLoader dependency from FeedPresenter
 - add didStartLoadingFeed
@@ -1291,7 +1291,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - add FeedRefreshViewControllerDelegate with didRequestFeedRefresh
 - and inject the delegate in the init method (constructor injection)
 - make the adapter class implement the delegate protocol 
-[replace Closure event handler with delegate Protocol to demostrate different composition approaches]
+[replace Closure event handler with delegate Protocol to demonstrate different composition approaches]
 - in MVP the presenter must hold a reference to the views protocols
 - change the views to be constructor injected (init) no need to be optionals anymore
 - in the composition there is a catch 22 problem now
