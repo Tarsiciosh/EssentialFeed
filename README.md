@@ -1246,18 +1246,19 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - add FeedPresenter (copy code of FeedViewModel)
 - add FeedView protocol with two funcs display(isLoading), display(feed) 
 - replace the observable properties with a view property (FeedView) (update code)
-- the protocol has two methods (violation of interface segragation principle)
+- the protocol has two methods (violation of Interface Segregation Principle)
 - break it down into two protocol (FeedLoadingView, FeedView) add a loadingView (update code)
-- rename view property to feedView and add loadinView
+- rename view property to feedView and add loadingView
 - make FeedRefreshViewContoller conform to FeedLoadingView
 - implement the display method 
 - rename binded to loadView (create the view and set the action)
 - replace viewModel with feedPresenter
-- update the composition presenter loadingView is the refreshController
-- move the adapter code to a new FeedViewAdapter (conforming to FeedView) 
+- update the composition  (presenter loadingView is now the refreshController)
+- move the adapter code to a new private final class FeedViewAdapter (conforming to FeedView) 
+- tranforms the feed into FeedImageCellControllers and set them to the FeedViewController tableModel
 - this new class has to dependecies controller (make it weak) and imageLoader
 - remove the view models TF -> memory leaks!
-- make the reference to the loadingView weak (change FeedLoadingView protocol to be class)
+- make the reference to the loadingView weak (change FeedLoadingView protocol to be class (now AnyObject) conforming) TS
 [add `FeedPresenter` holding feed loading presentation logic (loading state and loaded feed)]
 - we could use trick like (AnyObject & FeedLoadingView) but still leaking composition details 
 - create WeakRefVirtualProxy (wiht generic type T be AnyObject)
