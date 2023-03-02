@@ -1272,7 +1272,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - this way we can also add new properties and don't brake the protocol
 - add also FeedViewModel (update code)
 [add Presentable View Models as pure data to clarify communication between Presentation and UI]
-- in MVP the 'views' hold a reference to the presenter (in our case it is use to load the feed) 
+- in MVP the 'views' hold a reference to the presenter (in our case it is only use to load the feed) 
 - in this case we can change the presenter with an injected loadFeed function (update composition)
 [decouple `FeedRefreshViewController` from the concrete `FeedPresenter` dependency with a closure]
 - the presenter can also don't need to communicate with domain services directly 
