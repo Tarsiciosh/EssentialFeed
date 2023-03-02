@@ -1292,11 +1292,11 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - and inject the delegate in the init method (constructor injection)
 - make the adapter class implement the delegate protocol 
 [replace Closure event handler with delegate Protocol to demonstrate different composition approaches]
-- in MVP the presenter must hold a reference to the views protocols
+- in MVP the presenter must hold references to the views protocols
 - change the views to be constructor injected (init) no need to be optionals anymore
 - in the composition there is a catch 22 problem now
-- make the Adapter be property injected
-[move from property injection to contructor injection in the `FeedPresenter` to guarantee its instances have access to its dependecies at all times]
+- make the FeedLoaderPresentationAdapter be property injected (presenter)
+[move from property injection to constructor injection in the `FeedPresenter` to guarantee its instances have access to its dependencies at all times]
 - repleace old FeedImageViewModel with new FeedImagePresenter (repeat the steps)
 - viewModel now holds only data
 ```
