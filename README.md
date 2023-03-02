@@ -1276,14 +1276,15 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - in this case we can change the presenter with an injected loadFeed function (update composition)
 [decouple `FeedRefreshViewController` from the concrete `FeedPresenter` dependency with a closure]
 - the presenter can also don't need to communicate with domain services directly 
-- this is done via an adapter that receives the event of the view and talks back to the presenter
+- this is done via an adapter that receives the events of the view and talks back to the presenter
+- after communitating with the domain services
 - remove the FeedLoader dependency from FeedPresenter
 - add didStartLoadingFeed
 - add didFinishLoadingFeed(with feed)
-- add didFinishLoading(with error) only communicate that it finish with no feed
+- add didFinishLoading(with error) only communicate that it finished loading with no feed
 - in the FeedUIComposer file add FeedLoaderPresentationAdapter
 - with two dependencies feedLoader and presenter
-- implement the loadFeed func (conforms to ..)
+- implement the loadFeed func
 - update the composition (presentationAdapter)
 [decouple `FeedPresenter` from `FeedLoader` with an adapter in the Composition layer]
 - another change that it can be made is to use a protocol instead of using the loadFeed closure
