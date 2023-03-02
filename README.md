@@ -1237,3 +1237,64 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - remove EssentialFeed import from the FeedViewController (no longer needed)
 [remove `EssentialFeed` module import from `FeedViewController` file since it does not depend on any `EssentialFeed` component]
 ```
+
+### 7) MVP: Creating a Reusable and Cross-Platform Presentation Layer, Implementing Service Adapters, and Solving Cyclic Dependencies & Memory Management issues with the Proxy Pattern
+
+```
+- the presenter has a reference to the view (through a protocol)
+- add Feed Presentation folder (move FeedViewModel, FeedImageViewModel)
+- add FeedPresenter (copy code of FeedViewModel)
+- add FeedView protocol with two funcs display(isLoading), display(feed) 
+- replace the observable properties with a view property (FeedView) (update code)
+- the protocol has two methods (violation of interface segragation principle)
+- break it down into two protocol (FeedLoadingView, FeedView) add a loadingView (update code)
+- rename view property to feedView and add loadinView
+- make FeedRefreshViewContoller conform to FeedLoadingView
+- implement the display method 
+- rename binded to loadView (create the view and set the action)
+- replace viewModel with feedPresenter
+- update the composition presenter loadingView is the refreshController
+- move the adapter code to a new FeedViewAdapter (conforming to FeedView) 
+- this new class has to dependecies controller (make it weak) and imageLoader
+- remove the view models TF -> memory leaks!
+- make the reference to the loadingView weak (change FeedLoadingView protocol to be class)
+[add `FeedPresenter` holding feed loading presentation logic (loading state and loaded feed)]
+- we could use trick like (AnyObject & FeedLoadingView) but still leaking composition details 
+- create WeakRefVirtualProxy (wiht generic type T be AnyObject)
+- crate an extension to conform to FeedLoadingView protocol 
+- constraint conformance of T to FeedLoadingView to have a double check by the compiler
+[move memory management to Composer layer. The `FeedPresenter` shouldn't have to know or handle their dependencies lifetime]
+- remove the FeedViewModel
+[remove unused `FeedViewModel` (it was replaced by the new `FeedPresenter`)]
+- the presenters must translate model values into view data so
+- add FeedLoadingViewModel to replace the boolean of the protocol FeedLoadingView
+- this way we can add new properties and dont brake the protocol
+- add also FeedViewModel (update code)
+[add Presentable View Models as pure data to clarify communication between Presentation and UI]
+- in MVP the 'views' hold a reference to the presenter (in our case it is use to load the feed) 
+- in this case we can change the presenter with an injected loadFeed function (update composition)
+[decouple `FeedRefreshViewController` from the concrete `FeedPresenter` dependency with a closure]
+- the presenter can also don't need to communicate with domain services directly 
+- this is done via an adapter that receives the event of the view and talks back to the presenter
+- remove the FeedLoader dependency from FeedPresenter
+- add didStartLoadingFeed
+- add didFinishLoadingFeed(with feed)
+- add didFinishLoading(with error) only communicate that it finish with no feed
+- in the FeedUIComposer file add FeedLoaderPresentationAdapter
+- with two dependencies feedLoader and presenter
+- implement the loadFeed func (conforms to ..)
+- update the composition (presentationAdapter)
+[decouple `FeedPresenter` from `FeedLoader` with an adapter in the Composition layer]
+- another change that it can be made is to use a protocol instead of using the loadFeed closure
+- add FeedRefreshViewControllerDelegate with didRequestFeedRefresh
+- and inject the delegate in the init method (constructor injection)
+- make the adapter class implement the delegate protocol 
+[replace Closure event handler with delegate Protocol to demostrate different composition approaches]
+- in MVP the presenter must hold a reference to the views protocols
+- change the views to be constructor injected (init) no need to be optionals anymore
+- in the composition there is a catch 22 problem now
+- make the Adapter be property injected
+[move from property injection to contructor injection in the `FeedPresenter` to guarantee its instances have access to its dependecies at all times]
+- repleace old FeedImageViewModel with new FeedImagePresenter (repeat the steps)
+- viewModel now holds only data
+```

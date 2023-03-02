@@ -1,4 +1,3 @@
-import Foundation
 import EssentialFeed
 
 final class FeedImageViewModel<Image> {
@@ -41,7 +40,6 @@ final class FeedImageViewModel<Image> {
     private func handleResult(_ result: FeedImageDataLoader.Result) {
         if let image = (try? result.get()).flatMap(imageTransformer) {
             onImageLoad?(image)
-            onImageLoadingStateChange?(false)
         } else {
             onShouldRetryImageLoadStateChange?(true)
         }
