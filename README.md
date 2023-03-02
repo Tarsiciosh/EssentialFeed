@@ -1260,7 +1260,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - remove the view models TF -> memory leaks!
 - make the reference to the loadingView weak (change FeedLoadingView protocol to be class (now AnyObject) conforming) TS
 [add `FeedPresenter` holding feed loading presentation logic (loading state and loaded feed)]
-- we could use trick like (AnyObject & FeedLoadingView) but still leaking composition details 
+- we could use trick like (AnyObject & FeedLoadingView) but still we'll leaking composition details 
 - create WeakRefVirtualProxy (wiht generic type T be AnyObject)
 - crate an extension to conform to FeedLoadingView protocol 
 - constraint conformance of T to FeedLoadingView to have a double check by the compiler
