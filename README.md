@@ -1336,7 +1336,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - remove the setting of the refresh control in FeedViewController
 - change the property to be an IBOutlet (conect it in storyboard) TS
 [move `FeedViewController` + `FeedRefreshViewController` composition (instantiation and configuariton) to Storyboard]
-- since the composition is happening in the storyboard we can get rid of the refresh contro
+- since the composition is happening in the storyboard we can get rid of the refresh controler
 - move the FeedLoadingView protocol conformance to the FeedViewController (with the implementation)
 - move the delegate rename it to FeedViewControllerDelegate (replace the refreshController with delegate)
 - move the refresh (IBAction) can be set to private (fix code)
