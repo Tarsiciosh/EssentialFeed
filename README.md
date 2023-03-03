@@ -1299,4 +1299,12 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 [move from property injection to constructor injection in the `FeedPresenter` to guarantee its instances have access to its dependencies at all times]
 - repleace old FeedImageViewModel with new FeedImagePresenter (repeat the steps)
 - viewModel now holds only data
+- the FeedImagePresenter receives commands from the adapter FeedImageDataLoaderPresentationAdapter 
+- (handles the communication with the domain services) and forward it its view
+- with all the information needed encapsulated in the view model (FeedImageViewModel)
+- the commands are didStartLoadingImageData, didFinishLoadingImageData(with error and with data).
+- the FeedImageCellController receives this data via the display method of the FeedImageView protocol 
+- the FeedImageCellController also talks to its delegate, the adapter, with the messages:
+- didRequestImage, didCancelImageRequest (could be named requestImage instead
+ 
 ```
