@@ -1322,7 +1322,7 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - instanciate the FeedViewController from the storyboard
 - get the storyboard and the bundle (FeedViewController.self)
 - instanciate the feedViewController (instanciateInitialViwController) force cast is ok
-- change from constructor to property injection TS
+- change from constructor to property injection in FeedViewController TS
 [instanciate `FeedViewController` from Feed storyboard]
 - seting the refresh control in code and in the storyboard
 - remove creation of refresh controller
