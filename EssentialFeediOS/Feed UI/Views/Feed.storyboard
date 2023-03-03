@@ -128,9 +128,20 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Lfs-ga-K2O">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="pWx-C2-w2o" eventType="valueChanged" id="99X-Y6-cA0"/>
+                        </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="refreshController" destination="pWx-C2-w2o" id="35P-C4-1GJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fm0-3M-m7e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="pWx-C2-w2o" customClass="FeedRefreshViewController" customModule="EssentialFeediOS" customModuleProvider="target">
+                    <connections>
+                        <outlet property="view" destination="Lfs-ga-K2O" id="GMK-UZ-ltm"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="380.91603053435114" y="-306.33802816901408"/>
         </scene>

@@ -1324,15 +1324,15 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - instanciate the feedViewController (instanciateInitialViwController) force cast is ok
 - change from constructor to property injection in FeedViewController TS
 [instanciate `FeedViewController` from Feed storyboard]
-- seting the refresh control in code and in the storyboard
-- remove creation of refresh controller
-- set the refresh controller as an UBOutlet
-- change refresh the refresh to be an IBAction 
-- now we need to FeedRefreshViewController with its view in storyboard
-- add an object to the FeedViewController set the type as FeedRefreshVi..
-- connect the FeedRefresh.. view and refresh (valueChange) to the refresh control
-- remove refresh controller from composition 
-- get a reference from the feedController and use property injection (update the refresh controller)
+- we are now setting the refresh control in code and in the storyboard
+- remove the creation of refresh controller in FeedRefreshViewController
+- set the refresh controller view as an IBOutlet
+- change refresh to be an IBAction 
+- now we need to connect FeedRefreshViewController with its view in storyboard
+- add an object to the FeedViewController set the type as FeedRefreshViewController
+- connect the FeedRefreshViewController view and refresh (valueChange) to the refresh control
+- remove refresh controller creation from composition 
+- get a reference from the feedController and use property injection for the delegate (update the refresh controller) force unwrap is ok
 - remove the setting of the refresh control in FeedViewController
 - change the property to be an IBOutlet (conect it in storyboard) TS
 [move `FeedViewController` + `FeedRefreshViewController` composition (instantiation and configuariton) to Storyboard]
