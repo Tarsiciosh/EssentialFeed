@@ -1306,5 +1306,70 @@ T) test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore
 - the FeedImageCellController receives this data via the display method of the FeedImageView protocol 
 - the FeedImageCellController also talks to its delegate, the adapter, with the messages:
 - didRequestImage, didCancelImageRequest (could be named requestImage instead
- 
+```
+
+### 7) Storyboard vs. Code: Layout, DI and Composition, Identifying the Constrained Construction DI Anti-pattern, and Optimizing Performance by Reusing Cells
+```
+- create a storyboard file Feed and copy the prototype layout
+- remove navigation controller and navigation item (from FeedViewController)
+- make it the initial view controller
+- crate a Feed assets catalog (drag and drop the images)
+- check for connections inspector (delete the failing ones)
+- also for the cell
+- add the retry button in the image container (as big as the superview)
+- use the caracter arrow set font (60) text color (white)
+[add Feed storyboard and assets with layout from prototype]
+- instanciate the FeedViewController from the storyboard
+- get the storyboard and the bundle (FeedViewController.self)
+- instanciate the feedViewController (instanciateInitialViwController) force cast is ok
+- change from constructor to property injection TS
+[instanciate `FeedViewController` from Feed storyboard]
+- seting the refresh control in code and in the storyboard
+- remove creation of refresh controller
+- set the refresh controller as an UBOutlet
+- change refresh the refresh to be an IBAction 
+- now we need to FeedRefreshViewController with its view in storyboard
+- add an object to the FeedViewController set the type as FeedRefreshVi..
+- connect the FeedRefresh.. view and refresh (valueChange) to the refresh control
+- remove refresh controller from composition 
+- get a reference from the feedController and use property injection (update the refresh controller)
+- remove the setting of the refresh control in FeedViewController
+- change the property to be an IBOutlet (conect it in storyboard) TS
+[move `FeedViewController` + `FeedRefreshViewController` composition (instantiation and configuariton) to Storyboard]
+- since the composition is happening in the storyboard we can get rid of the refresh contro
+- move the FeedLoadingView protocol conformance to the FeedViewController (with the implementation)
+- move the delegate rename it to FeedViewControllerDelegate (replace the refreshController with delegate)
+- move the refresh (IBAction) can be set to private (fix code)
+- remove the refresh controller object from storyboard 
+- conect the refresh action of the controller to the refresh control (valueChange)
+- update the composition in the FeedUIComposer 
+- delete the FeedRefreshViewController
+[merge `FeedRefreshViewController` with `FeedViewController` since the `UIRefreshControl` creation and configuation now lives in the storyboard]
+- mover the prefetchDataSource settings to the storyboard 
+[move tableView.prefetchDataSource setup to the storyboard]
+- insted of instanciating cell we can deque them (need a reference to the table view)
+- use method injection (in) to recieve the table view and dequeue a reusable cell
+- fix code in FeedViewController 
+- change the property of the FeedImageCell be IBOutlets private(set) public var
+- and retryButtonTapped IBAction
+- perform the connections in storyboard (tapUpInsideEvent) TS
+- in cancelLoad we need to release the cell because other controller may be using the same cell
+T) test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore
+- setup test with a feed with one image
+- simulateFeedImageViewNotVisible at position 0
+- complete the image loading with any image data (red)
+- expect that the view rendered image be nil (renderedImage)
+- add return the view to the simulateFeedImageViewNotVisible (@dicardableResult)
+- make the fix (use helper function releaseCellForReuse)
+- create the helper method anyImageData
+- add assertion message "Expected no rendered image when an image laod finishes after the view is not visible anymore"
+[reuse table view cells from storyboard configuration]
+- create helper (UITableView extension) dequeueReusableCell with generic  
+- use the class property to have information of the type
+- move extension to its own file (UITableView+dequeueReusableCell)
+[add UITableView helper to dequeue typed cells by class name]
+- add animation to fade in the image (duration 0.25 )
+- add extention to UIImageView setImageAnimated (instead of if use guard)
+- move the extension to new file (UIImage+Animations)
+[display image with animation]
 ```
