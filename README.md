@@ -1417,7 +1417,7 @@ T) test_feedView_hasTitle
 - try removing the key pair in the table and it fails
 - move helper to FeedViewControllerTests+Localization (Helpers Folder)
 [create test helper to find missing localized strings]
-- rename FeedViewControllerTests to FeedUIIntegrationTest
+- rename FeedViewControllerTests to FeedUIIntegrationTests
 - move helpers to EssentialFeediOSTests/Feed UI/Helpers
 - EssentialFeediOSTests/Feed UI/FeedUIIntegrationTests
 [rename `FeedViewControllerTests` to `FeedUIIntegrationTests` since we are testing the composition of multiple UI components in integration]
