@@ -1379,7 +1379,7 @@ T) test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore
 In FeedViewControllerTests
 T) test_feedView_hasTitle 
 - create sut and call loadViewIfNeeded
-- assert that title of the sut it "My Feed"
+- assert that title of the sut is "My Feed" TF
 - add the title in the FeedViewController (viewDidLoad)
 [set `FeedViewController` title]
 - in MVP the string creatiion should be done by the presenter 
