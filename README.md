@@ -1411,7 +1411,7 @@ T) test_feedView_hasTitle
 - "Missing localized string for key: localizedKey"
 - add "FEED_VIEW_TITLE" = "My Feed"; to the file TS
 [Localize feed view title string]
-- add localized helper function (pass a key an look for localized string for that key)
+- add localized helper function (pass a key and look for localized string for that key)
 - fire an assertion failure if it cannot find one. also return the string
 - "Missing localized string for key: key in table: table" TS
 - try removing the key pair in the table and it fails
