@@ -1373,3 +1373,68 @@ T) test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore
 - move the extension to new file (UIImage+Animations)
 [display image with animation]
 ```
+
+### 8) Creating, Localizing, and Testing Customer Facing Strings in the Presentation Layer + NSLocalizedString Best Practices
+```
+In FeedViewControllerTests
+T) test_feedView_hasTitle 
+- create sut and call loadViewIfNeeded
+- assert that title of the sut it "My Feed"
+- add the title in the FeedViewController (viewDidLoad)
+[set `FeedViewController` title]
+- in MVP the string creatiion should be done by the presenter 
+- set the title with a FeedPresenter static computed var (title) add it to Presenter
+[move title string creation from `FeedViewController` to `FeedPresenter` - in MVP, presentation data should be created by Presenters]
+- move the title configuration to the composer 
+- (the FeedViewController don't know about the FeedPresenter)
+- can be pass as a property of the viewModel also
+[move title configuration from `FeedViewController` to the `FeedUIComposer` - the View Controllers can be agnostic of Presenters if we move the configuration to composers]
+- extract the FeedViewController configuration and creation to a factory method
+- makeWith (delegate, title) (static func extension of FeedViewController)
+[extract the `FeedViewController` creation and configuration into a factory method]
+- in the title test add a bundle (FeedViewController.self)
+- get the localizedString for key "My Feed" value nil table nil
+- asssert that the sut.title is equal to the localizedTitle TS
+- we can use the NSLocalizedString with comments but for test is ok the other way
+- if the localizedString does not found the String it returns the key
+- that's why the test were passing
+- but this is not recommended (keys should be keys)
+- change to FEED_VIEW_TITLE (can pass a default value in the value param)
+- create a Feed.strings (Feed Presentation folder)
+- change table to be "Feed" TF
+- update production code (FeedPresenter)
+- use NSLocalizedString (bundle FeedPresenter.self) ommit value 
+- comment "Title for the feed view" TS
+- but becuase the two places return the key when not finding the localized string!
+- add a localizedKey variable and an assertion to compare it to the title with error:
+- "Missing localized string for key: localizedKey"
+- add "FEED_VIEW_TITLE" = "My Feed"; to the file TS
+[Localize feed view title string]
+- add localized helper function (pass a key an look for localized string for that key)
+- fire an assertion failure if it cannot find one. also return the string
+- "Missing localized string for key: key in table: table" TS
+- try removing the key pair in the table and it fails
+- move helper to FeedViewControllerTests+Localization (Helpers Folder)
+[create test helper to find missing localized strings]
+- rename FeedViewControllerTests to FeedUIIntegrationTest
+- move helpers to EssentialFeediOSTests/Feed UI/Helpers
+- EssentialFeediOSTests/Feed UI/FeedUIIntegrationTests
+[rename `FeedViewControllerTests` to `FeedUIIntegrationTests` since we are testing the composition of multiple UI components in integration]
+- localize the Feed.string by pressing the Localized in the right panel
+- default languague is english TS
+[Localized `Feed.strings` file]
+- in the project configuration add support Locaclization (+) for portuguese (pt-BR)
+- now the Feed.string has multiple versions
+- translate the string (Meu Feed) TS
+[add Portuguese (pt-BR) localization]
+- add support for greek 
+- tranlate the string "To Feed ponele" TS
+[add Greek (el) localization]
+- create the FeedLocalizationTests 
+- look for all localization bundles in the main bundle 
+- look for all key in the localization bundles 
+- go through all bundles and localized keys
+- the static localization should live in the presentation layer 
+- the UI layer should only renders the info passed to it
+[add localization test to guarantee all localized key have tranlations in all supported localizations]
+```
