@@ -1396,7 +1396,7 @@ T) test_feedView_hasTitle
 - in the title test add a bundle (FeedViewController.self)
 - get the localizedString for key "My Feed" value nil table nil
 - asssert that the sut.title is equal to the localizedTitle TS
-- we can use the NSLocalizedString with comments but for test is ok the other way
+- we can use the NSLocalizedString with comments but for test is ok the this way
 - if the localizedString does not found the String it returns the key
 - that's why the test were passing
 - but this is not recommended (keys should be keys)
