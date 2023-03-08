@@ -1421,7 +1421,7 @@ T) test_feedView_hasTitle
 - move helpers to EssentialFeediOSTests/Feed UI/Helpers
 - EssentialFeediOSTests/Feed UI/FeedUIIntegrationTests
 [rename `FeedViewControllerTests` to `FeedUIIntegrationTests` since we are testing the composition of multiple UI components in integration]
-- localize the Feed.string by pressing the Localized in the right panel
+- localize the Feed.string by pressing the Localized button in the right panel
 - default languague is english TS
 [Localized `Feed.strings` file]
 - in the project configuration add support Locaclization (+) for portuguese (pt-BR)
