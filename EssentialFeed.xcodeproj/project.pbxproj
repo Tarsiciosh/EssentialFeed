@@ -192,6 +192,7 @@
 		57ED782D29B951F600311AB7 /* FeedUIIntegrationTests+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedUIIntegrationTests+Localization.swift"; sourceTree = "<group>"; };
 		57ED783029B9557F00311AB7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
 		57ED783229B9561800311AB7 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		57ED783329B9567400311AB7 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		57F88DB22975E9B60050C6C9 /* CoreDataFeedStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStoreTests.swift; sourceTree = "<group>"; };
 		57F88DB42975EB0F0050C6C9 /* CoreDataFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStore.swift; sourceTree = "<group>"; };
 		57F88DB72975EEC40050C6C9 /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
@@ -690,6 +691,7 @@
 				en,
 				Base,
 				"pt-BR",
+				el,
 			);
 			mainGroup = 57DCAA0E28F0BF7C00EEFCAF;
 			productRefGroup = 57DCAA1928F0BF7C00EEFCAF /* Products */;
@@ -892,6 +894,7 @@
 			children = (
 				57ED783029B9557F00311AB7 /* en */,
 				57ED783229B9561800311AB7 /* pt-BR */,
+				57ED783329B9567400311AB7 /* el */,
 			);
 			name = Feed.strings;
 			sourceTree = "<group>";
