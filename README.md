@@ -1382,7 +1382,8 @@ T) test_feedView_hasTitle
 - assert that title of the sut is "My Feed" TF
 - add the title in the FeedViewController (viewDidLoad)
 [set `FeedViewController` title]
-- in MVP the string creatiion should be done by the presenter 
+- in MVP the presentation strings should be done by the presenter 
+- and in MVVM by the view model
 - set the title with a FeedPresenter static computed var (title) add it to Presenter
 [move title string creation from `FeedViewController` to `FeedPresenter` - in MVP, presentation data should be created by Presenters]
 - move the title configuration to the composer 
