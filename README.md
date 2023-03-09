@@ -1432,10 +1432,50 @@ T) test_feedView_hasTitle
 - tranlate the string "To Feed ponele" TS
 [add Greek (el) localization]
 - create the FeedLocalizationTests 
-- look for all localization bundles in the main bundle 
+- look for all localization bundles in the presentation bundle 
 - look for all key in the localization bundles 
 - go through all bundles and localized keys
 - the static localization should live in the presentation layer 
 - the UI layer should only renders the info passed to it
 [add localization test to guarantee all localized key have tranlations in all supported localizations]
+```
+
+### 9) Decorator Pattern: Decoupling UIKit Components From Threading Details, Removing Duplication, and Implementing Cross-Cutting Concerns In a Clean & SOLID Way
+```
+- all UIkit code must run in the main thread
+T) test_loadFeedCompletion_dispatchesFromBackgroundToMainThread
+- create a sut and call leadViewIfNeeded
+- create an exp
+- dispatch the feed loading completion to a diferent queue (global async) complete exp
+- fix the crash with a dispatch to the main queue (tableView reloadData)
+- check if the Thread isMainThread (to call reloadData directly)
+- fix other crash with guard Thread.isMainDispatch else DispatchQueue.main.async (self.display..)
+- fix weak failing test 
+[dispatch background feed completion to main thread before updating the UI since UIKit is not thread safe]
+- move the threading check one level above (presenter layer) with the guard aproach 
+[move main thread dispatch to the Presenter]
+- presenter is platform agnostic should not leak UIkit details
+- move the threading handling one level aboce (composition layer)
+- create MainQueueDispatchDecorator (decoratee: FeedlLoader)
+- check to see if we are in the main thread to complete directly or otherwise to the main 
+- decorate the feedLoader
+[move main thread dispatch to the Composition layer with a Decorator]
+- make MainQueueDispatchDecorator be generic with an extension
+- add a dispatch completion func to the decorator main class
+- use it in the extension
+- replace the if else with a guard statement
+[make `MainQueueDispatchDecorator` generic]
+T) test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread
+- create a sut, loadViewIfNeeded, completeLoading with an image
+- simulateFeedImageViewVisible
+- create exp "Wait for background queue work"
+- dispatch completeImageLoading anyImageData (fulfill exp)
+- wait for exp (1.0)
+- add extension to decorate the FeedImageDataLoader (use the FeedImageDataLoaderTask)
+[dispatch background feed image data completion to main thread before passing result to the UI components. Threading is dealt with a Decorator in the Composition layer]
+- move MainQueueDispath and extension to its own file (Composers folder)
+[move `MainQueueDispatchDecorator` to separate file]
+- move composition helpers to separate files (WeakRefVirtualProxy, FeedViewAdapter etc)
+- create makeFeedViewController static func also
+[...]
 ```
