@@ -1471,7 +1471,7 @@ T) test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread
 - create exp "Wait for background queue work"
 - dispatch completeImageLoading anyImageData (fulfill exp)
 - wait for exp (1.0)
-- add extension to decorate the FeedImageDataLoader (use the FeedImageDataLoaderTask)
+- add extension to decorate the FeedImageDataLoader 
 [dispatch background feed image data completion to main thread before passing result to the UI components. Threading is dealt with a Decorator in the Composition layer]
 - move MainQueueDispath and extension to its own file (Composers folder)
 [move `MainQueueDispatchDecorator` to separate file]
