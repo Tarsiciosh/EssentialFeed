@@ -1445,8 +1445,8 @@ T) test_feedView_hasTitle
 - all UIkit code must run in the main thread
 T) test_loadFeedCompletion_dispatchesFromBackgroundToMainThread
 - create a sut and call leadViewIfNeeded
-- create an exp
-- dispatch the feed loading completion to a diferent queue (global async) complete exp
+- create an exp "Wait for feed completion"
+- dispatch the feed loading completion to a diferent queue (global() async) fulfill exp
 - fix the crash with a dispatch to the main queue (tableView reloadData)
 - check if the Thread isMainThread (to call reloadData directly)
 - fix other crash with guard Thread.isMainDispatch else DispatchQueue.main.async (self.display..)
