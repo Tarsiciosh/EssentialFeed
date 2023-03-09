@@ -1373,3 +1373,109 @@ T) test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore
 - move the extension to new file (UIImage+Animations)
 [display image with animation]
 ```
+
+### 8) Creating, Localizing, and Testing Customer Facing Strings in the Presentation Layer + NSLocalizedString Best Practices
+```
+In FeedViewControllerTests
+T) test_feedView_hasTitle 
+- create sut and call loadViewIfNeeded
+- assert that title of the sut is "My Feed" TF
+- add the title in the FeedViewController (viewDidLoad)
+[set `FeedViewController` title]
+- in MVP the presentation strings should be done by the presenter 
+- and in MVVM by the view model
+- set the title with a FeedPresenter static computed var (title) add it to Presenter
+[move title string creation from `FeedViewController` to `FeedPresenter` - in MVP, presentation data should be created by Presenters]
+- move the title configuration to the composer 
+- (the FeedViewController don't know about the FeedPresenter)
+- can be pass as a property of the viewModel also
+[move title configuration from `FeedViewController` to the `FeedUIComposer` - the View Controllers can be agnostic of Presenters if we move the configuration to composers]
+- extract the FeedViewController configuration and creation to a factory method
+- makeWith (delegate, title) (static func extension of FeedViewController)
+[extract the `FeedViewController` creation and configuration into a factory method]
+- in the title test add a bundle (FeedViewController.self)
+- get the localizedString for key "My Feed" value nil table nil
+- asssert that the sut.title is equal to the localizedTitle TS
+- we can use the NSLocalizedString with comments but for test is ok the this way
+- if the localizedString does not found the String it returns the key
+- that's why the test were passing
+- but this is not recommended (keys should be keys)
+- change to FEED_VIEW_TITLE (can pass a default value in the value param)
+- create a Feed.strings (Feed Presentation folder)
+- change table to be "Feed" TF
+- update production code (FeedPresenter)
+- use NSLocalizedString (bundle FeedPresenter.self) ommit value 
+- comment "Title for the feed view" TS
+- but becuase the two places return the key when not finding the localized string!
+- add a localizedKey variable and an assertion to compare it to the title with error:
+- "Missing localized string for key: localizedKey"
+- add "FEED_VIEW_TITLE" = "My Feed"; to the file TS
+[Localize feed view title string]
+- add localized helper function (pass a key and look for localized string for that key)
+- fire an assertion failure if it cannot find one. also return the string
+- "Missing localized string for key: key in table: table" TS
+- try removing the key pair in the table and it fails
+- move helper to FeedViewControllerTests+Localization (Helpers Folder)
+[create test helper to find missing localized strings]
+- rename FeedViewControllerTests to FeedUIIntegrationTests
+- move helpers to EssentialFeediOSTests/Feed UI/Helpers
+- EssentialFeediOSTests/Feed UI/FeedUIIntegrationTests
+[rename `FeedViewControllerTests` to `FeedUIIntegrationTests` since we are testing the composition of multiple UI components in integration]
+- localize the Feed.string by pressing the Localized button in the right panel
+- default languague is english TS
+[Localized `Feed.strings` file]
+- in the project configuration add support Locaclization (+) for portuguese (pt-BR)
+- now the Feed.string has multiple versions
+- translate the string (Meu Feed) TS
+[add Portuguese (pt-BR) localization]
+- add support for greek 
+- tranlate the string "To Feed ponele" TS
+[add Greek (el) localization]
+- create the FeedLocalizationTests 
+- look for all localization bundles in the presentation bundle 
+- look for all key in the localization bundles 
+- go through all bundles and localized keys
+- the static localization should live in the presentation layer 
+- the UI layer should only renders the info passed to it
+[add localization test to guarantee all localized key have tranlations in all supported localizations]
+```
+
+### 9) Decorator Pattern: Decoupling UIKit Components From Threading Details, Removing Duplication, and Implementing Cross-Cutting Concerns In a Clean & SOLID Way
+```
+- all UIkit code must run in the main thread
+T) test_loadFeedCompletion_dispatchesFromBackgroundToMainThread
+- create a sut and call leadViewIfNeeded
+- create an exp
+- dispatch the feed loading completion to a diferent queue (global async) complete exp
+- fix the crash with a dispatch to the main queue (tableView reloadData)
+- check if the Thread isMainThread (to call reloadData directly)
+- fix other crash with guard Thread.isMainDispatch else DispatchQueue.main.async (self.display..)
+- fix weak failing test 
+[dispatch background feed completion to main thread before updating the UI since UIKit is not thread safe]
+- move the threading check one level above (presenter layer) with the guard aproach 
+[move main thread dispatch to the Presenter]
+- presenter is platform agnostic should not leak UIkit details
+- move the threading handling one level aboce (composition layer)
+- create MainQueueDispatchDecorator (decoratee: FeedlLoader)
+- check to see if we are in the main thread to complete directly or otherwise to the main 
+- decorate the feedLoader
+[move main thread dispatch to the Composition layer with a Decorator]
+- make MainQueueDispatchDecorator be generic with an extension
+- add a dispatch completion func to the decorator main class
+- use it in the extension
+- replace the if else with a guard statement
+[make `MainQueueDispatchDecorator` generic]
+T) test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread
+- create a sut, loadViewIfNeeded, completeLoading with an image
+- simulateFeedImageViewVisible
+- create exp "Wait for background queue work"
+- dispatch completeImageLoading anyImageData (fulfill exp)
+- wait for exp (1.0)
+- add extension to decorate the FeedImageDataLoader (use the FeedImageDataLoaderTask)
+[dispatch background feed image data completion to main thread before passing result to the UI components. Threading is dealt with a Decorator in the Composition layer]
+- move MainQueueDispath and extension to its own file (Composers folder)
+[move `MainQueueDispatchDecorator` to separate file]
+- move composition helpers to separate files (WeakRefVirtualProxy, FeedViewAdapter etc)
+- create makeFeedViewController static func also
+[...]
+```
