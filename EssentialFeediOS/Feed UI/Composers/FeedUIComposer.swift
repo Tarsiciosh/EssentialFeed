@@ -9,7 +9,7 @@ public final class FeedUIComposer {
             feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader)
         )
         
-        let feedController = FeedViewController.makeWith(
+        let feedController = makeFeedViewController(
             delgate:presentationAdapter,
             title: FeedPresenter.title
         )
@@ -23,10 +23,8 @@ public final class FeedUIComposer {
         
         return feedController
     }
-}
-
-extension FeedViewController {
-    static func makeWith(delgate: FeedViewControllerDelegate, title: String) -> FeedViewController {
+    
+    static func makeFeedViewController(delgate: FeedViewControllerDelegate, title: String) -> FeedViewController {
         let bundle = Bundle(for: FeedViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
         let feedController = storyboard.instantiateInitialViewController() as! FeedViewController
@@ -35,3 +33,4 @@ extension FeedViewController {
         return feedController
     }
 }
+
