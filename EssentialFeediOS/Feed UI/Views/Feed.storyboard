@@ -25,6 +25,9 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="G2Y-0D-Y9j" appends="YES" id="25x-pD-4vh"/>
+                                    </connections>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" red="0.99951404330000004" green="0.41759261489999999" blue="0.4154433012" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -151,6 +154,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fm0-3M-m7e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="G2Y-0D-Y9j">
+                    <connections>
+                        <action selector="hideMessageAnimated" destination="a6f-h2-4D6" id="6TA-cF-OMq"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="380.91603053435114" y="-306.33802816901408"/>
         </scene>
