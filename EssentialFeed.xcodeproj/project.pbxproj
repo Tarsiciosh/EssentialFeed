@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5702DD6129BAA92500EF8AD7 /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6029BAA92500EF8AD7 /* MainQueueDispatchDecorator.swift */; };
+		5702DD6329BAA9E300EF8AD7 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6229BAA9E300EF8AD7 /* WeakRefVirtualProxy.swift */; };
+		5702DD6529BAAA4000EF8AD7 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6429BAAA4000EF8AD7 /* FeedImageDataLoaderPresentationAdapter.swift */; };
+		5702DD6729BAAAAA00EF8AD7 /* FeedLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6629BAAAAA00EF8AD7 /* FeedLoaderPresentationAdapter.swift */; };
+		5702DD6929BAAAF500EF8AD7 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6829BAAAF500EF8AD7 /* FeedViewAdapter.swift */; };
+		5702DD6C29BAAE4400EF8AD7 /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6B29BAAE4400EF8AD7 /* UIImageView+Animations.swift */; };
+		5702DD6E29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5702DD6D29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift */; };
 		570DB3CC29AD4B050070EEA8 /* FeedImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570DB3CB29AD4B050070EEA8 /* FeedImageViewModel.swift */; };
 		570EAC2929B159E600B4A15E /* FeedImagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570EAC2829B159E600B4A15E /* FeedImagePresenter.swift */; };
 		570EAC2C29B2987D00B4A15E /* Feed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 570EAC2B29B2987D00B4A15E /* Feed.storyboard */; };
@@ -131,6 +138,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5702DD6029BAA92500EF8AD7 /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
+		5702DD6229BAA9E300EF8AD7 /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
+		5702DD6429BAAA4000EF8AD7 /* FeedImageDataLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		5702DD6629BAAAAA00EF8AD7 /* FeedLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		5702DD6829BAAAF500EF8AD7 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
+		5702DD6B29BAAE4400EF8AD7 /* UIImageView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Animations.swift"; sourceTree = "<group>"; };
+		5702DD6D29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		570DB3CB29AD4B050070EEA8 /* FeedImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageViewModel.swift; sourceTree = "<group>"; };
 		570EAC2829B159E600B4A15E /* FeedImagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenter.swift; sourceTree = "<group>"; };
 		570EAC2B29B2987D00B4A15E /* Feed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Feed.storyboard; sourceTree = "<group>"; };
@@ -255,6 +269,11 @@
 			isa = PBXGroup;
 			children = (
 				571C99D729A6B59C0087AE1A /* FeedUIComposer.swift */,
+				5702DD6029BAA92500EF8AD7 /* MainQueueDispatchDecorator.swift */,
+				5702DD6229BAA9E300EF8AD7 /* WeakRefVirtualProxy.swift */,
+				5702DD6429BAAA4000EF8AD7 /* FeedImageDataLoaderPresentationAdapter.swift */,
+				5702DD6629BAAAAA00EF8AD7 /* FeedLoaderPresentationAdapter.swift */,
+				5702DD6829BAAAF500EF8AD7 /* FeedViewAdapter.swift */,
 			);
 			path = Composers;
 			sourceTree = "<group>";
@@ -382,6 +401,8 @@
 			children = (
 				57648051299C3CC800365642 /* FeedImageCell.swift */,
 				57140029299D916E005666BD /* UIView+Shimmering.swift */,
+				5702DD6B29BAAE4400EF8AD7 /* UIImageView+Animations.swift */,
+				5702DD6D29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift */,
 				570EAC2B29B2987D00B4A15E /* Feed.storyboard */,
 				570EAC2D29B299C800B4A15E /* Feed.xcassets */,
 			);
@@ -781,16 +802,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5702DD6929BAAAF500EF8AD7 /* FeedViewAdapter.swift in Sources */,
 				57ED782829B93D7300311AB7 /* FeedViewModel.swift in Sources */,
 				57CC5DDA29B138DC00960D6E /* FeedPresenter.swift in Sources */,
+				5702DD6529BAAA4000EF8AD7 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */,
 				576A333B29A007CB00262918 /* FeedImageDataLoader.swift in Sources */,
 				57ED782A29B93DB600311AB7 /* FeedLoadingViewModel.swift in Sources */,
+				5702DD6129BAA92500EF8AD7 /* MainQueueDispatchDecorator.swift in Sources */,
+				5702DD6729BAAAAA00EF8AD7 /* FeedLoaderPresentationAdapter.swift in Sources */,
 				5714002A299D916E005666BD /* UIView+Shimmering.swift in Sources */,
+				5702DD6E29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift in Sources */,
 				570EAC2929B159E600B4A15E /* FeedImagePresenter.swift in Sources */,
 				57648034299AF71A00365642 /* FeedViewController.swift in Sources */,
 				57648052299C3CC800365642 /* FeedImageCell.swift in Sources */,
 				570DB3CC29AD4B050070EEA8 /* FeedImageViewModel.swift in Sources */,
 				571C99D529A6A4AF0087AE1A /* FeedImageCellController.swift in Sources */,
+				5702DD6329BAA9E300EF8AD7 /* WeakRefVirtualProxy.swift in Sources */,
+				5702DD6C29BAAE4400EF8AD7 /* UIImageView+Animations.swift in Sources */,
 				571C99D829A6B59C0087AE1A /* FeedUIComposer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
