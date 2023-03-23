@@ -1511,10 +1511,9 @@ T) test_didStartLoadingFeed_displaysNoErrorMessage
 - append the message to the messages array when received
 - now the messages need to be a var (but with private setter) TS
 [`FeedPresenter` displays no error on `didStartLoadingFeed`]
-T) rename to test_didStartLoadingFeed_displayNoErrorMessageAndStartsLoading
+T) rename to test_didStartLoadingFeed_displaysNoErrorMessageAndStartsLoading
 - add the message display isLoading to the array of messages in the assertion TF
-- repeat the procedure of copy the origin code to the new FeedPresenter
-- copy all things needed 
+- repeat the procedure of copy the origin code to the new FeedPresenter (only needed things) TF
 - use the same spy and conform now also to the FeedLoadingView protocol TS
 [`FeedPresenter` displays loading on `didStartLoadingFeed`]
 - change the messages to be a Set instead (convert it to Hashable)
