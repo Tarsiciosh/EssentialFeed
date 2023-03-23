@@ -1479,3 +1479,83 @@ T) test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread
 - create makeFeedViewController static func also
 [...]
 ```
+
+### 10) Test-driven Approach to Effectively Dealing with Legacy Code (Code With No Tests!) + Extracting Cross-platform Components From a Platform-specific Module
+```
+- create a group Feed Presentation (in EssentialFeedTests) cross-platform module
+- create FeedPresenterTests
+- instead of moving the FeedPresenter the idea is to create a new FeedPresenter
+- use the old FeedPresenter as a guide (check list for what to test)
+T) test_init_doesNotSendMessagesToView
+- assert that view.messages is empty (XCTAssertTrue) "Expected no view messages"
+- create the view instance (ViewSpy holding the messages)
+- create a FeedPresenter with that view (discard the result) 
+- message holding Any 
+- create the new FeedPresenter with the init receiving Any as the view type
+[`FeedPresenter` does not send messages to view on init]
+- create a factory method makeSUT (returning the view and the sut) with memory leak track
+[extract system under test creation to a test factory method]
+T) test_didStartLoadingFeed_displaysNoErrorMessage
+- add an assertion that the view.messages should be equal to [.display(.noError)]
+- that is copying the message from the already existing code
+- create a Message enum representing all of the messages sent to the view
+- in this case it is the display with an optional string assosiated value (errorMessage)
+- update the assertion with the new interface 
+- make the Message be equatable to solve the compile error 
+- now invoke the event in the sut (add it to the FeedPresenter) TF
+- then copy the code from the existing FeedPresenter - let the compiler guide
+- copy the errorView (rename view to errorView)
+- copy the FeedErrorView and the FeedErrorViewModel (only the part needed) TF
+- refactor the makeSUT
+- make the spy implement the FeedErrorView 
+- append the message to the messages array when received
+- now the messages need to be a var (but with private setter) TS
+[`FeedPresenter` displays no error on `didStartLoadingFeed`]
+T) rename to test_didStartLoadingFeed_displayNoErrorMessageAndStartsLoading
+- add the message display isLoading to the array of messages in the assertion TF
+- repeat the procedure of copy the origin code to the new FeedPresenter
+- copy all things needed 
+- use the same spy and conform now also to the FeedLoadingView protocol TS
+[`FeedPresenter` displays loading on `didStartLoadingFeed`]
+- change the messages to be a Set instead (convert it to Hashable)
+[make massages Array a Set to make test more permissive since we don't care about order. (Changing order should not break the tests!)]
+T) test_didFinishLoadingFeed_diplaysFeedAndStopsLoading
+- create sut and view 
+- finish loading with a feed (use uniqueImageFeed)
+- assert that the mssages are display feed and display is loading false
+- create new case in messages (import EssentialFeed)
+- there is a problem: FeedImage is not hashable (change it to be hashable)
+- add implementation of didFinishLoadingFeed(with:)
+- copy the implementation from the origin code
+- follow the compiler adding only what it is missing
+- add the comformance and the implementation to the spy
+[`FeedPresenter` displays feed and stops loading on `didFinishLoadingFeed`]
+T) test_didFinishLoadingWithError_displaysLocalizedErrorMessageAndStopLoading
+- repeat the procedure
+- finish loading with an error (anyNSError)
+- display error message localized "FEED_VIEW_CONNECTION_ERROR"
+- copy the localized method use in the integration tests
+- use the FeedPresenter to create the bundle
+- add the didFinishLoadingFeed (empty) TF
+- copy all the needed parts TF
+- the Feed.strings file is in another module
+- create a new one, localized in all languages and bring the translations TS
+[`FeedPresenter` displays localized error message and stops loading on `didFinishLoadingFeedWithError`]
+T) test_title_isLocalized
+- assert that the FeedPresenter title is equal to the localized "FEED_VIEW_TITLE"
+- add an empty title
+- only paste code if we see a failing test
+[add localized `FeedPresenter.title`]
+- move files to their own files in production (Feed Presentation)
+- first to the FeedPresenter (change the accessibility)
+- move the Feed.string file (change the target membership tho the EssentialFeed)
+[move prod types to the EssentialFeed production module]
+- move type to their own files 
+- remove old files from the EssentialFeediOS   
+- import module fix error witht the help of the compiler (running the tests)
+[replace `FeedPresenter` from iOS module with the `FeedPresenter` from the cross-platform EssentialFeed module]
+- move the FeedLocalizationTests to the EssentialFeedTests group (change target membership)
+- remove the empty group Feed Presentation
+[move `FeedLocalizationTests` to cross-platform EssentialFeed module]
+- move FeedImagePresenter and FeedImageViewModel to the EssentialFeed module as well
+```
