@@ -1555,7 +1555,7 @@ T) test_title_isLocalized
 - import module fix error witht the help of the compiler (running the tests)
 - import EssentialFeed to FeedLocalizationTests and to FeedUIIntegrationTests localized extension
 [replace `FeedPresenter` from iOS module with the `FeedPresenter` from the cross-platform EssentialFeed module]
-- move the FeedLocalizationTests to the EssentialFeedTests group (change target membership)
+- move the FeedLocalizationTests to the EssentialFeedTests group (change target membership to EssentialFeedTests)
 - remove the empty group Feed Presentation
 [move `FeedLocalizationTests` to cross-platform EssentialFeed module]
 - move FeedImagePresenter and FeedImageViewModel to the EssentialFeed module as well
