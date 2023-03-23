@@ -1546,9 +1546,9 @@ T) test_title_isLocalized
 - add an empty title
 - only paste code if we see a failing test
 [add localized `FeedPresenter.title`]
-- move files to their own files in production (Feed Presentation)
-- first to the FeedPresenter (change the accessibility)
-- move the Feed.string file (change the target membership tho the EssentialFeed)
+- move files to their own files in production (new group Feed Presentation)
+- first the FeedPresenter (change the accessibility)
+- move the Feed.string file (change the target membership to EssentialFeed)
 [move prod types to the EssentialFeed production module]
 - move type to their own files 
 - remove old files from the EssentialFeediOS   
