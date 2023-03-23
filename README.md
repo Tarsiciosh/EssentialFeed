@@ -1524,7 +1524,7 @@ T) test_didFinishLoadingFeed_diplaysFeedAndStopsLoading
 - finish loading with a feed (use uniqueImageFeed)
 - assert that the mssages are display feed and display is loading false
 - create new case in messages (import EssentialFeed)
-- there is a problem: FeedImage is not hashable (change it to be hashable)
+- there is a problem: FeedImage is not hashable (change it to be hashable) TF
 - add implementation of didFinishLoadingFeed(with:)
 - copy the implementation from the origin code
 - follow the compiler adding only what it is missing
