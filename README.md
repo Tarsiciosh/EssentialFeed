@@ -1486,14 +1486,14 @@ T) test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread
 - create FeedPresenterTests
 - instead of moving the FeedPresenter the idea is to create a new FeedPresenter
 - use the old FeedPresenter as a guide (check list for what to test)
-T) test_init_doesNotSendMessagesToView
+T) test_init_doesNotSendMessagesToView (always start with the degenerate case)
 - assert that view.messages is empty (XCTAssertTrue) "Expected no view messages"
 - create the view instance (ViewSpy holding the messages)
 - create a FeedPresenter with that view (discard the result) 
 - message holding Any 
 - create the new FeedPresenter with the init receiving Any as the view type
 [`FeedPresenter` does not send messages to view on init]
-- create a factory method makeSUT (returning the view and the sut) with memory leak track
+- create a factory method makeSUT (returning the view and the sut) with memory leak tracking
 [extract system under test creation to a test factory method]
 T) test_didStartLoadingFeed_displaysNoErrorMessage
 - add an assertion that the view.messages should be equal to [.display(.noError)]
