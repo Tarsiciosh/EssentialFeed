@@ -1553,6 +1553,7 @@ T) test_title_isLocalized
 - move type to their own files 
 - remove old files from the EssentialFeediOS   
 - import module fix error witht the help of the compiler (running the tests)
+- import EssentialFeed to FeedLocalizationTests and to FeedUIIntegrationTests localized extension
 [replace `FeedPresenter` from iOS module with the `FeedPresenter` from the cross-platform EssentialFeed module]
 - move the FeedLocalizationTests to the EssentialFeedTests group (change target membership)
 - remove the empty group Feed Presentation
