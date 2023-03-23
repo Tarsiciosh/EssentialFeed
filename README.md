@@ -1516,6 +1516,7 @@ T) rename to test_didStartLoadingFeed_displaysNoErrorMessageAndStartsLoading
 - repeat the procedure of copy the origin code to the new FeedPresenter (only needed things) TF
 - use the same spy and conform now also to the FeedLoadingView protocol TS
 [`FeedPresenter` displays loading on `didStartLoadingFeed`]
+- the order of the messages is not important but if when change the order the test will fail
 - change the messages to be a Set instead (convert it to Hashable)
 [make massages Array a Set to make test more permissive since we don't care about order. (Changing order should not break the tests!)]
 T) test_didFinishLoadingFeed_diplaysFeedAndStopsLoading
