@@ -1501,9 +1501,9 @@ T) test_didStartLoadingFeed_displaysNoErrorMessage
 - create a Message enum representing all of the messages sent to the view
 - in this case it is the display with an optional string assosiated value (errorMessage)
 - update the assertion with the new interface 
-- make the Message be equatable to solve the compile error 
-- now invoke the event in the sut (add it to the FeedPresenter) TF
-- then copy the code from the existing FeedPresenter - let the compiler guide
+- make the Message be equatable to solve the compiler error 
+- now invoke the event in the sut (add it to the FeedPresenter - empty) TF
+- then copy the code from the existing FeedPresenter - follow the compiler errors
 - copy the errorView (rename view to errorView)
 - copy the FeedErrorView and the FeedErrorViewModel (only the part needed) TF
 - refactor the makeSUT
