@@ -1565,7 +1565,7 @@ T) test_title_isLocalized
 
 ### 1) Feed Image Data Loading and Caching with URLSession/CoreData + Composing Modules Into a Running iOS Application with Xcode Workspaces
 ```
-- move image feed loader to the EssentialFeed module 
+- move FeedImageDataLoader to the EssentialFeed module (Feed Feature group) 
 - implement RemoteFeedImageDataLoader and LocalFeedImageLoader
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
