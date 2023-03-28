@@ -196,6 +196,7 @@
 		576B0FE3296F5B7000DD2AB5 /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableRetrieveFeedStoreSpecs.swift"; sourceTree = "<group>"; };
 		576C751C28F6357700D4DB5A /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		576C8BF22936A2C9008CC9EC /* ValidateFeedCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateFeedCacheUseCaseTests.swift; sourceTree = "<group>"; };
+		57B5AF2E29D3ACEC00A1A87A /* NOTES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NOTES.md; sourceTree = "<group>"; };
 		57B99DE52936B2F8002DBCBA /* FeedCacheTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCacheTestHelpers.swift; sourceTree = "<group>"; };
 		57B99DE72936B4BD002DBCBA /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 		57B99DFE29381FC6002DBCBA /* FeedCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCachePolicy.swift; sourceTree = "<group>"; };
@@ -298,7 +299,6 @@
 			isa = PBXGroup;
 			children = (
 				576A333929A007A200262918 /* Feed Image Loader */,
-				57CC5DD729B1376000960D6E /* Feed Presentation */,
 				57CC5DD829B1378500960D6E /* Feed UI */,
 			);
 			path = EssentialFeediOS;
@@ -461,13 +461,6 @@
 			path = "Feed API";
 			sourceTree = "<group>";
 		};
-		57CC5DD729B1376000960D6E /* Feed Presentation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Feed Presentation";
-			sourceTree = "<group>";
-		};
 		57CC5DD829B1378500960D6E /* Feed UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -482,6 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				57EABE90291D9BDB002BEBDB /* README.md */,
+				57B5AF2E29D3ACEC00A1A87A /* NOTES.md */,
 				57DCAA1A28F0BF7C00EEFCAF /* EssentialFeed */,
 				57DCAA2428F0BF7C00EEFCAF /* EssentialFeedTests */,
 				571EB53929199CA60042BAA4 /* EssentialFeedEndToEndTests */,
@@ -509,8 +503,8 @@
 		57DCAA1A28F0BF7C00EEFCAF /* EssentialFeed */ = {
 			isa = PBXGroup;
 			children = (
-				576114FE293001C300FA5D4D /* Feed Cache */,
 				57DCAA3428F498D300EEFCAF /* Feed Feature */,
+				576114FE293001C300FA5D4D /* Feed Cache */,
 				576C751B28F6353800D4DB5A /* Feed API */,
 				5726319729CD128B003CEF0F /* Feed Presentation */,
 				57DCAA1B28F0BF7C00EEFCAF /* EssentialFeed.h */,
