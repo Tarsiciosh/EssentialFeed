@@ -1567,6 +1567,18 @@ T) test_title_isLocalized
 ```
 - move FeedImageDataLoader to the EssentialFeed module (Feed Feature group) 
 - implement RemoteFeedImageDataLoader and LocalFeedImageLoader
+- add RemoteFeedImageDataLoaderTests
+T) test_init_doesNotPerformAnyURLRequest
+- assert that the client requestedURL is empty
+- create a client (HTTPClientSpy) and a sut (RemoteFeedImageDataLoader)
+- remote init with the client (Any)
+- create makeSUT helper function with memory leak tracking
+[RemoteFeedImageDataLoader does not perform any URL request]
+T) test_loadImageDataFromURL_requestsDataFromURL
+- perform loadImageData(from:) with a created url on sut
+- assert that the requested urls is iqual to that url
+[]
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
