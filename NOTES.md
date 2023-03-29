@@ -1580,14 +1580,12 @@ T) test_loadImageDataFromURL_requestsDataFromURL
 [RemoteFeedImageDataLoader requests data from URL on `loadImageDataFromURL`]
 T) test_loadImageDataFromURLTwice_requestsDataFromURLTwice
 - repeat the same procedure twice so the array of requestedURLs has two urls
-
-
-
-
-
-
-
-
+[RemoteFeedImageDataLoader requests data from URL twice on calling `loadImageDataFromURL` twice]
+T) test_loadImageDataFromURL_deliversErrorOnClientError
+- create the expect sut to completeWith when action helper
+- use the FeedImageDataLoader.Result in the RemoteFeedImageDataLoader loadImageData completion
+- expect the sut to complete with failure (with created NSError) when client complete with that error
+- 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
