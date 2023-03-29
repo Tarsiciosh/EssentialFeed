@@ -1592,6 +1592,9 @@ T) test_loadImageDataFromURL_deliversInvalidDataErrorOnNon200HTTPResponse
 [RemoteFeedImageDataLoader.loadImageDataFromURL delivers invalid data error on non-200 HTTP response]
 T) test_loadImageDataFromURL_deliversInvalidDataErrorOn200HTTPResponseWithEmptyData
 - complete withStatusCode 200 and emptyData
+[`RemoteFeedImageDataLoader.loadImageDataFromURL` delivers invalid data error on 200 HTTP response with empty data]
+T) test_loadImageDataFromURL_deliversReceivedNonEmptyDataOn200HTTPResponse
+- modify production code to check for 200 case and empty data
 []
 
 
