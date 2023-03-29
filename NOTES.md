@@ -1598,6 +1598,10 @@ T) test_loadImageDataFromURL_deliversReceivedNonEmptyDataOn200HTTPResponse
 [`RemoteFeedImageDataLoader.loadImageDataFromURL` delivers non-empty received data on 200 HTTP response]
 T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - add check for self not being nil in production code
+T) test_cancelGetFromURLTask_cancelsURLRequest (URLSessionHTTPClientTests)
+- add wrappers for the tasks (URLSessionTaskWrapper, HTTPTaskWrapper) 
+- the wrapper has the name of the object that is wrapping + wrapper
+- in the test break when the error is the canceled error (URLError.cancelled)
 []
 
 - create a new project ios single view app: EssentialApp
