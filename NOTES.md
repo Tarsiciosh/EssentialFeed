@@ -1577,7 +1577,16 @@ T) test_init_doesNotPerformAnyURLRequest
 T) test_loadImageDataFromURL_requestsDataFromURL
 - perform loadImageData(from:) with a created url on sut
 - assert that the requested urls is iqual to that url
-[]
+[RemoteFeedImageDataLoader requests data from URL on `loadImageDataFromURL`]
+T) test_loadImageDataFromURLTwice_requestsDataFromURLTwice
+- repeat the same procedure twice so the array of requestedURLs has two urls
+
+
+
+
+
+
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
