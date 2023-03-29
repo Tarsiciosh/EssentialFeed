@@ -1590,6 +1590,11 @@ T) test_loadImageDataFromURL_deliversInvalidDataErrorOnNon200HTTPResponse
 - create client complete withStatusCode data at (use HTTPURLResponse) 
 - create "failure" helper to convert RemoteFeedImageDataLoader.Error into FeedImageDataLoader.Result failure result
 [RemoteFeedImageDataLoader.loadImageDataFromURL delivers invalid data error on non-200 HTTP response]
+T) test_loadImageDataFromURL_deliversInvalidDataErrorOn200HTTPResponseWithEmptyData
+- complete withStatusCode 200 and emptyData
+[]
+
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
