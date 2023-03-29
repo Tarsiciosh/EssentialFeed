@@ -1585,7 +1585,11 @@ T) test_loadImageDataFromURL_deliversErrorOnClientError
 - create the expect sut to completeWith when action helper
 - use the FeedImageDataLoader.Result in the RemoteFeedImageDataLoader loadImageData completion
 - expect the sut to complete with failure (with created NSError) when client complete with that error
-- 
+[RemoteFeedImageDataLoader.loadImageDataFromURL delivers error on client error]
+T) test_loadImageDataFromURL_deliversInvalidDataErrorOnNon200HTTPResponse
+- create client complete withStatusCode data at (use HTTPURLResponse) 
+- create "failure" helper to convert RemoteFeedImageDataLoader.Error into FeedImageDataLoader.Result failure result
+[RemoteFeedImageDataLoader.loadImageDataFromURL delivers invalid data error on non-200 HTTP response]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
