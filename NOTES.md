@@ -1595,8 +1595,10 @@ T) test_loadImageDataFromURL_deliversInvalidDataErrorOn200HTTPResponseWithEmptyD
 [`RemoteFeedImageDataLoader.loadImageDataFromURL` delivers invalid data error on 200 HTTP response with empty data]
 T) test_loadImageDataFromURL_deliversReceivedNonEmptyDataOn200HTTPResponse
 - modify production code to check for 200 case and empty data
+[`RemoteFeedImageDataLoader.loadImageDataFromURL` delivers non-empty received data on 200 HTTP response]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- add check for self not being nil in production code
 []
-
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
