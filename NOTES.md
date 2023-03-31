@@ -1620,6 +1620,8 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Extract duplicate HTTPClientSpy helper into a shared scope]
 - move the RemoteFeedImageDataLoader (make it public and final)
 [Move RemoteFeedImageDataLoader to production]
+[Make RemoteFeedImageDataLoader conform to FeedImageDataLoader]
+[RemoteFeedImageDataLoader.loadImageDataFromURL delivers connectivity error on HTTP client error]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
