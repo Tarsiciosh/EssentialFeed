@@ -1622,6 +1622,8 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Move RemoteFeedImageDataLoader to production]
 [Make RemoteFeedImageDataLoader conform to FeedImageDataLoader]
 [RemoteFeedImageDataLoader.loadImageDataFromURL delivers connectivity error on HTTP client error]
+[Refactor switch statement with mapError and flatMap chain]
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
