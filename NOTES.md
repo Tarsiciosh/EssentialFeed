@@ -1602,7 +1602,10 @@ T) test_cancelGetFromURLTask_cancelsURLRequest (URLSessionHTTPClientTests)
 - add wrappers for the tasks (URLSessionTaskWrapper, HTTPTaskWrapper) 
 - the wrapper has the name of the object that is wrapping + wrapper
 - in the test break when the error is the canceled error (URLError.cancelled)
-[]
+[Add HTTPClientTask so clients can cancel HTTP requests]
+- refator "resultFor" helper in URLSessionHTTPClientTests
+- add a tuple (values) with all the former values (data, response, error) and a taskHandler
+-  
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
