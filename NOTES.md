@@ -1623,6 +1623,7 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Make RemoteFeedImageDataLoader conform to FeedImageDataLoader]
 [RemoteFeedImageDataLoader.loadImageDataFromURL delivers connectivity error on HTTP client error]
 [Refactor switch statement with mapError and flatMap chain]
+[Remove @discardableResult attribute — FeedImageDataLoaderTask instances should be properly managed and never discarded.]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
