@@ -1605,7 +1605,18 @@ T) test_cancelGetFromURLTask_cancelsURLRequest (URLSessionHTTPClientTests)
 [Add HTTPClientTask so clients can cancel HTTP requests]
 - refator "resultFor" helper in URLSessionHTTPClientTests
 - add a tuple (values) with all the former values (data, response, error) and a taskHandler
--  
+[Extract duplicate error capturing logic by passing a taskHandler closure into the reusable `resultErrorFor` helper. Now, we can easily interact with the HTTP task as the request starts.]
+- add a queue for handling the stub of the URLSession tests
+[Synchronize access to global URLProtocolStub.stub with a private `DispatchQueue` to prevent data races]
+- refactor the URLSessionHTTPClient
+[Remove default URLSessionHTTPClient initializer parameter (dependency) as clients should be mindful about which `URLSession` instance to use. For example, clients may 
+decide to use the `.shared` instance, but when testing we can inject a `URLSession` with an ephemeral configuration registered with the `URLProtocolStub` class. This way, we don't need to start/stop intercepting URL requests globally.]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
+- modify HTTPTaskWrapper to prevent the completion when cancelling
+[Cancelling the RemoteFeedImageDataLoader.loadImageDataFromURL cance…
+…ls the HTTP client URL request]
+[Cancelling the RemoteFeedImageDataLoader.loadImageDataFromURL cancels the HTTP client URL reques]
+- 
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
