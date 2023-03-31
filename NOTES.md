@@ -1616,6 +1616,7 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Cancelling the RemoteFeedImageDataLoader.loadImageDataFromURL cance…
 …ls the HTTP client URL request]
 [Cancelling the RemoteFeedImageDataLoader.loadImageDataFromURL cancels the HTTP client URL reques]
+[Extract duplicate anyData helper into a shared scope]
 - 
 
 - create a new project ios single view app: EssentialApp
