@@ -1617,8 +1617,9 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 …ls the HTTP client URL request]
 [Cancelling the RemoteFeedImageDataLoader.loadImageDataFromURL cancels the HTTP client URL reques]
 [Extract duplicate anyData helper into a shared scope]
-- 
-
+[Extract duplicate HTTPClientSpy helper into a shared scope]
+- move the RemoteFeedImageDataLoader (make it public and final)
+[Move RemoteFeedImageDataLoader to production]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
