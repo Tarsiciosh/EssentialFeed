@@ -1626,6 +1626,7 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Remove @discardableResult attribute — FeedImageDataLoaderTask instances should be properly managed and never discarded.]
 [Add RemoteFeedImageDataLoader end-to-end test to guarantee both the client (app) and server (backend) respects the API contract, so we can fetch image data from remote.]
 [Extract duplicate base URL creation into a factory helper]
+[Extract duplicate ephemeral HTTPClient creation into a factory helper]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
