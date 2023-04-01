@@ -7,3 +7,7 @@ func anyNSError() -> NSError {
 func anyURL() -> URL {
     URL(string: "http://any-url.com")!
 }
+
+func anyData() -> Data {
+    return Data("any data".utf8)
+}
