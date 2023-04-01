@@ -20,7 +20,7 @@ class URLProtocolStub: URLProtocol {
         stub = Stub(data: data, response: response, error: error, requestObserver: nil)
     }
     
-    static func observeRequest(observer: @escaping (URLRequest) -> Void) {
+    static func observeRequests(observer: @escaping (URLRequest) -> Void) {
         stub = Stub(data: nil, response: nil, error: nil, requestObserver: observer)
     }
     

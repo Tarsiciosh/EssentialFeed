@@ -1630,6 +1630,7 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Extract duplicate HTTPURLResponse.statusCode == 200 validation into a `isOK` helper method]
 [Move URLProtocolStub to separate file]
 [Rename test case class to reflect the use case it refers to]
+[Wait for URLProtocol to complete the URLRequest after a task has been canceled to avoid a test leak where the URLProtocol would be starting the request after the test finishes. This happens because cancelling a URLSessionDataTask won't immediately cancel the URLProtocol from receiving that request. So if we don't wait for it, there's a chance the URLProtocol request will run while another test is running and influence its result.]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
