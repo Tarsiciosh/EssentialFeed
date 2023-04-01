@@ -1627,6 +1627,9 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Add RemoteFeedImageDataLoader end-to-end test to guarantee both the client (app) and server (backend) respects the API contract, so we can fetch image data from remote.]
 [Extract duplicate base URL creation into a factory helper]
 [Extract duplicate ephemeral HTTPClient creation into a factory helper]
+[Extract duplicate HTTPURLResponse.statusCode == 200 validation into a `isOK` helper method]
+[Move URLProtocolStub to separate file]
+[Rename test case class to reflect the use case it refers to]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
