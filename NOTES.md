@@ -1644,7 +1644,14 @@ T) test_loadImageDataFromURL_failsOnStoreError
 - add Error to LocalFeedImageDataLoader 
 - add failed helper (returns FeedImageDataLoader.Result with a LocalFeedImageDataLoader.Error.failed)
 - add completions and and complete with to StoreSpy
-[]
+[LocalFeedImageDataLoader.loadImageData fails on store error]
+- add notFound helper (same idea as before)
+- add complete with data to StoreSpy
+- add mapError and flatMap to loadImageData of LocalFeedImageDataLoader
+[LocalFeedImageDataLoader.loadImageData delivers not found error when store can't find image data for url]
+
+
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
