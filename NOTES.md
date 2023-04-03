@@ -1662,6 +1662,11 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDealloca
 - make self weak for the completion block of retrieve (store func) and return immediatelly if it is nil 
 [LocalFeedImageDataLoader.loadImageData does not deliver result after instance has been deallocated]
 [Move LocalFeedImageDataLoader and FeedImageDataStore to production]
+T) test_saveImageDataForURL_requestsImageDataInsertionForURL
+- add the insert method to the FeedImageDataStore (along with the InsertionResult)
+- add insert case for Message in StoreSpy and the insert method
+- add SaveResult and save func to LocalFeedImageDataLoader
+[LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion for url into the store]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
