@@ -1635,8 +1635,16 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 - create LocalFeedImageDataLoaderTests (Feed Cache group)
 [LocalFeedImageDataLoader does not message store upon creation]
 T) test_loadImageDataFromURL_requestsStoredDataForURL
-- add FeedImageDataStore, FeedImageDataLoaderTask refactor StoreSpy
-
+- add FeedImageDataStore protocol, add private struct Task that conforms to FeedImageDataLoaderTask
+- add a store to the LocalFeedImageDataLoader conforming to the FeedImageDataStore
+- refactor StoreSpy to collect receivedMessages (type Message)
+[`LocalFeedImageDataLoader.loadImageData` requests stored data for URL from `FeedImageDataStore`]
+T) test_loadImageDataFromURL_failsOnStoreError
+- add expect sut toCompleteWith when 
+- add Error to LocalFeedImageDataLoader 
+- add failed helper (returns FeedImageDataLoader.Result with a LocalFeedImageDataLoader.Error.failed)
+- add completions and and complete with to StoreSpy
+[]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
