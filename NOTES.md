@@ -1659,8 +1659,9 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 - cancel function is invoked, thus when "complete with" is invoked there is no completion executed
 [`LocalFeedImageDataLoader.loadImageData` does not deliver result after cancelling task]
 T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
-- 
-
+- make self weak for the completion block of retrieve (store func) and return immediatelly if it is nil 
+[LocalFeedImageDataLoader.loadImageData does not deliver result after instance has been deallocated]
+[Move LocalFeedImageDataLoader and FeedImageDataStore to production]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
