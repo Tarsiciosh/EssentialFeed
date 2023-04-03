@@ -1649,7 +1649,9 @@ T) test_loadImageDataFromURL_failsOnStoreError
 - add complete with data to StoreSpy
 - add mapError and flatMap to loadImageData of LocalFeedImageDataLoader
 [LocalFeedImageDataLoader.loadImageData delivers not found error when store can't find image data for url]
-
+T) test_loadImageDataFromURL_deliversStoredDataOnFoundData
+- add complete handling for the flatMap call
+[LocalFeedImageDataLoader.loadImageData delivers stored data when store finds image data for url]
 
 
 - create a new project ios single view app: EssentialApp
