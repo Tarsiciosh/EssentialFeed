@@ -1652,6 +1652,14 @@ T) test_loadImageDataFromURL_failsOnStoreError
 T) test_loadImageDataFromURL_deliversStoredDataOnFoundData
 - add complete handling for the flatMap call
 [LocalFeedImageDataLoader.loadImageData delivers stored data when store finds image data for url]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
+- refactor Task to receive a completion block which is stored in a completion variable that is optional, 
+- then use the "complete with" function of the task instead of the received completion in the loadImageData
+- the Task has a internal func preventFurtherCompletions that set the completion to nil when the 
+- cancel function is invoked, thus when "complete with" is invoked there is no completion executed
+[`LocalFeedImageDataLoader.loadImageData` does not deliver result after cancelling task]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- 
 
 
 - create a new project ios single view app: EssentialApp
