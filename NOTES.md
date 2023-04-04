@@ -1708,6 +1708,7 @@ T) test_retrieveImageData_deliversLastInsertedValue
 - call map on image and assign the data in the transform closure
 - call again map and save the context
 [refactor procedural code into a chain of map operations]
+[move CoreDataFeedStore implementation of the FeedStore protocol to separate file]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
