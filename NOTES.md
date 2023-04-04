@@ -1669,7 +1669,7 @@ T) test_saveImageDataForURL_requestsImageDataInsertionForURL
 [LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion for url into the store]
 [separate retrieval from insertion operations and types to clarify intent]
 [rename test case class to clarify intent]
-
+[extract FeedImageDataStoreSpy into a shared scope]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
