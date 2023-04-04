@@ -1696,6 +1696,11 @@ T) test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch
 - add "data" also to ManagedFeedImage file (@NSManaged var data: Data?)
 [add new FeedStore core data model version adding an optional Data property to the ManagedFeedImage]
 [move CoreDataFeedStore implementation of the FeedImageDataStore protocol to production]
+T) test_retrieveImageData_deliversFoundDataWhenThereIsAStoredImageDataMatchingURL
+- add found helper to CoreDataFeedImageDataStoreTests
+- implement insert and retrieve in the CoreDataFeedStore (FeedImageDataStore extension)
+- add "first with url in context" helper to ManagedFeedImage
+[CoreDataFeedStore.retrieveImageData delivers stored data when there's an image with a matching URL in the store]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
