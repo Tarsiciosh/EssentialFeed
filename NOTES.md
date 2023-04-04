@@ -1695,7 +1695,7 @@ T) test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch
 - set it as the current version -> select FeedStore2.xcdatamodel file and select the version (FeedStore2) 
 - add "data" also to ManagedFeedImage file (@NSManaged var data: Data?)
 [add new FeedStore core data model version adding an optional Data property to the ManagedFeedImage]
-
+[move CoreDataFeedStore implementation of the FeedImageDataStore protocol to production]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
