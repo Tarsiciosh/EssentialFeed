@@ -1680,6 +1680,11 @@ T) test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion
 - add completeInsertionSuccessfully to FeedImageDataStoreSpy
 - modify LocalFeedImageDataLoader (save extension)
 [LocalFeedImageDataLoader.saveImageDataFromURL succeeds on successful store insertion]
+T) test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- add weak self to LocalFeedImageDataLoader save extension
+[LocalFeedImageDataLoader.saveImageDataFromURL does not deliver result after instance has been deallocated]
+
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
