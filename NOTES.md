@@ -1710,6 +1710,7 @@ T) test_retrieveImageData_deliversLastInsertedValue
 [refactor procedural code into a chain of map operations]
 [move CoreDataFeedStore implementation of the FeedStore protocol to separate file]
 [Encapsulate CoreDataStore bundle creation into a centralized place to remove duplication and prevent mistakes]
+[Clean up references to persistent stores on CoreDataStore.deinit to encapsulate the whole CoreData stack lifecycle within the `CoreDataStore` instance life time]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
