@@ -1690,6 +1690,12 @@ T) test_retrieveImageData_deliversNotFoundWhenEmpty
 T) test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch
 - add insert and localImage helpers
 [CoreDataFeedStore.retrieveImageData delivers image data not found when store is not empty but there's no image with matching URL]
+- add a new version of FeedStore.xcdatamodeld select the file and select Editor > Add Model Version
+- name it FeedStore2 and add new "data" attribure (Binary Data)
+- set it as the current version -> select FeedStore2.xcdatamodel file and select the version (FeedStore2) 
+- add "data" also to ManagedFeedImage file (@NSManaged var data: Data?)
+[add new FeedStore core data model version adding an optional Data property to the ManagedFeedImage]
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
