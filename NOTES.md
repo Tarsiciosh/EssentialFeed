@@ -1683,8 +1683,10 @@ T) test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion
 T) test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - add weak self to LocalFeedImageDataLoader save extension
 [LocalFeedImageDataLoader.saveImageDataFromURL does not deliver result after instance has been deallocated]
-
-
+- create new CoreDataFeedImageDataStoreTests
+T) test_retrieveImageData_deliversNotFoundWhenEmpty
+- create makeSUT
+[CoreDataFeedStore.retrieveImageData delivers image data not found when empty]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
