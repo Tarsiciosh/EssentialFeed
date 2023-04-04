@@ -1705,8 +1705,9 @@ T) test_retrieveImageData_deliversLastInsertedValue
 [CoreDataFeedStore.retrieveImageData delivers last inserted value (overwriting previous values)]
 [Add test to guarantee that CoreDataFeedStore side effects run serially to prevent unexpected behavior]
 [remove unnecessary return statements]
-
-
+- call map on image and assign the data in the transform closure
+- call again map and save the context
+[refactor procedural code into a chain of map operations]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
