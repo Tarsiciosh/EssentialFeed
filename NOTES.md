@@ -1703,6 +1703,10 @@ T) test_retrieveImageData_deliversFoundDataWhenThereIsAStoredImageDataMatchingUR
 [CoreDataFeedStore.retrieveImageData delivers stored data when there's an image with a matching URL in the store]
 T) test_retrieveImageData_deliversLastInsertedValue
 [CoreDataFeedStore.retrieveImageData delivers last inserted value (overwriting previous values)]
+[Add test to guarantee that CoreDataFeedStore side effects run serially to prevent unexpected behavior]
+[remove unnecessary return statements]
+
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
