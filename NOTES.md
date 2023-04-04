@@ -1687,6 +1687,9 @@ T) test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDealloca
 T) test_retrieveImageData_deliversNotFoundWhenEmpty
 - create makeSUT
 [CoreDataFeedStore.retrieveImageData delivers image data not found when empty]
+T) test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch
+- add insert and localImage helpers
+[CoreDataFeedStore.retrieveImageData delivers image data not found when store is not empty but there's no image with matching URL]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
