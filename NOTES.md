@@ -1667,6 +1667,9 @@ T) test_saveImageDataForURL_requestsImageDataInsertionForURL
 - add insert case for Message in StoreSpy and the insert method
 - add SaveResult and save func to LocalFeedImageDataLoader
 [LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion for url into the store]
+[separate retrieval from insertion operations and types to clarify intent]
+[rename test case class to clarify intent]
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
