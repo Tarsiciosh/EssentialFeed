@@ -1701,6 +1701,8 @@ T) test_retrieveImageData_deliversFoundDataWhenThereIsAStoredImageDataMatchingUR
 - implement insert and retrieve in the CoreDataFeedStore (FeedImageDataStore extension)
 - add "first with url in context" helper to ManagedFeedImage
 [CoreDataFeedStore.retrieveImageData delivers stored data when there's an image with a matching URL in the store]
+T) test_retrieveImageData_deliversLastInsertedValue
+[CoreDataFeedStore.retrieveImageData delivers last inserted value (overwriting previous values)]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
