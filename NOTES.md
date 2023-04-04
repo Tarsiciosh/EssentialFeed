@@ -1670,6 +1670,7 @@ T) test_saveImageDataForURL_requestsImageDataInsertionForURL
 [separate retrieval from insertion operations and types to clarify intent]
 [rename test case class to clarify intent]
 [extract FeedImageDataStoreSpy into a shared scope]
+[Extract cache feed image data use case into the new `CacheFeedImageDataUseCaseTests` test case class]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
