@@ -1672,11 +1672,14 @@ T) test_saveImageDataForURL_requestsImageDataInsertionForURL
 [extract FeedImageDataStoreSpy into a shared scope]
 [Extract cache feed image data use case into the new CacheFeedImageDataUseCaseTests test case class]
 T) test_saveImageDataFromURL_failsOnStoreInsertionError
-- add expect helper 
+- add expect sut to completWith when helper to CacheFeedImageDataUseCaseTests
 - add SaveResult to LocalFeedImageDataLoader
+- add insertionCompletions to FeedImageDataStoreSpy
 [LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion into store]
-
-
+T) test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion
+- add completeInsertionSuccessfully to FeedImageDataStoreSpy
+- modify LocalFeedImageDataLoader (save extension)
+[LocalFeedImageDataLoader.saveImageDataFromURL succeeds on successful store insertion]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
