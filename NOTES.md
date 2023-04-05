@@ -1735,7 +1735,9 @@ T) test_validateCache_succeedsOnEmptyCache
 [LocalFeedLoader.validateCache succeeds on empty cache]
 T) test_validateCache_succeedsOnNonExpiredCache
 [LocalFeedLoader.validateCache succeeds on non-expired cache]
-
+T) test_validateCache_failsOnDeletionErrorOfExpiredCache
+T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
+[LocalFeedLoader.validateCache fails on deletion error of a expired cache]
 
 
 
