@@ -1726,6 +1726,7 @@ T) test_validateFeedCache_doesNotDeleteRecentlySavedFeed
 T) test_validateFeedCache_deletesFeedSavedInADistantPast 
 - add currentDate parameter to makeFeedLoader helper
 [LocalFeedLoader in integration with the CoreDataFeedStore deletes items saved in a distant past by separate instances when validating cache, proving we correctly manage the data models on disk.]
+[Remove default LocalFeedLoader.validateCache completion closure as clients should be mindful about handling the result of the operation]
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
