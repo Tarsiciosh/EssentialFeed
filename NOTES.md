@@ -1716,7 +1716,9 @@ T) test_loadImageData_deliversSavedDataOnASeparateInstance
 - use the same approch with the feed test
 [LocalFeedImageDataLoader in integration with the CoreDataFeedStore delivers items saved on separate instances, proving we correctly persist the data models to disk.]
 [separate test scopes with better naming]
-
+T) test_saveImageData_overridesSavedImageDataOnASeparateInstance
+- use the same approch with the feed test
+[LocalFeedImageDataLoader in integration with the `CoreDataFeedStore overrides items saved by separate instances, proving we correctly manage the data models on disk.]
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
