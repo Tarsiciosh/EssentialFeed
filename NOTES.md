@@ -1631,6 +1631,116 @@ T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
 [Move URLProtocolStub to separate file]
 [Rename test case class to reflect the use case it refers to]
 [Wait for URLProtocol to complete the URLRequest after a task has been canceled to avoid a test leak where the URLProtocol would be starting the request after the test finishes. This happens because cancelling a URLSessionDataTask won't immediately cancel the URLProtocol from receiving that request. So if we don't wait for it, there's a chance the URLProtocol request will run while another test is running and influence its result.]
+[update use case]
+- create LocalFeedImageDataLoaderTests (Feed Cache group)
+[LocalFeedImageDataLoader does not message store upon creation]
+T) test_loadImageDataFromURL_requestsStoredDataForURL
+- add FeedImageDataStore protocol, add private struct Task that conforms to FeedImageDataLoaderTask
+- add a store to the LocalFeedImageDataLoader conforming to the FeedImageDataStore
+- refactor StoreSpy to collect receivedMessages (type Message)
+[`LocalFeedImageDataLoader.loadImageData` requests stored data for URL from `FeedImageDataStore`]
+T) test_loadImageDataFromURL_failsOnStoreError
+- add expect sut toCompleteWith when 
+- add Error to LocalFeedImageDataLoader 
+- add failed helper (returns FeedImageDataLoader.Result with a LocalFeedImageDataLoader.Error.failed)
+- add completions and and complete with to StoreSpy
+[LocalFeedImageDataLoader.loadImageData fails on store error]
+- add notFound helper (same idea as before)
+- add complete with data to StoreSpy
+- add mapError and flatMap to loadImageData of LocalFeedImageDataLoader
+[LocalFeedImageDataLoader.loadImageData delivers not found error when store can't find image data for url]
+T) test_loadImageDataFromURL_deliversStoredDataOnFoundData
+- add complete handling for the flatMap call
+[LocalFeedImageDataLoader.loadImageData delivers stored data when store finds image data for url]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask
+- refactor Task to receive a completion block which is stored in a completion variable that is optional, 
+- then use the "complete with" function of the task instead of the received completion in the loadImageData
+- the Task has a internal func preventFurtherCompletions that set the completion to nil when the 
+- cancel function is invoked, thus when "complete with" is invoked there is no completion executed
+[`LocalFeedImageDataLoader.loadImageData` does not deliver result after cancelling task]
+T) test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- make self weak for the completion block of retrieve (store func) and return immediatelly if it is nil 
+[LocalFeedImageDataLoader.loadImageData does not deliver result after instance has been deallocated]
+[Move LocalFeedImageDataLoader and FeedImageDataStore to production]
+T) test_saveImageDataForURL_requestsImageDataInsertionForURL
+- add the insert method to the FeedImageDataStore (along with the InsertionResult)
+- add insert case for Message in StoreSpy and the insert method
+- add SaveResult and save func to LocalFeedImageDataLoader
+[LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion for url into the store]
+[separate retrieval from insertion operations and types to clarify intent]
+[rename test case class to clarify intent]
+[extract FeedImageDataStoreSpy into a shared scope]
+[Extract cache feed image data use case into the new CacheFeedImageDataUseCaseTests test case class]
+T) test_saveImageDataFromURL_failsOnStoreInsertionError
+- add expect sut to completWith when helper to CacheFeedImageDataUseCaseTests
+- add SaveResult to LocalFeedImageDataLoader
+- add insertionCompletions to FeedImageDataStoreSpy
+[LocalFeedImageDataLoader.saveImageDataForURL requests image data insertion into store]
+T) test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion
+- add completeInsertionSuccessfully to FeedImageDataStoreSpy
+- modify LocalFeedImageDataLoader (save extension)
+[LocalFeedImageDataLoader.saveImageDataFromURL succeeds on successful store insertion]
+T) test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- add weak self to LocalFeedImageDataLoader save extension
+[LocalFeedImageDataLoader.saveImageDataFromURL does not deliver result after instance has been deallocated]
+- create new CoreDataFeedImageDataStoreTests
+T) test_retrieveImageData_deliversNotFoundWhenEmpty
+- create makeSUT
+[CoreDataFeedStore.retrieveImageData delivers image data not found when empty]
+T) test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch
+- add insert and localImage helpers
+[CoreDataFeedStore.retrieveImageData delivers image data not found when store is not empty but there's no image with matching URL]
+- add a new version of FeedStore.xcdatamodeld select the file and select Editor > Add Model Version
+- name it FeedStore2 and add new "data" attribure (Binary Data)
+- set it as the current version -> select FeedStore2.xcdatamodel file and select the version (FeedStore2) 
+- add "data" also to ManagedFeedImage file (@NSManaged var data: Data?)
+[add new FeedStore core data model version adding an optional Data property to the ManagedFeedImage]
+[move CoreDataFeedStore implementation of the FeedImageDataStore protocol to production]
+T) test_retrieveImageData_deliversFoundDataWhenThereIsAStoredImageDataMatchingURL
+- add found helper to CoreDataFeedImageDataStoreTests
+- implement insert and retrieve in the CoreDataFeedStore (FeedImageDataStore extension)
+- add "first with url in context" helper to ManagedFeedImage
+[CoreDataFeedStore.retrieveImageData delivers stored data when there's an image with a matching URL in the store]
+T) test_retrieveImageData_deliversLastInsertedValue
+[CoreDataFeedStore.retrieveImageData delivers last inserted value (overwriting previous values)]
+[Add test to guarantee that CoreDataFeedStore side effects run serially to prevent unexpected behavior]
+[remove unnecessary return statements]
+- call map on image and assign the data in the transform closure
+- call again map and save the context
+[refactor procedural code into a chain of map operations]
+[move CoreDataFeedStore implementation of the FeedStore protocol to separate file]
+[Encapsulate CoreDataStore bundle creation into a centralized place to remove duplication and prevent mistakes]
+[Clean up references to persistent stores on CoreDataStore.deinit to encapsulate the whole CoreData stack lifecycle within the `CoreDataStore` instance life time]
+Add test to EssentialFeedCacheIntegrationTests
+T) test_loadImageData_deliversSavedDataOnASeparateInstance  
+- use the same approch with the feed test
+[LocalFeedImageDataLoader in integration with the CoreDataFeedStore delivers items saved on separate instances, proving we correctly persist the data models to disk.]
+[separate test scopes with better naming]
+T) test_saveImageData_overridesSavedImageDataOnASeparateInstance
+- use the same approch with the feed test
+[LocalFeedImageDataLoader in integration with the CoreDataFeedStore overrides items saved by separate instances, proving we correctly manage the data models on disk.]
+T) test_validateFeedCache_doesNotDeleteRecentlySavedFeed
+- add validateCache(with:) helper function 
+- add a ValidationResult and completion for the validateCache function of LocalFeedLoader
+[LocalFeedLoader in integration with the CoreDataFeedStore does not delete recently saved items saved by separate instances when validating cache, proving we correctly manage the data models on disk.]
+T) test_validateFeedCache_deletesFeedSavedInADistantPast 
+- add currentDate parameter to makeFeedLoader helper
+[LocalFeedLoader in integration with the CoreDataFeedStore deletes items saved in a distant past by separate instances when validating cache, proving we correctly manage the data models on disk.]
+[Remove default LocalFeedLoader.validateCache completion closure as clients should be mindful about handling the result of the operation]
+T) test_validateCache_failsOnDeletionErrorOfFailedRetrieval
+T) test_validateCache_succeedsOnSuccessfulDeletionOfFailedRetrieval
+- forwad the completion closure of validateCache (LocalFeedLoader) to the deleteCachedFeed (FeedStore)
+[LocalFeedLoader.validateCache fails on deletion error of a failed retrieval]
+T) test_validateCache_succeedsOnEmptyCache
+[LocalFeedLoader.validateCache succeeds on empty cache]
+T) test_validateCache_succeedsOnNonExpiredCache
+[LocalFeedLoader.validateCache succeeds on non-expired cache]
+T) test_validateCache_failsOnDeletionErrorOfExpiredCache
+T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
+[LocalFeedLoader.validateCache fails on deletion error of a expired cache]
+[Load NSManagedObjectModel instance lazily and cache it to prevent multiple `NSEntityDescriptions` claiming the same `NSManagedObject` model subclasses (This problem just generates warnings but could lead to undefined behavior in the future).]
+
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
