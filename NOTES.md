@@ -1731,7 +1731,8 @@ T) test_validateCache_failsOnDeletionErrorOfFailedRetrieval
 T) test_validateCache_succeedsOnSuccessfulDeletionOfFailedRetrieval
 - forwad the completion closure of validateCache (LocalFeedLoader) to the deleteCachedFeed (FeedStore)
 [LocalFeedLoader.validateCache fails on deletion error of a failed retrieval]
-
+T) test_validateCache_succeedsOnEmptyCache
+[LocalFeedLoader.validateCache succeeds on empty cache]
 
 
 
