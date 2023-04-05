@@ -1733,6 +1733,8 @@ T) test_validateCache_succeedsOnSuccessfulDeletionOfFailedRetrieval
 [LocalFeedLoader.validateCache fails on deletion error of a failed retrieval]
 T) test_validateCache_succeedsOnEmptyCache
 [LocalFeedLoader.validateCache succeeds on empty cache]
+T) test_validateCache_succeedsOnNonExpiredCache
+[LocalFeedLoader.validateCache succeeds on non-expired cache]
 
 
 
