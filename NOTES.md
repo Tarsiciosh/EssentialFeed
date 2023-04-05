@@ -1711,6 +1711,11 @@ T) test_retrieveImageData_deliversLastInsertedValue
 [move CoreDataFeedStore implementation of the FeedStore protocol to separate file]
 [Encapsulate CoreDataStore bundle creation into a centralized place to remove duplication and prevent mistakes]
 [Clean up references to persistent stores on CoreDataStore.deinit to encapsulate the whole CoreData stack lifecycle within the `CoreDataStore` instance life time]
+Add test to EssentialFeedCacheIntegrationTests
+T) test_loadImageData_deliversSavedDataOnASeparateInstance  
+- use the same approch with the feed test
+[LocalFeedImageDataLoader in integration with the CoreDataFeedStore delivers items saved on separate instances, proving we correctly persist the data models to disk.]
+
 
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
