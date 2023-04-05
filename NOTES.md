@@ -1738,7 +1738,7 @@ T) test_validateCache_succeedsOnNonExpiredCache
 T) test_validateCache_failsOnDeletionErrorOfExpiredCache
 T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
 [LocalFeedLoader.validateCache fails on deletion error of a expired cache]
-
+[Load NSManagedObjectModel instance lazily and cache it to prevent multiple `NSEntityDescriptions` claiming the same `NSManagedObject` model subclasses (This problem just generates warnings but could lead to undefined behavior in the future).]
 
 
 - create a new project ios single view app: EssentialApp
