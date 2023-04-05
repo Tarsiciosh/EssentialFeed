@@ -1719,6 +1719,14 @@ T) test_loadImageData_deliversSavedDataOnASeparateInstance
 T) test_saveImageData_overridesSavedImageDataOnASeparateInstance
 - use the same approch with the feed test
 [LocalFeedImageDataLoader in integration with the CoreDataFeedStore overrides items saved by separate instances, proving we correctly manage the data models on disk.]
+T) test_validateFeedCache_doesNotDeleteRecentlySavedFeed
+- add validateCache(with:) helper function 
+- add a ValidationResult and completion for the validateCache function of LocalFeedLoader
+[LocalFeedLoader in integration with the CoreDataFeedStore does not delete recently saved items saved by separate instances when validating cache, proving we correctly manage the data models on disk.]
+T) test_validateFeedCache_deletesFeedSavedInADistantPast 
+- add currentDate parameter to makeFeedLoader helper
+[LocalFeedLoader in integration with the CoreDataFeedStore deletes items saved in a distant past by separate instances when validating cache, proving we correctly manage the data models on disk.]
+
 - create a new project ios single view app: EssentialApp
 - remove landscape (left and right)
 [add empty EssentialApp project]
