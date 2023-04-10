@@ -1739,16 +1739,14 @@ T) test_validateCache_failsOnDeletionErrorOfExpiredCache
 T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
 [LocalFeedLoader.validateCache fails on deletion error of a expired cache]
 [Load NSManagedObjectModel instance lazily and cache it to prevent multiple `NSEntityDescriptions` claiming the same `NSManagedObject` model subclasses (This problem just generates warnings but could lead to undefined behavior in the future).]
-
-
-- create a new project ios single view app: EssentialApp
+- create a new project ios single view app: EssentialApp (single view app, storyboard, include tests)
 - remove landscape (left and right)
 [add empty EssentialApp project]
 - need to create a workspace
 - drag the EssentialFeed project into the EssentialApp project (up) 
 - response to create a new workspace (a workspace can combine multiple projects) 
 - now there are the EssentialFeed project and the EssetialApp project
-- in the EssetialApp project add the modules as embeded frameworks (+) EssentialFeed and EssentialFeediOS
+- in the EssetialApp project add the other two modules as embeded frameworks (+) EssentialFeed and EssentialFeediOS
 - now from the EssentialApp project we have access to the EssentialFeed components
 [create EssetialApp workspace combining EssentialApp and EssentialFeed projects]
 - in the scene delegate import both modules
