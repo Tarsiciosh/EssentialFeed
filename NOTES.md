@@ -1743,10 +1743,11 @@ T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
 - remove landscape (left and right)
 [add empty EssentialApp project]
 - need to create a workspace
-- drag the EssentialFeed project into the EssentialApp project (up) 
-- response to create a new workspace (a workspace can combine multiple projects) 
+- drag the EssentialFeed project (from finder with XCode close for that project) into the EssentialApp project (top) 
+- response to create a new workspace (a workspace can combine multiple projects) EssentialFeed/EssentialApp.xcworkspace
 - now there are the EssentialFeed project and the EssetialApp project
 - in the EssetialApp project add the other two modules as embeded frameworks (+) EssentialFeed and EssentialFeediOS
+- (main tab - Frameworks, Libraries and Embedded Content)
 - now from the EssentialApp project we have access to the EssentialFeed components
 [create EssetialApp workspace combining EssentialApp and EssentialFeed projects]
 - in the scene delegate import both modules
