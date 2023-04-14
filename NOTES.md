@@ -1798,6 +1798,7 @@ T) test_load_deliversRemoteFeedOnRemoteSuccess
 [FeedLoaderWithFallbackComposite.load delivers primary feed on primary loader success]
 - create the makeSUT (with primaryResult and fallbackResult as parameters) (track for memory leaks also)
 - create the trackForMemoryLeaks helper
+- use FeedLoader as return parameter!
 [Extract system under test (SUT) creation into a factory method]
 T) test_load_deliversFallbackFeedOnPrimaryFailure
 - repeat the same strategy, create the anyNSError helper 
