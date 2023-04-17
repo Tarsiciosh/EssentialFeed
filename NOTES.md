@@ -1825,7 +1825,7 @@ T) test_loadImageData_loadsFromPrimaryLoaderFirst
 [`FeedImageDataLoaderWithFallbackComposite.loadImageData` loads from primary loader first] 
 [Extract system under test (SUT) creation into a factory method]
 - create anyNSError helper
-- add 'complete' function to LoaderSpy
+- add 'complete with error' function to LoaderSpy
 [FeedImageDataLoaderWithFallbackComposite.loadImageData loads from fallback loader on primary loader failure]
 T) test_cancelLoadImageData_cancelsPrimaryLoaderTask
 - add a callback to the Task internal struct of LoaderSpy
@@ -1834,7 +1834,9 @@ T) test_cancelLoadImageData_cancelsPrimaryLoaderTask
 [FeedImageDataLoaderWithFallbackComposite.loadImageData cancels primary loader task on cancel]
 T) test_cancelLoadImageData_cancelsFallbackLoaderTaskAfterPrimaryLoaderFailure
 [FeedImageDataLoaderWithFallbackComposite.loadImageData cancels fallback loader task on cancel after a primary loader failure]
-- 
+T) test_loadImageData_deliversPrimaryDataOnPrimaryLoaderSuccess
+- add 'complete with data' function to LoaderSpy
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers primary data on primary loader success]
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
