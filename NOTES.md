@@ -1812,8 +1812,15 @@ T) test_load_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
 - move FeedLoaderWithFallbackComposite to production (change access control)
 - import the EssentialApp in the test
 [move `FeedLoaderWithFallbackComposite` to production]
-- create the FeedImageDataLoaderWithFallbackComposite
-[...]
+- create the FeedImageDataLoaderWithFallbackCompositeTests
+T) test_init_doesNotLoadImageData
+- create a primaryLoader and a fallbackLoader (using a LoaderSpy)
+- create the FeedImageDataLoaderWithFallbackComposite use an internal Task class to return the task 
+- assert that the primaryLoader.loadedUrls is empty upon init (also for the fallbackLoader)
+- in the LoaderSpay (conforming to FeedImageDataLoader) also use an internal Task class
+- store the messages sent to the spy (url and completion) and use  
+[`FeedImageDataLoaderWithFallbackComposite.init does not load image data]
+
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
 - migrate the Ci_iOS to the workspace (select the workspace as the container of the CI_iOS scheme)
