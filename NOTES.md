@@ -1760,3 +1760,95 @@ T) test_validateCache_succeedsOnSuccessfulDeletionOfExpiredCache
 - access the window and set the rootViewController 
 - run the app and it should work!
 ```
+
+### 2) Composite Pattern: Implementing a Flexible & Composable Strategy for Loading Data with Fallback Logic
+```
+[remove not used test cases (also EssentialAppUITests target)]
+[configure EssentialApp scheme to execute tests in random order and gather coverage for the EssentialApp targetq]
+- create RemoteWithLocalFallbackFeedLoaderTests
+T) test_load_deliversRemoteFeedOnRemoteSuccess
+- assert that a 'receivedFeed' is equal to the stubbed result 'remoteFeed'
+- call load in the sut (get a result back)
+- create 'receivedFeed' of type of optional array of FeedImage
+- capture in that variable the feed in the success case (can move the assertion there and remove the variable)
+- otherwise (failure case) we fail the test ("Expected successful load feed result, got 'result' instead"
+- add an expectation that is fullfilled when getting the result and wait for it after invoking load
+- instanciate the sut (RemoteWithLocalFallbackFeedLoader with remote and local as parameters)
+- create the actual RemoteWithLocalFallbackFeedLoader (with the init method) (import EssentialFeed)
+- add the remoteLoader (RemoteFeedLoader) and localLoader (LocalFeedLoader) 
+- but these need dependencies! 
+- change the init with the abstractions themseves (FeedLoader, FeedLoader)
+- create a LoaderStub (use it for remoteLoader and localLoader) make conform to FeedLoader
+- we could create protocols RemoteFeedLoader and LocalFeedLoader inheriting from the FeedLoader
+- to get the compiler help with the order of the parameters
+- need to create a RemoteLoaderStub (RemoteFeedLoader) and a LocalLoaderStub (LocalFeedLoader)
+- then anotate that the concrete types implements these protocols with extensions
+- but we are going to follow the simplest solution:
+- change parameters with primaryLoader and fallbackLoader (also change the instances)
+- rename class to FeedLoaderWithFallbackComposite
+- rename test class to FeedLoaderWithFallbackCompositeTests
+- rename 'remoteFeed' to 'primaryFeed'
+- rename test to test_load_deliversPrimaryFeedOnPrimaryLoaderSuccess
+- make FeedLoaderWithFallbackComposite conform to FeedLoader
+- create the 'primaryFeed' (uniqueFeed) and 'fallbackFeed' (uniqueFeed)
+- stub these results into primaryLoader (LoaderStub(result: .success(primaryFeed)) and fallbackLoader 
+- impplement the uniqueFeed function (like the previous one)
+- add the result property to the stub (complete with this result when the load method is called) 
+- add the 'primary' property to FeedLoaderWithFallbackComposite (set it in the init method)
+[FeedLoaderWithFallbackComposite.load delivers primary feed on primary loader success]
+- create the makeSUT (with primaryResult and fallbackResult as parameters) (track for memory leaks also)
+- create the trackForMemoryLeaks helper
+- use FeedLoader as return parameter!
+[Extract system under test (SUT) creation into a factory method]
+T) test_load_deliversFallbackFeedOnPrimaryFailure
+- repeat the same strategy, create the anyNSError helper 
+- add the 'fallback' property to the SUT 
+- add the logic to load from fallback when primary fails to load (failure case)
+[`FeedLoaderWithFallbackComposite.load` delivers fallback feed on primary loader failure]
+- create 'expect sut toCompleteWith' helper
+[extract duplicate load logic from test into a helper method]
+T) test_load_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
+[`FeedLoaderWithFallbackComposite.load` delivers error on both primary and fallback failure]
+- move FeedLoaderWithFallbackComposite to production (change access control)
+- import the EssentialApp in the test
+[move `FeedLoaderWithFallbackComposite` to production]
+- create the FeedImageDataLoaderWithFallbackCompositeTests
+T) test_init_doesNotLoadImageData
+- create a primaryLoader and a fallbackLoader (using a LoaderSpy)
+- create the FeedImageDataLoaderWithFallbackComposite use an internal Task class to return the task 
+- assert that the primaryLoader.loadedUrls is empty upon init (also for the fallbackLoader)
+- in the LoaderSpay (conforming to FeedImageDataLoader) also use an internal Task class
+- store the messages sent to the spy (url and completion) and use a computed property for the loaded urls  
+[`FeedImageDataLoaderWithFallbackComposite.init does not load image data]
+T) test_loadImageData_loadsFromPrimaryLoaderFirst
+- create the anyURL helper
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` loads from primary loader first] 
+[Extract system under test (SUT) creation into a factory method]
+- create anyNSError helper
+- add 'complete with error' function to LoaderSpy
+[FeedImageDataLoaderWithFallbackComposite.loadImageData loads from fallback loader on primary loader failure]
+T) test_cancelLoadImageData_cancelsPrimaryLoaderTask
+- add a callback to the Task internal struct of LoaderSpy
+- rename Task to TaskWrapper (store an optional FeedImageDataLoaderTask called wrapped) and execute the 
+- cancel function of the wrapped when cancel received
+[FeedImageDataLoaderWithFallbackComposite.loadImageData cancels primary loader task on cancel]
+T) test_cancelLoadImageData_cancelsFallbackLoaderTaskAfterPrimaryLoaderFailure
+[FeedImageDataLoaderWithFallbackComposite.loadImageData cancels fallback loader task on cancel after a primary loader failure]
+T) test_loadImageData_deliversPrimaryDataOnPrimaryLoaderSuccess
+- add 'complete with data' function to LoaderSpy
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers primary data on primary loader success]
+T) test_loadImageData_deliversFallbackDataOnFallbackLoaderSuccess
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers fallback data on fallback loader success]
+T) test_loadImageData_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers error on both primary and fallback loader failure]
+[move `FeedImageDataLoaderWithFallbackComposite` to production]
+[extract memory leak tracking helper into a shared scope to remove duplication]
+[Extract test helpers into a shared scope to remove duplication]
+
+- create the remote and local feed loaders in the scene delegate and compose them
+- setup CI pipeline 
+- migrate the Ci_iOS to the workspace (select the workspace as the container of the CI_iOS scheme)
+- select the test configuration -> add the essentialAppTests target (randomize the execution order)
+- in 'Options' tab include the EssentialApp target for gathering coverage
+- update ci configuration file (travis)
+``
