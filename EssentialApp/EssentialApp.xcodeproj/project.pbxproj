@@ -20,6 +20,7 @@
 		57E691EF29E77E0F0084A963 /* RemoteWithLocalFallbackFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691EE29E77E0F0084A963 /* RemoteWithLocalFallbackFeedLoaderTests.swift */; };
 		57E691FE29EDE3C90084A963 /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691FD29EDE3C90084A963 /* FeedLoaderWithFallbackComposite.swift */; };
 		57E6920029EDE51D0084A963 /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691FF29EDE51D0084A963 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
+		57E6920229EE06A90084A963 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E6920129EE06A90084A963 /* FeedImageDataLoaderWithFallbackComposite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		57E691EE29E77E0F0084A963 /* RemoteWithLocalFallbackFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWithLocalFallbackFeedLoaderTests.swift; sourceTree = "<group>"; };
 		57E691FD29EDE3C90084A963 /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		57E691FF29EDE51D0084A963 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		57E6920129EE06A90084A963 /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				57A0F9E229E4E2450029C3A5 /* SceneDelegate.swift */,
 				57A0F9E429E4E2450029C3A5 /* ViewController.swift */,
 				57E691FD29EDE3C90084A963 /* FeedLoaderWithFallbackComposite.swift */,
+				57E6920129EE06A90084A963 /* FeedImageDataLoaderWithFallbackComposite.swift */,
 				57A0F9E629E4E2450029C3A5 /* Main.storyboard */,
 				57A0F9E929E4E2470029C3A5 /* Assets.xcassets */,
 				57A0F9EB29E4E2470029C3A5 /* LaunchScreen.storyboard */,
@@ -243,6 +246,7 @@
 				57A0F9E129E4E2450029C3A5 /* AppDelegate.swift in Sources */,
 				57E691FE29EDE3C90084A963 /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				57A0F9E329E4E2450029C3A5 /* SceneDelegate.swift in Sources */,
+				57E6920229EE06A90084A963 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
