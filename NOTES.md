@@ -1824,8 +1824,9 @@ T) test_loadImageData_loadsFromPrimaryLoaderFirst
 - create the anyURL helper
 [`FeedImageDataLoaderWithFallbackComposite.loadImageData` loads from primary loader first] 
 [Extract system under test (SUT) creation into a factory method]
-
-
+- create anyNSError helper
+- add 'complete' function to LoaderSpy
+[FeedImageDataLoaderWithFallbackComposite.loadImageData loads from fallback loader on primary loader failure]
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
