@@ -1818,8 +1818,14 @@ T) test_init_doesNotLoadImageData
 - create the FeedImageDataLoaderWithFallbackComposite use an internal Task class to return the task 
 - assert that the primaryLoader.loadedUrls is empty upon init (also for the fallbackLoader)
 - in the LoaderSpay (conforming to FeedImageDataLoader) also use an internal Task class
-- store the messages sent to the spy (url and completion) and use  
+- store the messages sent to the spy (url and completion) and use a computed property for the loaded urls  
 [`FeedImageDataLoaderWithFallbackComposite.init does not load image data]
+T) test_loadImageData_loadsFromPrimaryLoaderFirst
+- create the anyURL helper
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` loads from primary loader first] 
+
+
+
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
