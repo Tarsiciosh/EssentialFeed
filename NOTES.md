@@ -1844,11 +1844,12 @@ T) test_loadImageData_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
 [move `FeedImageDataLoaderWithFallbackComposite` to production]
 [extract memory leak tracking helper into a shared scope to remove duplication]
 [Extract test helpers into a shared scope to remove duplication]
-
+[]
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
+- got to scheme selection -> Manage schemes 
 - migrate the Ci_iOS to the workspace (select the workspace as the container of the CI_iOS scheme)
-- select the test configuration -> add the essentialAppTests target (randomize the execution order)
+- in the test configuration (left Tab) -> add the essentialAppTests target (randomize the execution order)
 - in 'Options' tab include the EssentialApp target for gathering coverage
 - update ci configuration file (travis)
 ``
