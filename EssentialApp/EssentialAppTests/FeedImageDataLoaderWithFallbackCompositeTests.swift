@@ -11,7 +11,6 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         XCTAssertTrue(fallbackLoader.loadedURLs.isEmpty, "Expected no loaded URLs in the fallback loader")
     }
     
-
     func test_loadImageData_loadsFromPrimaryLoaderFirst() {
         let url = anyURL()
         let (sut, primaryLoader, fallbackLoader) = makeSUT()
@@ -118,12 +117,6 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
-    }
-    
-    private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
-        }
     }
     
     func anyData() -> Data {
