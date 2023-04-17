@@ -1827,6 +1827,11 @@ T) test_loadImageData_loadsFromPrimaryLoaderFirst
 - create anyNSError helper
 - add 'complete' function to LoaderSpy
 [FeedImageDataLoaderWithFallbackComposite.loadImageData loads from fallback loader on primary loader failure]
+T) test_cancelLoadImageData_cancelsPrimaryLoaderTask
+- add a callback to the Task internal struct of LoaderSpy
+- rename Task to TaskWrapper (store an optional FeedImageDataLoaderTask called wrapped) and execute the 
+- cancel function of the wrapped when cancel received
+[FeedImageDataLoaderWithFallbackComposite.loadImageData cancels primary loader task on cancel]
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
