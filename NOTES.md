@@ -1843,7 +1843,7 @@ T) test_loadImageData_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
 [`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers error on both primary and fallback loader failure]
 [move `FeedImageDataLoaderWithFallbackComposite` to production]
 [extract memory leak tracking helper into a shared scope to remove duplication]
-
+[Extract test helpers into a shared scope to remove duplication]
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
