@@ -1837,7 +1837,8 @@ T) test_cancelLoadImageData_cancelsFallbackLoaderTaskAfterPrimaryLoaderFailure
 T) test_loadImageData_deliversPrimaryDataOnPrimaryLoaderSuccess
 - add 'complete with data' function to LoaderSpy
 [`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers primary data on primary loader success]
-
+T) test_loadImageData_deliversFallbackDataOnFallbackLoaderSuccess
+[`FeedImageDataLoaderWithFallbackComposite.loadImageData` delivers fallback data on fallback loader success]
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
 - migrate the Ci_iOS to the workspace (select the workspace as the container of the CI_iOS scheme)
