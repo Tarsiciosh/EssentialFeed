@@ -1832,6 +1832,9 @@ T) test_cancelLoadImageData_cancelsPrimaryLoaderTask
 - rename Task to TaskWrapper (store an optional FeedImageDataLoaderTask called wrapped) and execute the 
 - cancel function of the wrapped when cancel received
 [FeedImageDataLoaderWithFallbackComposite.loadImageData cancels primary loader task on cancel]
+T) test_cancelLoadImageData_cancelsFallbackLoaderTaskAfterPrimaryLoaderFailure
+[FeedImageDataLoaderWithFallbackComposite.loadImageData cancels fallback loader task on cancel after a primary loader failure]
+- 
 
 - create the remote and local feed loaders in the scene delegate and compose them
 - setup CI pipeline 
