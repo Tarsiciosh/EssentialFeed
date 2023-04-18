@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		578C820929EF6243008516C5 /* FeedLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578C820829EF6243008516C5 /* FeedLoaderCacheDecoratorTests.swift */; };
 		57A0F9E129E4E2450029C3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A0F9E029E4E2450029C3A5 /* AppDelegate.swift */; };
 		57A0F9E329E4E2450029C3A5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A0F9E229E4E2450029C3A5 /* SceneDelegate.swift */; };
 		57A0F9E529E4E2450029C3A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A0F9E429E4E2450029C3A5 /* ViewController.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		578C820829EF6243008516C5 /* FeedLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 		57A0F9DD29E4E2450029C3A5 /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57A0F9E029E4E2450029C3A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57A0F9E229E4E2450029C3A5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				57E6920329EE075C0084A963 /* Helpers */,
 				57E691EE29E77E0F0084A963 /* RemoteWithLocalFallbackFeedLoaderTests.swift */,
 				57E691FF29EDE51D0084A963 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
+				578C820829EF6243008516C5 /* FeedLoaderCacheDecoratorTests.swift */,
 			);
 			path = EssentialAppTests;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57E6920729EE08560084A963 /* SharedTestHelpers.swift in Sources */,
+				578C820929EF6243008516C5 /* FeedLoaderCacheDecoratorTests.swift in Sources */,
 				57E6920029EDE51D0084A963 /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				57E691EF29E77E0F0084A963 /* RemoteWithLocalFallbackFeedLoaderTests.swift in Sources */,
 				57E6920529EE07790084A963 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
