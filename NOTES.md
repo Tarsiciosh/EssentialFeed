@@ -1871,7 +1871,7 @@ T) test_load_deliversErrorOnLoaderFailure
 - move FeedLoaderStub (own file)
 [Extract `FeedLoaderStub` into a shared scope to remove duplication]
 - move uniqueFeed (Shared test helpers)
-[]
+[Extract `uniqueFeed` factory helper into a shared scope to remove duplication]
 - move the 'expect' helper (XCTestCase+FeedLoader)
 []
 - to make the function 'expect' only accessible for the test that care about that we can 
