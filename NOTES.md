@@ -1912,5 +1912,6 @@ T) test_load_doesNotCacheOnLoaderFailure
 [`FeedImageDataLoaderCacheDecorator.loadImageData` delivers decoratee result (either success or failure)]
 [extract `FeedImageDataLoaderSpy` into a shared scope to remove duplication]
 [extract `FeedImageDataLoader` test helpers into a shared protocol extension to remove duplication]
+[`FeedImageDataLoaderCacheDecorator.loadImageData` caches loaded data on loader success]
 ```
 
