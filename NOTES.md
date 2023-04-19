@@ -1914,5 +1914,7 @@ T) test_load_doesNotCacheOnLoaderFailure
 [extract `FeedImageDataLoader` test helpers into a shared protocol extension to remove duplication]
 [`FeedImageDataLoaderCacheDecorator.loadImageData` caches loaded data on loader success]
 [`FeedImageDataLoaderCacheDecorator.loadImageData` does not cache image data on loader failure]
+[move `FeedImageDataCache` to the `Feed Feature` production group]
+
 ```
 
