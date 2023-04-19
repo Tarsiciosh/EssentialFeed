@@ -1881,8 +1881,8 @@ T) test_load_deliversErrorOnLoaderFailure
 - this way we can conform to different protocols in the tests (oposed to the class aproach when 
 - you can only inherit from one class only)
 [Extract `FeedLoader` test helpers into a shared protocol extension to remove duplication]
-- create the makeSUT
-[]
+- create the makeSUT (with loaderResult)
+[Extract system under test (SUT) creation into a factory method]
 T) test_load_cachesLoadedFeedOnLoaderSuccess
 - assert that the messages of the 'cache' are equal to [.save(feed)] 
 - create a CacheSpy to store the messages (Message enum type)
