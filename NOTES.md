@@ -1898,7 +1898,7 @@ T) test_load_doesNotCacheOnLoaderFailure
 - use an if let (only when having a cache then save it)
 [`FeedLoaderCacheDecorator.load` does not cache feed on loader failure]
 - refactor to use the 'map' statement
-[] 
+[Replace if-try-statement with map] 
 - move FeedCache (Feed Feature group)
 []
 - make the LocalFeedLoader implement the FeedCache protocol (change SaveResul to FeedCache.Result)
