@@ -1889,9 +1889,11 @@ T) test_load_cachesLoadedFeedOnLoaderSuccess
 - add the 'cache' parameter to the FeedLoaderCacheDecorator init 
 - instead of using the concrete type LocalFeedLoader we can create an abstraction (protocol)
 - FeedCache (FeedSaver other option) that has the method save with the related SaveResult type
+- make the CacheSpy conform to that protocol
+- change makeSUT to accept a cache (CacheSpy type) with a default value (to not brake the older tests)
 - change production code to invoke the save method in the cache when getting a cache result otherwise
 - with an empty cache (only for testing) (need to add the 'cache' property in the class)
-[]
+[`FeedLoaderCacheDecorator.load caches loaded feed on loader success]
 T) test_load_doesNotCacheOnLoaderFailure
 - use an if let (only when having a cache then save it)
 []
