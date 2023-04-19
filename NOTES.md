@@ -1873,13 +1873,14 @@ T) test_load_deliversErrorOnLoaderFailure
 - move uniqueFeed (Shared test helpers)
 [Extract `uniqueFeed` factory helper into a shared scope to remove duplication]
 - move the 'expect' helper (XCTestCase+FeedLoader)
-[]
 - to make the function 'expect' only accessible for the test that care about that we can 
 - use a subclass of the XCtest class and then use that class in the tests
 - but class inheritance is not composable (one class can only inherit from other)
 - we can use a protocol FeedLoaderTestCase constrained to XCTestCase ('inherits' from) 
 - and add an extension of that protocol and the class conforming to that protocol will have access to
-[]
+- this way we can conform to different protocols in the tests (oposed to the class aproach when 
+- you can only inherit from one class only)
+[Extract `FeedLoader` test helpers into a shared protocol extension to remove duplication]
 - create the makeSUT
 []
 T) test_load_cachesLoadedFeedOnLoaderSuccess
