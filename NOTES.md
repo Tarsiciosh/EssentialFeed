@@ -1907,6 +1907,9 @@ T) test_load_doesNotCacheOnLoaderFailure
 [move `FeedLoaderCacheDecorator` to production]
 - create an extension of the FeedCache that have a saveIgnoringResult func 
 [create saveIgnoringResult method to clarify intent]
-
+- create FeedImageDataLoaderCacheDecoratorTests
+- repeat similar steps as the previous tests
+[`FeedImageDataLoaderCacheDecorator.loadImageData` delivers decoratee result (either success or failure)]
+[]
 ```
 
