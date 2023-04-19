@@ -1899,10 +1899,10 @@ T) test_load_doesNotCacheOnLoaderFailure
 [`FeedLoaderCacheDecorator.load` does not cache feed on loader failure]
 - refactor to use the 'map' statement
 [replace if-try-statement with map] 
-- move FeedCache (Feed Feature group)
+- move FeedCache (Feed Feature group) (make it public)
 [move `FeedCache` to the `Feed Feature` production group]
 - make the LocalFeedLoader implement the FeedCache protocol (change SaveResul to FeedCache.Result)
-[]
+[make the `LocalFeedLoader` implement the FeedCache protocol (so it can be composed)]
 - move the FeedLoaderCacheDecorator (above the FeedImageData..Composite)
 []
 - create an extension of the FeedCache that have a saveIgnoringResult func 
