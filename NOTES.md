@@ -1869,7 +1869,7 @@ T) test_load_deliversErrorOnLoaderFailure
 - repeate the same logic but subbing a .failure case with an error (anyNSError)
 [`FeedLoaderCacheDecorator.load` delivers decoratee loader result (either success or failure)]
 - move FeedLoaderStub (own file)
-[]
+[Extract `FeedLoaderStub` into a shared scope to remove duplication]
 - move uniqueFeed (Shared test helpers)
 []
 - move the 'expect' helper (XCTestCase+FeedLoader)
