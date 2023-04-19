@@ -1906,7 +1906,7 @@ T) test_load_doesNotCacheOnLoaderFailure
 - move the FeedLoaderCacheDecorator (above the FeedImageData..Composite)
 [move `FeedLoaderCacheDecorator` to production]
 - create an extension of the FeedCache that have a saveIgnoringResult func 
-[]
+[create saveIgnoringResult method to clarify intent]
 
 ```
 
