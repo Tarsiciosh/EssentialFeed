@@ -1915,6 +1915,6 @@ T) test_load_doesNotCacheOnLoaderFailure
 [`FeedImageDataLoaderCacheDecorator.loadImageData` caches loaded data on loader success]
 [`FeedImageDataLoaderCacheDecorator.loadImageData` does not cache image data on loader failure]
 [move `FeedImageDataCache` to the `Feed Feature` production group]
-
+[make the `LocalFeedImageDataLoader` implement the `FeedImageDataCache` protocol (so it can be composed)]
 ```
 
