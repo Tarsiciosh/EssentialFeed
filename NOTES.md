@@ -1904,8 +1904,9 @@ T) test_load_doesNotCacheOnLoaderFailure
 - make the LocalFeedLoader implement the FeedCache protocol (change SaveResul to FeedCache.Result)
 [make the `LocalFeedLoader` implement the FeedCache protocol (so it can be composed)]
 - move the FeedLoaderCacheDecorator (above the FeedImageData..Composite)
-[]
+[move `FeedLoaderCacheDecorator` to production]
 - create an extension of the FeedCache that have a saveIgnoringResult func 
 []
+
 ```
 
