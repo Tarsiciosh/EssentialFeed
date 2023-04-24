@@ -1964,8 +1964,9 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 - also in the first test 
 [reset cache in every test run to make sure tests run in a clean state and dont influence the result of other tests.]
 - add compilation directives to prevent the test code to be deployed in production (#if DEBUG #endif)
-- refactor the makeRemoteClient to use an if statement 
-[]
+- refactor the makeRemoteClient to use an if statement and wrapped with #if statments 
+- wrap the AlwaysFailingHTTPClient with #if statements
+[add #if DEBUG compilation directive to prevent test-specific code from being deployed in production]
 - create a new class DebuggingSceneDelegate (subclass of SceneDelegate)
 - override the funtionality of the scene willConnectTo .. function
 - keep only the debug code and then forward the message to the super class 
