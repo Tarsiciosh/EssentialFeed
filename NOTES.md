@@ -1954,11 +1954,12 @@ T) test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity
 - in scene delegate add the localStoreURL, localStore, localFeedLoader, and localImageLoader
 - compose the loaders as before (with the primary and fallbacks) TS
 [displays cached feed on launch when customer has no connectivity]
-T)
-- add onother lanch argument (-reset)
+T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
+- launch the app and assert that feedCells count is 0 
+- add another lanch argument (-reset)
 - add a check in the scene delegate (using CommandLine.arguments.contains("-reset")
 - and delet the local store (using the FileManager.default.removeItem(at: localStoreURL))
-[]
+[displays empty feed when customer has no connectivity and no cache]
 - reset the state also in the previous test (before loading the online app)
 - also in the first test 
 []
