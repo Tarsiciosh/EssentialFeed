@@ -1967,7 +1967,7 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 - refactor the makeRemoteClient to use an if statement and wrapped with #if statments 
 - wrap the AlwaysFailingHTTPClient with #if statements
 [add #if DEBUG compilation directive to prevent test-specific code from being deployed in production]
-- create a new class DebuggingSceneDelegate (subclass of SceneDelegate)
+- create a new class (own file) DebuggingSceneDelegate (subclass of SceneDelegate)
 - override the funtionality of the scene willConnectTo .. function
 - keep only the debug code and then forward the message to the super class 
 - override also the makeRemoteClient and if the connectivity flag is offline return the always failing 
@@ -1975,11 +1975,11 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 - change the functions of the super class to be internal (no modifiers - default)
 - expose the local storeURL (to use it from the subclass)
 - wrap the hole new class with the compilation directives 
-- tell the app to use the new version of scene delegate in the app delegate
-- implement the function 'application configurationForConnecting options' and set in the configuration the
-- the debug version of the scene delegate when in DEBUG (#if DEBUG #endif) (othewise it uses the one set in 
-- the info.plist)
-[]
+- tell the app to use the new version of scene delegate in the app delegate:
+- implement the function 'application configurationForConnecting options' and set in the returned 'configuration'
+- the debug version of the scene delegate (delegateClass property) when in DEBUG (#if DEBUG #endif) 
+- (othewise it uses the one set in the info.plist - the standard SceneDelegate)
+[move DEBUG code paths from the main SceneDelegate to a new DebuggingSceneDelegate subclass to separate debug- and test-specific code from production code]
 - to not need to relay in the server to run the tests
 - add a new option "online" to the -connentivity flag 
 - rename the AlwaysFailingHTTPClient to DebuggingHTTPClient (add a paramenter connectivity)
