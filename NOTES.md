@@ -1920,3 +1920,70 @@ T) test_load_doesNotCacheOnLoaderFailure
 [create `saveIgnoringResult` method to clarify intent]
 ```
 
+### 4) Validating Acceptance Criteria with High-Level UI Tests, Controlling Network and App State in UI tests with Launch Arguments and Conditional Compilation Directives
+```
+- create a new tests target (+ from EssentialApp) (ios - UI testing Bundle) EssentialAppUIAcceptanceTests
+- check the target application is correct (EssentialApp)
+- configure the EssentialApp scheme (remove the UI Tests)
+- add a new scheme (manage schemes -> +) Target: EssentialAppUIAcceptanceTests name: (idem)
+- container: EssentialApp Workspace
+- configure the CI_iOS scheme - in the test tab add the EssentialAppUIAcceptanceTests (randomize order)
+[add UI Test target for running high-level Acceptance Tests]
+T) test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity
+- the json file provides 22 images so the idea is to check the count of the cells 
+- assert that the app.cells.counts is 22
+- when the app.lounch
+- given (create the app using XCUIApplication)
+- you cannot check the images that are on the cells that are off screen
+- so check that the app.cells.firstMatch.images.count is 1
+- run the test it should fail 
+- in the scene delegate add controller with there dependencies (remoteFeedLoader and remoteImageLoader)
+- add the other dependencies (remoteClient and remoteURL) TS
+[]
+- add an identifier to count the cells that we want to count ("feed-image-cell")
+- repeate the same but with the firsImage firstMatch ("feed-image-view") (assert that it exists) TF
+- add the identifiess (in storyboard) TS
+[]
+T) 
+- launch the app (online) then launch the app again without connetivity (passing launch arguments) 
+- (["-connectivity", "offline"])
+- then check that we should have the same amount of cells and at least an image 
+- in the scene delegate create a function makeRemoteClient and based on the argument return the normal 
+- client or the AlwaysFailingHTTPClient (use the UserDefaults.stanadar.string(forKey:) function)
+- create the AlwaysFailingHTTPClient TF
+- in scene delegate add the localStoreURL, localStore, localFeedLoader, and localImageLoader
+- compose the loaders as before (with the primary and fallbacks) TS
+[]
+T)
+- add onother lanch argument (-reset)
+- add a check in the scene delegate (using CommandLine.arguments.contains("-reset")
+- and delet the local store (using the FileManager.default.removeItem(at: localStoreURL))
+[]
+- reset the state also in the previous test (before loading the online app)
+- also in the first test 
+[]
+- add compilation directives to prevent the test code to be deployed in production (#if DEBUG #endif)
+- refactor the makeRemoteClient to use an if statement 
+[]
+- create a new class DebuggingSceneDelegate (subclass of SceneDelegate)
+- override the funtionality of the scene willConnectTo .. function
+- keep only the debug code and then forward the message to the super class 
+- override also the makeRemoteClient and if the connectivity flag is offline return the always failing 
+- otherwise return the super.makeRemoteClient 
+- change the functions of the super class to be internal (no modifiers - default)
+- expose the local storeURL (to use it from the subclass)
+- wrap the hole new class with the compilation directives 
+- tell the app to use the new version of scene delegate in the app delegate
+- implement the function 'application configurationForConnecting options' and set in the configuration the
+- the debug version of the scene delegate when in DEBUG (#if DEBUG #endif) (othewise it uses the one set in 
+- the info.plist)
+[]
+- to not need to relay in the server to run the tests
+- add a new option "online" to the -connentivity flag 
+- rename the AlwaysFailingHTTPClient to DebuggingHTTPClient (add a paramenter connectivity)
+- depending on the connectivity paramenter return the successfull response or failure
+- create the makeSuccessfulResponse returning the Data and the HTTPURLResponse 
+- create also makeData, makeImageData and makeFeedData
+[]
+- 
+```
