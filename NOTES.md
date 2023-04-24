@@ -1932,14 +1932,14 @@ T) test_load_doesNotCacheOnLoaderFailure
 T) test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity
 - the json file provides 22 images so the idea is to check the count of the cells 
 - assert that the app.cells.counts is 22
-- when the app.lounch
+- when the app.launch
 - given (create the app using XCUIApplication)
 - you cannot check the images that are on the cells that are off screen
 - so check that the app.cells.firstMatch.images.count is 1
 - run the test it should fail 
 - in the scene delegate add controller with there dependencies (remoteFeedLoader and remoteImageLoader)
 - add the other dependencies (remoteClient and remoteURL) TS
-[]
+[displays remote feed on launch when customer has connectivity]
 - add an identifier to count the cells that we want to count ("feed-image-cell")
 - repeate the same but with the firsImage firstMatch ("feed-image-view") (assert that it exists) TF
 - add the identifiess (in storyboard) TS
