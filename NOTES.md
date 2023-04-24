@@ -1940,20 +1940,20 @@ T) test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity
 - in the scene delegate add controller with there dependencies (remoteFeedLoader and remoteImageLoader)
 - add the other dependencies (remoteClient and remoteURL) TS
 [displays remote feed on launch when customer has connectivity]
-- add an identifier to count the cells that we want to count ("feed-image-cell")
+- add an identifier to count the cells that we want to count ("feed-image-cell") .matching(identifier:)
 - repeate the same but with the firsImage firstMatch ("feed-image-view") (assert that it exists) TF
 - add the identifiess (in storyboard) TS
-[]
-T) 
-- launch the app (online) then launch the app again without connetivity (passing launch arguments) 
-- (["-connectivity", "offline"])
+[improve coverage by using identifiers for finding feed image cells]
+T) test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity
+- launch the app (onlineApp) then launch the app again without connetivity (passing launch arguments) 
+- offlineApp.launchArguments = ["-connectivity", "offline"]
 - then check that we should have the same amount of cells and at least an image 
 - in the scene delegate create a function makeRemoteClient and based on the argument return the normal 
-- client or the AlwaysFailingHTTPClient (use the UserDefaults.stanadar.string(forKey:) function)
+- client or the AlwaysFailingHTTPClient (use the UserDefaults.standard.string(forKey:) function)
 - create the AlwaysFailingHTTPClient TF
 - in scene delegate add the localStoreURL, localStore, localFeedLoader, and localImageLoader
 - compose the loaders as before (with the primary and fallbacks) TS
-[]
+[displays cached feed on launch when customer has no connectivity]
 T)
 - add onother lanch argument (-reset)
 - add a check in the scene delegate (using CommandLine.arguments.contains("-reset")
