@@ -1962,7 +1962,7 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 [displays empty feed when customer has no connectivity and no cache]
 - reset the state also in the previous test (before loading the online app)
 - also in the first test 
-[]
+[reset cache in every test run to make sure tests run in a clean state and dont influence the result of other tests.]
 - add compilation directives to prevent the test code to be deployed in production (#if DEBUG #endif)
 - refactor the makeRemoteClient to use an if statement 
 []
