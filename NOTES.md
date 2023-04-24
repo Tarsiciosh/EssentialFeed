@@ -1844,12 +1844,79 @@ T) test_loadImageData_deliversErrorOnBothPrimaryAndFallbackLoaderFailure
 [move `FeedImageDataLoaderWithFallbackComposite` to production]
 [extract memory leak tracking helper into a shared scope to remove duplication]
 [Extract test helpers into a shared scope to remove duplication]
-[]
-- create the remote and local feed loaders in the scene delegate and compose them
+- create the remote and local feed loaders in the scene delegate and compose them (to test)
 - setup CI pipeline 
-- got to scheme selection -> Manage schemes 
+- go to scheme selection -> Manage schemes 
 - migrate the Ci_iOS to the workspace (select the workspace as the container of the CI_iOS scheme)
 - in the test configuration (left Tab) -> add the essentialAppTests target (randomize the execution order)
 - in 'Options' tab include the EssentialApp target for gathering coverage
 - update ci configuration file (travis)
-``
+```
+
+### 3) Interception: An Effective, Modular and Composable Way of Injecting Behavior and Side-effects in the App Composition
+```
+- to store the feed locally when it is fetch from the remote source, one solution would be to make 
+- the FeedLoaderWithFallbackComposite perform that (changing to the concrete LocalFeedLoader type)
+- but that solution is not flexible 
+- add FeedLoaderCacheDecoratorTests
+T) test_load_deliversFeedOnLoaderSuccess
+- expect that the sut completes with a feed (success) (using 'expect sut toCompleteWith')
+- when the decoratee 'loader' success with that feed
+- use a LoaderStub for the the loader with the stubbed result: '.success(feed)'
+- use same helper from previous lecture (also the uniqueFeed) 
+- create the FeedLoaderCacheDecorator
+T) test_load_deliversErrorOnLoaderFailure
+- repeate the same logic but subbing a .failure case with an error (anyNSError)
+[`FeedLoaderCacheDecorator.load` delivers decoratee loader result (either success or failure)]
+- move FeedLoaderStub (own file)
+[Extract `FeedLoaderStub` into a shared scope to remove duplication]
+- move uniqueFeed (Shared test helpers)
+[Extract `uniqueFeed` factory helper into a shared scope to remove duplication]
+- move the 'expect' helper (XCTestCase+FeedLoader)
+- to make the function 'expect' only accessible for the test that care about that we can 
+- use a subclass of the XCtest class and then use that class in the tests
+- but class inheritance is not composable (one class can only inherit from other)
+- we can use a protocol FeedLoaderTestCase constrained to XCTestCase ('inherits' from) 
+- and add an extension of that protocol and the class conforming to that protocol will have access to
+- this way we can conform to different protocols in the tests (oposed to the class aproach when 
+- you can only inherit from one class only)
+[Extract `FeedLoader` test helpers into a shared protocol extension to remove duplication]
+- create the makeSUT (with loaderResult)
+[Extract system under test (SUT) creation into a factory method]
+T) test_load_cachesLoadedFeedOnLoaderSuccess
+- assert that the messages of the 'cache' are equal to [.save(feed)] 
+- create a CacheSpy to store the messages (Message enum type)
+- add the 'cache' parameter to the FeedLoaderCacheDecorator init 
+- instead of using the concrete type LocalFeedLoader we can create an abstraction (protocol)
+- FeedCache (FeedSaver other option) that has the method save with the related Result type
+- make the CacheSpy conform to that protocol
+- change makeSUT to accept a cache (CacheSpy type) with a default value (to not brake the older tests)
+- change production code to invoke the save method in the cache when getting a cache result otherwise
+- with an empty cache (only for testing) (need to add the 'cache' property in the class)
+[`FeedLoaderCacheDecorator.load caches loaded feed on loader success]
+T) test_load_doesNotCacheOnLoaderFailure
+- use an if let (only when having a cache then save it)
+[`FeedLoaderCacheDecorator.load` does not cache feed on loader failure]
+- refactor to use the 'map' statement
+[replace if-try-statement with map] 
+- move FeedCache (Feed Feature group) (make it public)
+[move `FeedCache` to the `Feed Feature` production group]
+- make the LocalFeedLoader implement the FeedCache protocol (change SaveResul to FeedCache.Result)
+[make the `LocalFeedLoader` implement the FeedCache protocol (so it can be composed)]
+- move the FeedLoaderCacheDecorator (above the FeedImageData..Composite)
+[move `FeedLoaderCacheDecorator` to production]
+- create an extension of the FeedCache that have a saveIgnoringResult func 
+[create saveIgnoringResult method to clarify intent]
+- create FeedImageDataLoaderCacheDecoratorTests
+- repeat similar steps as the previous tests
+[`FeedImageDataLoaderCacheDecorator.loadImageData` delivers decoratee result (either success or failure)]
+[extract `FeedImageDataLoaderSpy` into a shared scope to remove duplication]
+[extract `FeedImageDataLoader` test helpers into a shared protocol extension to remove duplication]
+[`FeedImageDataLoaderCacheDecorator.loadImageData` caches loaded data on loader success]
+[`FeedImageDataLoaderCacheDecorator.loadImageData` does not cache image data on loader failure]
+[move `FeedImageDataCache` to the `Feed Feature` production group]
+[make the `LocalFeedImageDataLoader` implement the `FeedImageDataCache` protocol (so it can be composed)]
+[move `FeedImageDataLoaderCacheDecorator to production]
+[create `saveIgnoringResult` method to clarify intent]
+```
+
