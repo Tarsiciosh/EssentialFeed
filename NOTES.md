@@ -1982,10 +1982,9 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 [move DEBUG code paths from the main SceneDelegate to a new DebuggingSceneDelegate subclass to separate debug- and test-specific code from production code]
 - to not need to relay in the server to run the tests
 - add a new option "online" to the -connentivity flag 
-- rename the AlwaysFailingHTTPClient to DebuggingHTTPClient (add a paramenter connectivity)
+- rename the AlwaysFailingHTTPClient to DebuggingHTTPClient (add an init paramenter 'connectivity')
 - depending on the connectivity paramenter return the successfull response or failure
 - create the makeSuccessfulResponse returning the Data and the HTTPURLResponse 
-- create also makeData, makeImageData and makeFeedData
-[]
-- 
+- create also makeData(for:url), makeImageData and makeFeedData
+[intercept HTTP requests with canned responses during UI tests to eliminate network flakiness - We can now run UI tests without internet connection.]
 ```
