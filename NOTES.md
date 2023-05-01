@@ -2037,8 +2037,9 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - delete the EssentialAppUIAcceptanceTest target (from file structure also), the scheme and remove it from the CI scheme
 [remove EssentialAppUIAcceptanceTests in favor of faster and more precise integration tests]
 - remove the DebuggingSceneDelegate
+- remove code from 'application connectingscene .. '
 - remove the makeRemoteClient, remove the localStoreURL
-[]
+[remove unused debugging code that was previously used during UI tests]
 T) test_onEnteringBackground_deletesExpiredFeedCache
 - create a store (InMemoryFeedStore.withExpiredCahce)
 - simulate enter background (enterBackground)
