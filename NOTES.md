@@ -2004,11 +2004,14 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - assert that the topController (topViewController) is a FeedViewController. import the EssentialFeediOS TS
 [configures feed navigation as window root view controller]
 - move the composition details (Composers group) from EssentialFeed target to the EssentialApp target (composition root)
-- also move the tests (helpers and FeedUIIntegrationTests)
-- fix access control and imports (make public the FeedViewControllerDelegate (change the FeedViewController
-- delegate to be public move it down), FeedImageCellControllerDelegate, make the tableModel private and a public setter 
-- accessor functions (display) import the EssantialApp in the FeedUIIntegrationTests
-[]
+- after DebuggingSceneDelegate file (remove old references after moving them) 
+- also move the tests helpers (from helpers folder to helpers folder)
+- and the FeedUIIntegrationTests (after SceneDelegateTest) 
+- fix access control and imports (make public the FeedViewControllerDelegate (change the FeedViewController delegate 
+- to be public, move it down), FeedImageCellControllerDelegate, make the tableModel private and a public setter 
+- accessor function 'display(_ cellControllers: [FeedImageCellController])
+- import the EssantialApp in the FeedUIIntegrationTests
+[move Feed UI composition details from the EssentialFeediOS to the EssentialApp module (Composition Root)]
 create FeedAcceptanceTests (copy the tests from the EssentialAppUIAcceptanceTests) import @testable EssentialApp
 - create the sut (SceneDelegate) set the windows (UIWindow) get the 'nav' (window.rootViewController)
 - finally get the 'feed' (nav.topViewController), use the helpers for the integration tests numberOfRenderdImageViews
