@@ -2030,10 +2030,10 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - create 'launch' helper
 [displays remote feed on launch when customer has connectivity]
 [displays cached feed on launch when customer has no connectivity]
-[]
-- try to make the test fail (changing the composition) and it does but wiht an exception
+[displays empty feed on launch when customer has no connectivity and no cache]
+- try to make the test fail (changing the composition) and it does but with an exception
 - fix the index out of range issue returning nil in that case
-[]
+[check number of cells before fetching cell at index to avoid out of bounds exception]
 - delete the UIAcceptanceTest target, the scheme and remoce from the CI scheme
 []
 - remove the DebuggingSceneDelegate
