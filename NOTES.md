@@ -2034,8 +2034,8 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - try to make the test fail (changing the composition) and it does but with an exception
 - fix the index out of range issue returning nil in that case
 [check number of cells before fetching cell at index to avoid out of bounds exception]
-- delete the UIAcceptanceTest target, the scheme and remoce from the CI scheme
-[]
+- delete the EssentialAppUIAcceptanceTest target (from file structure also), the scheme and remove it from the CI scheme
+[remove EssentialAppUIAcceptanceTests in favor of faster and more precise integration tests]
 - remove the DebuggingSceneDelegate
 - remove the makeRemoteClient, remove the localStoreURL
 []
