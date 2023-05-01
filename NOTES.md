@@ -2012,23 +2012,23 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - accessor function 'display(_ cellControllers: [FeedImageCellController])
 - import the EssantialApp in the FeedUIIntegrationTests
 [move Feed UI composition details from the EssentialFeediOS to the EssentialApp module (Composition Root)]
-create FeedAcceptanceTests (copy the tests from the EssentialAppUIAcceptanceTests) import @testable EssentialApp
+- create FeedAcceptanceTests (copy the tests from the EssentialAppUIAcceptanceTests)  @testable import EssentialApp
 - create the sut (SceneDelegate) set the windows (UIWindow) get the 'nav' (window.rootViewController)
 - finally get the 'feed' (nav.topViewController), use the helpers for the integration tests numberOfRenderdImageViews
-- simulateFeedImageViewVisible(at: 0).renderedImage etc..
-- need to inject the infrastructure (httpClient and store) to the SceneDelegate. import the EssentialFeed module 
+- simulateFeedImageViewVisible(at: 0).renderedImage etc.. (import EssentialFeediOS and EssentialFeed)
+- in order to be able to stub the results of the dependencies it is good to be received by the scene delegate 
 - create the InMemoryStore and HTTPClientStub 
 - copy the helper methods used in the DebugginSceneDelegate (makeImageData can use now the UIImage 
 - extension make(withColor:)
 - create the convenience initializer of the SceneDelegate (call self.init first) receiving the httpClient (HTTPClient)
 - and the store (FeedStore & FeedImageDataStore)
 - create lazy properties to store these 
-- in makeRemoteClient return the lazy var 'httpClient'
 - move the creation of the httpClient and the store to the lazy creation functions
+- in makeRemoteClient return the lazy var 'httpClient'
 - change the rendered image
 - create renderedFeedImageData(at index)
 - create 'launch' helper
-[]
+[displays remote feed on launch when customer has connectivity]
 []
 []
 - try to make the test fail (changing the composition) and it does but wiht an exception
