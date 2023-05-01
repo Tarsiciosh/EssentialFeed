@@ -2052,5 +2052,5 @@ T) test_onEnteringBackground_keepsNonExpiredFeedCache
 - add the sceneWillResignActive to the scene delegate TF
 - make localFeedLoader be a lazy var so it can be reference from the function 
 [validate feed cache on entering background]
-  
+[move HTTPClientStub to a shared scope in a separate file]
 ```
