@@ -2029,7 +2029,7 @@ T) test_sceneWillConnectToSession_configuresRootViewController
 - create renderedFeedImageData(at index)
 - create 'launch' helper
 [displays remote feed on launch when customer has connectivity]
-[]
+[displays cached feed on launch when customer has no connectivity]
 []
 - try to make the test fail (changing the composition) and it does but wiht an exception
 - fix the index out of range issue returning nil in that case
