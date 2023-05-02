@@ -1988,3 +1988,70 @@ T) test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache
 - create also makeData(for:url), makeImageData and makeFeedData
 [intercept HTTP requests with canned responses during UI tests to eliminate network flakiness - We can now run UI tests without internet connection.]
 ```
+
+### 5) Validating Acceptance Criteria with Fast Integration Tests, Composition Root, and Simulating App Launch & State Transitions
+```
+- create SceneDelegateTests (EssentialAppTests)
+T) test_sceneWillConnectToSession_configuresRootViewController
+- asert that the rootviewController of the sut window is a UINavigationController (XCTAssertTrue is)
+- create the sut (SceneDelegate) import the EssentialApp as @testable
+- call the 'scence willConnectTo options' (but we can't provide the dependencies), so instead:
+- move all the logic from the original 'willConnect' function to a configureWindow function to be able to call that 
+- from the test
+- configure a window to the sut (before calling configureWindow) TF
+- embed the feed UI in a navigation controller TS
+- assert that the rootNavigation is not nil (use 'root' as intermediate step then cast 'root' to UINavigationController)
+- assert that the topController (topViewController) is a FeedViewController. import the EssentialFeediOS TS
+[configures feed navigation as window root view controller]
+- move the composition details (Composers group) from EssentialFeed target to the EssentialApp target (composition root)
+- after DebuggingSceneDelegate file (remove old references after moving them) 
+- also move the tests helpers (from helpers folder to helpers folder)
+- and the FeedUIIntegrationTests (after SceneDelegateTest) 
+- fix access control and imports (make public the FeedViewControllerDelegate (change the FeedViewController delegate 
+- to be public, move it down), FeedImageCellControllerDelegate, make the tableModel private and a public setter 
+- accessor function 'display(_ cellControllers: [FeedImageCellController])
+- import the EssantialApp in the FeedUIIntegrationTests
+[move Feed UI composition details from the EssentialFeediOS to the EssentialApp module (Composition Root)]
+- create FeedAcceptanceTests (copy the tests from the EssentialAppUIAcceptanceTests)  @testable import EssentialApp
+- create the sut (SceneDelegate) set the windows (UIWindow) get the 'nav' (window.rootViewController)
+- finally get the 'feed' (nav.topViewController), use the helpers for the integration tests numberOfRenderdImageViews
+- simulateFeedImageViewVisible(at: 0).renderedImage etc.. (import EssentialFeediOS and EssentialFeed)
+- in order to be able to stub the results of the dependencies it is good to be received by the scene delegate 
+- create the InMemoryStore and HTTPClientStub 
+- copy the helper methods used in the DebugginSceneDelegate (makeImageData can use now the UIImage 
+- extension make(withColor:)
+- create the convenience initializer of the SceneDelegate (call self.init first) receiving the httpClient (HTTPClient)
+- and the store (FeedStore & FeedImageDataStore)
+- create lazy properties to store these 
+- move the creation of the httpClient and the store to the lazy creation functions
+- in makeRemoteClient return the lazy var 'httpClient'
+- change the rendered image
+- create renderedFeedImageData(at index)
+- create 'launch' helper
+[displays remote feed on launch when customer has connectivity]
+[displays cached feed on launch when customer has no connectivity]
+[displays empty feed on launch when customer has no connectivity and no cache]
+- try to make the test fail (changing the composition) and it does but with an exception
+- fix the index out of range issue returning nil in that case
+[check number of cells before fetching cell at index to avoid out of bounds exception]
+- delete the EssentialAppUIAcceptanceTest target (from file structure also), the scheme and remove it from the CI scheme
+[remove EssentialAppUIAcceptanceTests in favor of faster and more precise integration tests]
+- remove the DebuggingSceneDelegate
+- remove code from 'application connectingscene .. '
+- remove the makeRemoteClient, remove the localStoreURL
+[remove unused debugging code that was previously used during UI tests]
+T) test_onEnteringBackground_deletesExpiredFeedCache
+- create a store (InMemoryFeedStore.withExpiredCahce)
+- simulate enter background (enterBackground)
+- assert that the store.feedCache is nil
+T) test_onEnteringBackground_keepsNonExpiredFeedCache
+- similar but assert that it should be not nil
+- add the enterBackground helper 
+- add the withExpiredFeedCache, withNonExpiredFeedCache helpers
+- add the init
+- add the sceneWillResignActive to the scene delegate TF
+- make localFeedLoader be a lazy var so it can be reference from the function 
+[validate feed cache on entering background]
+[move HTTPClientStub to a shared scope in a separate file]
+[move InMemoryFeedStore to a shared scope in a separate file]
+```

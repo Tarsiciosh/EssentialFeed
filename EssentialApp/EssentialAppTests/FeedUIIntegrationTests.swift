@@ -1,5 +1,6 @@
 import XCTest
 import UIKit
+import EssentialApp
 import EssentialFeed
 import EssentialFeediOS
 
