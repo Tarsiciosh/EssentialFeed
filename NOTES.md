@@ -2053,4 +2053,5 @@ T) test_onEnteringBackground_keepsNonExpiredFeedCache
 - make localFeedLoader be a lazy var so it can be reference from the function 
 [validate feed cache on entering background]
 [move HTTPClientStub to a shared scope in a separate file]
+[move InMemoryFeedStore to a shared scope in a separate file]
 ```
