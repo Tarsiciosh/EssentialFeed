@@ -2055,3 +2055,22 @@ T) test_onEnteringBackground_keepsNonExpiredFeedCache
 [move HTTPClientStub to a shared scope in a separate file]
 [move InMemoryFeedStore to a shared scope in a separate file]
 ```
+
+### 6) Validating the UI with Snapshot Tests + Dark Mode Support
+
+```
+- create FeedSnapshotTests
+T) test_emptyFeed
+- create a sut (FeedViewController)
+- call sut.display(emptyFeed())
+- call sut.snapshot()
+- create makeSUT (instanciate FeedViewController from storyboard, call loadViewIfNeeded)
+- create 'emptyFeed' func
+- create 'snapshot' func extension in UIVieController
+- return the rendered image by rendering the view in the action context
+- capture the snapshot with a constant and add a breakpoint to see the snapshot  
+- create record function (receives the snapshot and a name)
+- convert to png then create the path 'snapshotURL' (use the #file path)
+- create the directory then write the data to the url
+[record empty feed snapshot]
+```
