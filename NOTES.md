@@ -2073,4 +2073,17 @@ T) test_emptyFeed
 - convert to png then create the path 'snapshotURL' (use the #file path)
 - create the directory then write the data to the url
 [record empty feed snapshot]
+T) test_feedWithContent
+- repeat the same but with feedWithContent() instead of emptyFeed()
+- create ImageStub implementing the FeedImageCellControllerDelegate
+- when the method didRequestImage is invoked we need to the tell the controller to 'display' a stubbed viewModel
+- need a reference to the controller (FeedImageCellController) (weak)
+- create a reference to the viewMode (FeedImageViewMode<UIImage>)
+- add an initializer with takes a description, location and image
+- as the FeedImageViewModel doen't have a public initializer need to @testable import EssentialFeed
+- create the feedWithContent helper 
+- add the make(withColor:) helper: in new Helpers folder (copy from the EssentialApp module)
+- add a private extension to the FeedViewController to map the stubbed images to FeedImageCellControllers 
+- and call 'display' with this array of FeedImageCellControllers
+[record feed with content snapshot]
 ```
