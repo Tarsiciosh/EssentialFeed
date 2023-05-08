@@ -2092,5 +2092,7 @@ T) test_feedWithErrorMessage
 - create UITableView+HeaderSizing (with sizeTableHeaderToFit func)
 - update the FeedViewController in viewDidLayoutSubviews call the sizeTableHeaderToFit on tableView
 - fix issue in storyboard (not all constraints)
-[]
+[fix table header resizing for multi-line label]
+[record feed with error message snapshot]
+
 ```
