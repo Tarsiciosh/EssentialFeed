@@ -2108,4 +2108,5 @@ T) test_feedWithFailedImageLoading
 - retry button system background color
 [add dark mode support]
 [assert snapshots for light and dark mode using an iPhone8 configuration]
+[move UIViewController snapshot helpers to separate file]
 ```
