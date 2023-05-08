@@ -2096,5 +2096,7 @@ T) test_feedWithErrorMessage
 [record feed with error message snapshot]
 T) test_feedWithFailedImageLoading
 - create feedWithFailedImageLoading func (stubbed images with nil images)
--  
+[record feed with failed image loading snapshot] 
+- create the assert func (store the snapshot in a temporary folder, add the link to that in the error message)
+[assert snapshots match the stored snapshots]
 ```
