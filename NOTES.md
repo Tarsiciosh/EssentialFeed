@@ -2086,4 +2086,11 @@ T) test_feedWithContent
 - add a private extension to the FeedViewController to map the stubbed images to FeedImageCellControllers 
 - and call 'display' with this array of FeedImageCellControllers
 [record feed with content snapshot]
+T) test_feedWithErrorMessage
+- test with multiple lines -> not looking good
+- fix the issue 
+- create UITableView+HeaderSizing (with sizeTableHeaderToFit func)
+- update the FeedViewController in viewDidLayoutSubviews call the sizeTableHeaderToFit on tableView
+- fix issue in storyboard (not all constraints)
+[]
 ```
