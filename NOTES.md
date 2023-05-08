@@ -2126,5 +2126,5 @@ T) test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed
 - and cancel will cancel that loadingController at that indexPath if any then set it to nil
 - set the reference in the 'cellController forRowAt' func
 [fix potential bug when cancelling requests in UITableView didEndDisplayingCell method - This method is invoked after calling `reloadData`, so we'd be cancelling requests in the wrong models or crash in case the model has less items than the previous model]
-- 
+[extract layout cycle steps into a shared helper extension]
 ```
