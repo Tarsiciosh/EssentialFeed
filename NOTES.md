@@ -2055,3 +2055,59 @@ T) test_onEnteringBackground_keepsNonExpiredFeedCache
 [move HTTPClientStub to a shared scope in a separate file]
 [move InMemoryFeedStore to a shared scope in a separate file]
 ```
+
+### 6) Validating the UI with Snapshot Tests + Dark Mode Support
+
+```
+- create FeedSnapshotTests
+T) test_emptyFeed
+- create a sut (FeedViewController)
+- call sut.display(emptyFeed())
+- call sut.snapshot()
+- create makeSUT (instanciate FeedViewController from storyboard, call loadViewIfNeeded)
+- create 'emptyFeed' func
+- create 'snapshot' func extension in UIVieController
+- return the rendered image by rendering the view in the action context
+- capture the snapshot with a constant and add a breakpoint to see the snapshot  
+- create record function (receives the snapshot and a name)
+- convert to png then create the path 'snapshotURL' (use the #file path)
+- create the directory then write the data to the url
+[record empty feed snapshot]
+T) test_feedWithContent
+- repeat the same but with feedWithContent() instead of emptyFeed()
+- create ImageStub implementing the FeedImageCellControllerDelegate
+- when the method didRequestImage is invoked we need to the tell the controller to 'display' a stubbed viewModel
+- need a reference to the controller (FeedImageCellController) (weak)
+- create a reference to the viewMode (FeedImageViewMode<UIImage>)
+- add an initializer with takes a description, location and image
+- as the FeedImageViewModel doen't have a public initializer need to @testable import EssentialFeed
+- create the feedWithContent helper 
+- add the make(withColor:) helper: in new Helpers folder (copy from the EssentialApp module)
+- add a private extension to the FeedViewController to map the stubbed images to FeedImageCellControllers 
+- and call 'display' with this array of FeedImageCellControllers
+[record feed with content snapshot]
+T) test_feedWithErrorMessage
+- test with multiple lines -> not looking good
+- fix the issue 
+- create UITableView+HeaderSizing (with sizeTableHeaderToFit func)
+- update the FeedViewController in viewDidLayoutSubviews call the sizeTableHeaderToFit on tableView
+- fix issue in storyboard (not all constraints)
+[fix table header resizing for multi-line label]
+[record feed with error message snapshot]
+T) test_feedWithFailedImageLoading
+- create feedWithFailedImageLoading func (stubbed images with nil images)
+[record feed with failed image loading snapshot] 
+- create the assert func (store the snapshot in a temporary folder, add the link to that in the error message)
+[assert snapshots match the stored snapshots]
+- add the SnapshotConfiguration (with size, safeAreaInsets, layoutMargins and traitCollection
+- to override the configuration we use a custom window SnapshotWindow
+- fix dark mode support in storyboard (commit this part first)
+- table view background default 
+- description and location secondary label color 
+- image container secondary system background color
+- retry button system background color
+[add dark mode support]
+[assert snapshots for light and dark mode using an iPhone8 configuration]
+[move UIViewController snapshot helpers to separate file]
+[move `XCTestCase` snapshot helpers to separate file]
+```
