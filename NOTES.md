@@ -2099,4 +2099,13 @@ T) test_feedWithFailedImageLoading
 [record feed with failed image loading snapshot] 
 - create the assert func (store the snapshot in a temporary folder, add the link to that in the error message)
 [assert snapshots match the stored snapshots]
+- add the SnapshotConfiguration (with size, safeAreaInsets, layoutMargins and traitCollection
+- to override the configuration we use a custom window SnapshotWindow
+- fix dark mode support in storyboard (commit this part first)
+- table view background default 
+- description and location secondary label color 
+- image container secondary system background color
+- retry button system background color
+[add dark mode support]
+[assert snapshots for light and dark mode using an iPhone8 configuration]
 ```
