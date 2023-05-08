@@ -2094,5 +2094,7 @@ T) test_feedWithErrorMessage
 - fix issue in storyboard (not all constraints)
 [fix table header resizing for multi-line label]
 [record feed with error message snapshot]
-
+T) test_feedWithFailedImageLoading
+- create feedWithFailedImageLoading func (stubbed images with nil images)
+-  
 ```
