@@ -2111,3 +2111,20 @@ T) test_feedWithFailedImageLoading
 [move UIViewController snapshot helpers to separate file]
 [move `XCTestCase` snapshot helpers to separate file]
 ```
+
+### 6) Validating the UI with Snapshot Tests + Dark Mode Support
+```
+- fix issue when the system call didEndDisplaying (when reload data is called)
+- UIKit will call didEndDisplaying also when reloadData is called
+T) test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed
+- for persformance reason UIKit does not reload the table immediately after reloadData is called
+- in 'assertThat' func add tableView.layoutIfNeeded and RunLoop.main.run(unitl: Date()) -> Test crash
+- fix it adding a guard to check the tableModel count with the indexPath.row
+- but this doesnt solve the problem (will cancel the new image cell controllers) 
+- so create private var loadingControllers dictionary with keys IndexPath
+- every time we receive a new model we reset it (display func)
+- and cancel will cancel that loadingController at that indexPath if any then set it to nil
+- set the reference in the 'cellController forRowAt' func
+[fix potential bug when cancelling requests in UITableView didEndDisplayingCell method - This method is invoked after calling `reloadData`, so we'd be cancelling requests in the wrong models or crash in case the model has less items than the previous model]
+- 
+```
