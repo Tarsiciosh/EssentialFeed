@@ -2112,7 +2112,7 @@ T) test_feedWithFailedImageLoading
 [move `XCTestCase` snapshot helpers to separate file]
 ```
 
-### 6) Validating the UI with Snapshot Tests + Dark Mode Support
+### 7) Preventing a Crash when Invalidating Work Based on UITableViewDelegate events
 ```
 - fix issue when the system call didEndDisplaying (when reload data is called)
 - UIKit will call didEndDisplaying also when reloadData is called
@@ -2127,4 +2127,66 @@ T) test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed
 - set the reference in the 'cellController forRowAt' func
 [fix potential bug when cancelling requests in UITableView didEndDisplayingCell method - This method is invoked after calling `reloadData`, so we'd be cancelling requests in the wrong models or crash in case the model has less items than the previous model]
 [extract layout cycle steps into a shared helper extension]
+```
+
+### 8) Organizing Modular Codebases with Horizontal and Vertical Slicing
+```
+- create a framework (macOS) EssentialFeedAPI (add support for the iphonesimulator, iphoneos
+- add the EssentialFeed framework as frameworks and libraries
+- drag the files to the new EssentialFeedAPI folder
+- select all and update the target membership
+- drag test files and update the target memership as well
+- now we gain a new scheme also, try to run the test 
+- fix import statmanets 
+- try to run the application now
+- add the EssentiaFeedAPI to the frameworks and libraries
+- fix the import statments
+- repeat the steps with each module 
+```
+
+### 9) Continuous Delivery and Deployment: Automating the App Deploy to App Store Connect
+```
+Tidy up for v1.0 release PR:
+- add an icon to the assets catalog
+[add app icon]
+- change the lauch screen to be as similar as possible to the first screen (feed inmbeded in a nav controller)
+- imbed the launc screen in a navigation controller
+[embed launch screen into a navigation controller for a smoother initial app transition]
+- remove the Main storyboard (deleting the file is not enough) 
+- select the app project -> EssentialApp target -> General -> remove the 'Main Interface' 
+- remove it from the info.plist -> Application Scene Manifest -> Scene Configuration -> Application Session Role
+- Item 0 -> Storyboard Name (remove the row from the configuration) 
+- the app now runs but it is all black (the window is not created automatically anymore)
+- in the sceneDelegate `scene willConnectTo` create a window with the windowScene (scene receive by the func)
+- it still don't work because the window is not key and not visible 
+- in SceneDelegateTests 
+T) test_configureWindow_setsWindowAsKeyAndVisible
+- create a window 
+- create the sut (sceneDelegate) 
+- set the sut window to be the created window 
+- call configureWindow on sut
+- expect the created window to be the key window (assert true isKeyWindow)
+- expect it is not hidden (assert false isHidden) TF
+- after setting the window in the configureWindow call makeKeyAndVisible
+[remove unnecessary Main storyboard - the initial set up happens in code]
+[improve a test name]
+- ready to deploy the application to the App Store Connect
+- go to the App Store Connect web site, create a new application: iOS (Platform), Essential App (Name),
+- English (U.S.) (Primary Language), XC ...com.essential.EssentialAppCaseStudy (Bundle ID)
+- EssentialAppCaseStudy (SKU), Full access (User Access) -> Create
+- fill the information like subtitle, privacy policy, category etc
+- go to the test flight (set the test information message) -> Save
+- change the bundle identifier in Xcode to match the bundle identifier in App Store Connect
+[update bundle id to match app store connect]
+- select the generic iOS device (in the scheme)
+- Product -> Archive (now we have an archive we can distribute to the App Store)
+- select the archive and press Distribute App -> App Store Connect -> Upload
+- Automatically manage signing, check the profile, the team -> Upload
+- App "EssentialApp" successfully uploaded
+- go to the web and Provide Export Comliance Information -> No (no encryption) -> Start Internal Testing
+- set the automatic delivery with github actions
+- go the github site .github folder -> deploy > ExportOptions.plist, certificate.p12.gpd and 
+- profile.mobileprovition.gpg (encrypted with GPG)
+- go to .github -> workflow CI-iOS.yml, CI-macOS.yml, Deploy.yml
+- set the steps in the deploy file 
 ```
