@@ -2153,7 +2153,9 @@ Tidy up for v1.0 release PR:
 - embed the launch screen in a navigation controller
 [embed launch screen into a navigation controller for a smoother initial app transition]
 - remove the Main storyboard (deleting the file is not enough) 
-- select the app project -> EssentialApp target -> General -> remove the 'Main Interface' 
+- select the app project -> EssentialApp target -> General -> Custom iOS Target properties ->
+- Main storyboard file base name (delete this row)
+- Application Scene Manifest -> ... -> Storyboard Name: Main (delete this row)
 - remove it from the info.plist -> Application Scene Manifest -> Scene Configuration -> Application Session Role
 - Item 0 -> Storyboard Name (remove the row from the configuration) 
 - the app now runs but it is all black (the window is not created automatically anymore)
