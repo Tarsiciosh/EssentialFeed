@@ -2150,7 +2150,7 @@ Tidy up for v1.0 release PR:
 - add an icon to the assets catalog
 [add app icon]
 - change the lauch screen to be as similar as possible to the first screen (feed inmbeded in a nav controller)
-- imbed the launc screen in a navigation controller
+- embed the launch screen in a navigation controller
 [embed launch screen into a navigation controller for a smoother initial app transition]
 - remove the Main storyboard (deleting the file is not enough) 
 - select the app project -> EssentialApp target -> General -> remove the 'Main Interface' 
