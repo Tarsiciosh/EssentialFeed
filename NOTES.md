@@ -2192,3 +2192,117 @@ T) test_configureWindow_setsWindowAsKeyAndVisible
 - go to .github -> workflow CI-iOS.yml, CI-macOS.yml, Deploy.yml
 - set the steps in the deploy file 
 ```
+
+### 10) From Design Patterns to Universal Abstractions Using the Combine Framework
+```
+- in scene delegate import Combine
+- create function makeRemoteFeedLoaderWithLocalFallback that returns a Combine publisher (AnyPublisher)
+- copy and paste the existing code
+- return a Future that accepts a completion block, call remoteFeedLoader.load inside
+- compiler complains about the return type, so we can change the return type to be a Future but
+- it will tide up too much to the implementation 
+- add .eraseTypePublisher 
+- Future will be executed immediately upon creation (this is not what we want)
+- one solution would be to wrap it with a Deferred publisher
+- since the type completion func signature match we can pass the function remoteFeedLoader.load directly
+- extract the code into an extension of RemoteFeedLoader
+- func loadPublisher that returns a AnyPublisher<[FeedImage], Swift.Error> (with the code created before)
+- create a typealias Publisher of type AnyPublisher<[FeedImage], Swift.Error>
+- use it also in the makeRemoteFeedLoaderWithLocalFallback
+- in FeeLoaderCacheDecorator file
+- import Combine and create an extension on Publisher where Output == [FeedImage] {}
+- func caching(to cache: FeedCache) that returns a AnyPublisher<Output, Failure>
+- copy and paste the map operation and add .eraseToAnyPublisher 
+- (you can always replace a decorator with a map using publishers)
+- since we are not altering the mapped values we can replace with 'handleEvents' which receives 
+- the receiveOutput parameter: { feed in cache.saveIgnoringResult(feed) }
+- since the signature is the same we can pass the function directly 
+- move the extension to the scene delegate file 
+- add it to the chain 'return remoteFeedLoader.loadPublisher().caching(to: localFeedLoader)'
+- in FeedLoaderWithFallbackComposite
+- import Combine and create an extension on Publisher
+- func fallback(to fallbackPublisher: Publisher) -> Publisher (can't be done because we need asociated types)
+- so func fallback(to fallbackPublisher: AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure>
+- we can use the 'catch' function (listen to error and if there is any we want to replace the chain with the
+- fallback) (pass a function that receives an error and returns a publisher)
+- self.catch(fallbackPublisher) (change the fallbackPublisher to be a function that receives an error and return 
+- an AnyPublisher (@escaping), then as always .eraseToAnyPublisher() 
+- as we ignore the error in the composite we can ignore it also in the publisher
+- so func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
+- self.catch { _ in fallbackPublisher() }.eraseToAnyPublisher
+- (catch operator on the Publisher is equivalent to the created Composite)
+- (a way of injecting fallback logic into publishers)
+- move the extension to the scene delegate file
+- add it to the chain ....caching(to: localFeedLoader).fallback(to: localFeedLoader.loadPublisher)
+- change the extension on RemoteFeedLoader to be on FeedLoader instead (remove the swift. from the error)
+- in FeedUIComposer 
+- change the feedComposedWith function feedLoader parameter to a parameter function that receives nothing and returns 
+- a FeedLoader.Publisher  
+- FeedLoader (but we need one more operation to do that -> migrate the MainQueueDispatchDecorator)
+- in MainDispatchDecorator
+- import Combine and create an extension on Publisher
+- func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> (does not change the types only injects dispatch decorator)
+- use receive(on: Scheduler), so receive(on: DispatchQueue.main)
+- as always add the .eraseToAnyPublisher
+- doing like this will always dispatch ayncronosly to the main queue (will not check if already in the main thread)
+extension DispathQueue {
+    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler{ 
+        ImmediateWhenOnMainQueueScheduler()
+    }
+
+    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
+        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
+        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
+        
+        var now: SchedulerTimeType { DispathQueue.main.now }
+        
+        var minimumTolerance: SchedulerTimeType.String { Dispatch.main.minimumTolerance }
+        
+        func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, 
+        _ action: @escaping () -> Void) { 
+            guard Thread.isMainThread else {
+                return DispatchQueue.main.schedule(options: options, action)
+            }
+            action()
+        }
+        
+        func schedule(after date: SchedulerType ..) {
+            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
+        }
+        
+        func schedule(after date: .. interval ..) {
+            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
+        }
+    }
+}
+- receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
+- move this extension to the scene delegate
+- now in FeedUIComposer instead of using the decorator 
+- { feedLoader().dispatchOnMainQueue }
+- in FeedLoaderPresentationAdapter change to recieve also a function that returns FeedLoader.Publisher
+private var cancellable: Cancellable?
+..
+cacellable = feedLoader().sink(
+    receivedCompletion: { [weak self] completion in 
+        switch completion {
+        case .finished: break
+        case let .failure(error):
+            self?.presenter?.didFinishLoadingFeed(with: error)
+        }
+    }, receivedValue: { [weak self] feed in
+        self?.presenter?.didFinishLoadingFeed(with: feed)
+    }
+}
+- In scene delegate 
+- complete the composition chain 
+- feedLoader: makeRemoteFeedLoaderWithLocalFallback
+- import Combine
+- run the tests, got a build error. inject the loader.loadPublisher TS
+- delete the FeedLoaderWithFallbackComposite, FeedLoaderCacheDecorator, MainQueueDispatchDecorator extension on 
+- delete FeedLoaderCacheDecoratorTests 
+[]
+- repeat the same with the FeedImageDataLoader
+[]
+[]
+
+```
