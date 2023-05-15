@@ -2186,7 +2186,7 @@ T) test_configureWindow_setsWindowAsKeyAndVisible
 - Automatically manage signing, check the profile, the team -> Upload
 - App "EssentialApp" successfully uploaded
 - go to the web and Provide Export Compliance Information -> No (no encryption) -> Start Internal Testing
-- set the automatic delivery with github actions
+- set the automatic delivery with github actions:
 - go the github site .github folder -> deploy > ExportOptions.plist, certificate.p12.gpd and 
 - profile.mobileprovition.gpg (encrypted with GPG)
 - go to .github -> workflow CI-iOS.yml, CI-macOS.yml, Deploy.yml
