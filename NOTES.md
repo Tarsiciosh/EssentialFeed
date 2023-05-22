@@ -2112,7 +2112,7 @@ T) test_feedWithFailedImageLoading
 [move `XCTestCase` snapshot helpers to separate file]
 ```
 
-### 6) Validating the UI with Snapshot Tests + Dark Mode Support
+### 7) Preventing a Crash when Invalidating Work Based on UITableViewDelegate events
 ```
 - fix issue when the system call didEndDisplaying (when reload data is called)
 - UIKit will call didEndDisplaying also when reloadData is called
@@ -2127,4 +2127,182 @@ T) test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed
 - set the reference in the 'cellController forRowAt' func
 [fix potential bug when cancelling requests in UITableView didEndDisplayingCell method - This method is invoked after calling `reloadData`, so we'd be cancelling requests in the wrong models or crash in case the model has less items than the previous model]
 [extract layout cycle steps into a shared helper extension]
+```
+
+### 8) Organizing Modular Codebases with Horizontal and Vertical Slicing
+```
+- create a framework (macOS) EssentialFeedAPI (add support for the iphonesimulator, iphoneos
+- add the EssentialFeed framework as frameworks and libraries
+- drag the files to the new EssentialFeedAPI folder
+- select all and update the target membership
+- drag test files and update the target memership as well
+- now we gain a new scheme also, try to run the test 
+- fix import statmanets 
+- try to run the application now
+- add the EssentiaFeedAPI to the frameworks and libraries
+- fix the import statments
+- repeat the steps with each module 
+```
+
+### 9) Continuous Delivery and Deployment: Automating the App Deploy to App Store Connect
+```
+Tidy up for v1.0 release PR:
+- add an icon to the assets catalog
+[add app icon]
+- change the lauch screen to be as similar as possible to the first screen (feed inmbeded in a nav controller)
+- embed the launch screen in a navigation controller
+[embed launch screen into a navigation controller for a smoother initial app transition]
+- remove the Main storyboard (deleting the file is not enough) 
+- select the app project -> EssentialApp target -> General -> Custom iOS Target properties ->
+- Main storyboard file base name (delete this row)
+- Application Scene Manifest -> ... -> Storyboard Name: Main (delete this row)
+- remove it from the info.plist -> Application Scene Manifest -> Scene Configuration -> Application Session Role
+- Item 0 -> Storyboard Name (remove the row from the configuration) 
+- the app now runs but it is all black (the window is not created automatically anymore)
+- in the sceneDelegate `scene willConnectTo` create a window with the windowScene (scene receive by the func)
+- it still don't work because the window is not key and not visible 
+- in SceneDelegateTests 
+T) test_configureWindow_setsWindowAsKeyAndVisible
+- create a window 
+- create the sut (sceneDelegate) 
+- set the sut window to be the created window 
+- call configureWindow on sut
+- expect the created window to be the key window (assert true isKeyWindow)
+- expect it is not hidden (assert false isHidden) TF
+- after setting the window in the configureWindow call makeKeyAndVisible
+[remove unnecessary Main storyboard - the initial set up happens in code]
+[improve a test name]
+- ready to deploy the application to the App Store Connect
+- go to the App Store Connect web site, create a new application: iOS (Platform), Essential App (Name),
+- English (U.S.) (Primary Language), XC ...com.essential.EssentialAppCaseStudy (Bundle ID)
+- EssentialAppCaseStudy (SKU), Full access (User Access) -> Create
+- fill the information like subtitle, privacy policy, category etc
+- go to the test flight (set the test information message) -> Save
+- change the bundle identifier in Xcode to match the bundle identifier in App Store Connect
+[update bundle id to match app store connect]
+- select the generic iOS device (in the scheme)
+- Product -> Archive (now we have an archive we can distribute to the App Store)
+- select the archive and press Distribute App -> App Store Connect -> Upload
+- Automatically manage signing, check the profile, the team -> Upload
+- App "EssentialApp" successfully uploaded
+- go to the web and Provide Export Compliance Information -> No (no encryption) -> Start Internal Testing
+- set the automatic delivery with github actions:
+- go the github site .github folder -> deploy > ExportOptions.plist, certificate.p12.gpd and 
+- profile.mobileprovition.gpg (encrypted with GPG)
+- go to .github -> workflow CI-iOS.yml, CI-macOS.yml, Deploy.yml
+- set the steps in the deploy file 
+```
+
+### 10) From Design Patterns to Universal Abstractions Using the Combine Framework
+```
+- in scene delegate import Combine
+- create function makeRemoteFeedLoaderWithLocalFallback that returns a Combine publisher (AnyPublisher)
+- copy and paste the existing code
+- return a Future that accepts a completion block, call remoteFeedLoader.load inside
+- compiler complains about the return type, so we can change the return type to be a Future but
+- it will tide up too much to the implementation 
+- add .eraseTypePublisher 
+- Future will be executed immediately upon creation (this is not what we want)
+- one solution would be to wrap it with a Deferred publisher
+- since the type completion func signature match we can pass the function remoteFeedLoader.load directly
+- extract the code into an extension of RemoteFeedLoader
+- func loadPublisher that returns a AnyPublisher<[FeedImage], Swift.Error> (with the code created before)
+- create a typealias Publisher of type AnyPublisher<[FeedImage], Swift.Error>
+- use it also in the makeRemoteFeedLoaderWithLocalFallback
+- in FeeLoaderCacheDecorator file
+- import Combine and create an extension on Publisher where Output == [FeedImage] {}
+- func caching(to cache: FeedCache) that returns a AnyPublisher<Output, Failure>
+- copy and paste the map operation and add .eraseToAnyPublisher 
+- (you can always replace a decorator with a map using publishers)
+- since we are not altering the mapped values we can replace with 'handleEvents' which receives 
+- the receiveOutput parameter: { feed in cache.saveIgnoringResult(feed) }
+- since the signature is the same we can pass the function directly 
+- move the extension to the scene delegate file 
+- add it to the chain 'return remoteFeedLoader.loadPublisher().caching(to: localFeedLoader)'
+- in FeedLoaderWithFallbackComposite
+- import Combine and create an extension on Publisher
+- func fallback(to fallbackPublisher: Publisher) -> Publisher (can't be done because we need asociated types)
+- so func fallback(to fallbackPublisher: AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure>
+- we can use the 'catch' function (listen to error and if there is any we want to replace the chain with the
+- fallback) (pass a function that receives an error and returns a publisher)
+- self.catch(fallbackPublisher) (change the fallbackPublisher to be a function that receives an error and return 
+- an AnyPublisher (@escaping), then as always .eraseToAnyPublisher() 
+- as we ignore the error in the composite we can ignore it also in the publisher
+- so func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
+- self.catch { _ in fallbackPublisher() }.eraseToAnyPublisher
+- (catch operator on the Publisher is equivalent to the created Composite)
+- (a way of injecting fallback logic into publishers)
+- move the extension to the scene delegate file
+- add it to the chain ....caching(to: localFeedLoader).fallback(to: localFeedLoader.loadPublisher)
+- change the extension on RemoteFeedLoader to be on FeedLoader instead (remove the swift. from the error)
+- in FeedUIComposer 
+- change the feedComposedWith function feedLoader parameter to a parameter function that receives nothing and returns 
+- a FeedLoader.Publisher  
+- FeedLoader (but we need one more operation to do that -> migrate the MainQueueDispatchDecorator)
+- in MainDispatchDecorator
+- import Combine and create an extension on Publisher
+- func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> (does not change the types only injects dispatch decorator)
+- use receive(on: Scheduler), so receive(on: DispatchQueue.main)
+- as always add the .eraseToAnyPublisher
+- doing like this will always dispatch ayncronosly to the main queue (will not check if already in the main thread)
+extension DispathQueue {
+    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler{ 
+        ImmediateWhenOnMainQueueScheduler()
+    }
+
+    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
+        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
+        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
+        
+        var now: SchedulerTimeType { DispathQueue.main.now }
+        
+        var minimumTolerance: SchedulerTimeType.String { Dispatch.main.minimumTolerance }
+        
+        func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, 
+        _ action: @escaping () -> Void) { 
+            guard Thread.isMainThread else {
+                return DispatchQueue.main.schedule(options: options, action)
+            }
+            action()
+        }
+        
+        func schedule(after date: SchedulerType ..) {
+            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
+        }
+        
+        func schedule(after date: .. interval ..) {
+            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
+        }
+    }
+}
+- receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
+- move this extension to the scene delegate
+- now in FeedUIComposer instead of using the decorator 
+- { feedLoader().dispatchOnMainQueue }
+- in FeedLoaderPresentationAdapter change to recieve also a function that returns FeedLoader.Publisher
+private var cancellable: Cancellable?
+..
+cacellable = feedLoader().sink(
+    receivedCompletion: { [weak self] completion in 
+        switch completion {
+        case .finished: break
+        case let .failure(error):
+            self?.presenter?.didFinishLoadingFeed(with: error)
+        }
+    }, receivedValue: { [weak self] feed in
+        self?.presenter?.didFinishLoadingFeed(with: feed)
+    }
+}
+- In scene delegate 
+- complete the composition chain 
+- feedLoader: makeRemoteFeedLoaderWithLocalFallback
+- import Combine
+- run the tests, got a build error. inject the loader.loadPublisher TS
+- delete the FeedLoaderWithFallbackComposite, FeedLoaderCacheDecorator, MainQueueDispatchDecorator extension on 
+- delete FeedLoaderCacheDecoratorTests 
+[]
+- repeat the same with the FeedImageDataLoader
+[]
+[]
+
 ```
