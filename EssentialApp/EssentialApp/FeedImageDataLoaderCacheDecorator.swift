@@ -20,8 +20,9 @@ public final class FeedImageDataLoaderCacheDecorator: FeedImageDataLoader {
     }
 }
 
-private extension FeedImageDataCache {
+extension FeedImageDataCache {
     func saveIgnoringResult(_ data: Data, for url: URL) {
         save(data, for: url) { _ in }
     }
 }
+
