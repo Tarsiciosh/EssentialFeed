@@ -2328,7 +2328,10 @@ cacellable = feedLoader().sink(
 - delete FeedLoaderCacheDecoratorTests, FeedLoaderWithFallbackCompositeTests 
 [replace FeedLoader composition with Combine operators]
 - repeat the same with the FeedImageDataLoader
-[]
+- replace the imageLoader parameter in FeedViewAdapter to be a function that accepts a url an return a publisher
+- delete FeedImageDataLoaderWithFallbackComposite, FeedImageDataLoaderCacheDecorator, MainQueueDispatchDecorator
+- delete FeedImageDataLoaderWithFallbackCompositeTests, FeedImageDataLoaderCacheDecoratorTests
+[replace FeedImageDataLoader composition with Combine operators]
 []
 
 ```
