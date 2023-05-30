@@ -2332,6 +2332,8 @@ cacellable = feedLoader().sink(
 - delete FeedImageDataLoaderWithFallbackComposite, FeedImageDataLoaderCacheDecorator, MainQueueDispatchDecorator
 - delete FeedImageDataLoaderWithFallbackCompositeTests, FeedImageDataLoaderCacheDecoratorTests
 [replace FeedImageDataLoader composition with Combine operators]
-[]
+- move combine helpers to CombineHelpers folder
+- 
+[move Combine helpers to a new file]
 
 ```
