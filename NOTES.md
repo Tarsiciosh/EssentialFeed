@@ -2335,5 +2335,5 @@ cacellable = feedLoader().sink(
 - move combine helpers to CombineHelpers folder
 - 
 [move Combine helpers to a new file]
-
+[move dispatchOnMainQueue operator to the point of use (before subscription with `sink`)]
 ```
