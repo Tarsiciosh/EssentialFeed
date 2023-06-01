@@ -1,27 +1,28 @@
 import UIKit
 import EssentialFeed
 import EssentialFeediOS
+import Combine
 
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
+    public static func feedComposedWith(
+        feedLoader: @escaping () -> FeedLoader.Publisher,
+        imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher
+    ) -> FeedViewController {
         let presentationAdapter = FeedLoaderPresentationAdapter(
-            feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader)
-        )
+            feedLoader: feedLoader)
         
         let feedController = makeFeedViewController(
-            delgate:presentationAdapter,
-            title: FeedPresenter.title
-        )
+            delgate: presentationAdapter,
+            title: FeedPresenter.title)
         
         presentationAdapter.presenter = FeedPresenter(
             feedView: FeedViewAdapter(
                 controller: feedController,
-                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
+                imageLoader: imageLoader),
             loadingView: WeakRefVirtualProxy(feedController),
-            errorView: WeakRefVirtualProxy(feedController)
-        )
+            errorView: WeakRefVirtualProxy(feedController))
         
         return feedController
     }
@@ -35,4 +36,3 @@ public final class FeedUIComposer {
         return feedController
     }
 }
-
