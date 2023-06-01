@@ -2337,3 +2337,27 @@ cacellable = feedLoader().sink(
 [move Combine helpers to a new file]
 [move dispatchOnMainQueue operator to the point of use (before subscription with `sink`)]
 ```
+
+```
+- the main thread can run queues that are not the Main Queue and some frameworks need to dispatch the
+- work to the main queue (main queue always runs in the main thread by the way) 
+- because of that it is not enough to check isMainThread 
+- to achieve this we can use an private isMainQueue function 
+- using the setSpecific(key: value:) 
+- and then with getSpecific(key) if it matched the value then we are in the same queue  
+private static let key = DispatchSpecificKey<UInt8> 
+private static let value = UInt8.max
+
+init() {
+    DispatchQueue.main.setSpecific(key: Self.key, value: Self.value)
+}
+
+private func isMainThread() -> Bool {
+    DispatchQueue.getSpecific(key: Self.key) == Self.value
+}
+
+- to prevent multiple instanciation of this class we can use a singlenton
+static let shared = Self()
+private init.. 
+[check isMainQueue instead of just isMainThread since there's no guarantee that the main thread is running the main queue]
+```
