@@ -155,6 +155,7 @@
 				57A0F9E029E4E2450029C3A5 /* AppDelegate.swift */,
 				57A0F9E229E4E2450029C3A5 /* SceneDelegate.swift */,
 				571B9DEC2A00754E0086B2C9 /* FeedUIComposer.swift */,
+				5773C47B2A26BF2600BA4192 /* CombineHelpers.swift */,
 				571B9DF02A00754E0086B2C9 /* WeakRefVirtualProxy.swift */,
 				571B9DF12A00754E0086B2C9 /* FeedImageDataLoaderPresentationAdapter.swift */,
 				571B9DEF2A00754E0086B2C9 /* FeedLoaderPresentationAdapter.swift */,
@@ -163,7 +164,6 @@
 				57A0F9E929E4E2470029C3A5 /* Assets.xcassets */,
 				57A0F9EB29E4E2470029C3A5 /* LaunchScreen.storyboard */,
 				57A0F9EE29E4E2470029C3A5 /* Info.plist */,
-				5773C47B2A26BF2600BA4192 /* CombineHelpers.swift */,
 			);
 			path = EssentialApp;
 			sourceTree = "<group>";
