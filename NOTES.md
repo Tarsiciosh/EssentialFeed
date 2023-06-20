@@ -2382,22 +2382,23 @@ private init..
 - test_load_deliversItemsOn2xxHTTPResponseWithJSONItems [200, 201, 250, 280, 299]
 [delivers proper results on 2xx response]
 - change makeItem id: UUID, message: String, createdAt: Date, username: String
-- use not yet created ImmageComment, update id, message, created_at, author { username }
-- ISO8601DateFormatter.string(from: createdAt) -> this depend the time zone and locale
+- use not yet created ImmageComment, update id, message, created_at, author: ["username": username] 
+- ISO8601DateFormatter().string(from: createdAt) -> this depend from the time zone and locale
 - createdAt: (date: Date, iso8601String: String)
 - remove the compact map
 - create ImageComment (Image Comments Feature folder) public struct (public init)
 - make it Equatable 
 - fix test setup message: "a message", createdAt: (Date(timeIntervalSince1970: 1598627222), 
 - "2020-08-28T15:07:02+00:00"), username: "a user name"
-- 1577881882 "2020-01-01T12:31:22+00:00" TF
+- 1577881882 "2020-01-01T12:31:22+00:00" BE
+- in RemoteImageCommentsLoader:
 - public typealias Result = Swift.Result<[ImageComment], Swift.Error> remove FeedLoader conformance
 - move the mapping to the mapper 
 - private struct Item: Decodable { let id ... }
 - private stuct Author: Decodable { let username: String}
 - var comments: [ImageComment] { items.map{ ImageComment(id: $0.id ... }}
-- let decoder = JSONDecoder
-- decoder.dateDecodingStrategy = .iso8601
+- let decoder = JSONDecoder()
+- decoder.dateDecodingStrategy = .iso8601 TS
 [add image comment data model]
 [implement image comment mapping]
 - have different modules for the client implementation) and client interface
