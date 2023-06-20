@@ -2404,18 +2404,18 @@ private init..
 - the idea is to have different modules for the client implementation and client interface
 - in Essential Feed:
 - create Shared API folder (move the HTTPClient) - interface
-- create Shared API Infra (move URLSessionHTTPClient) - implementation
+- create Shared API Infra folder (move URLSessionHTTPClient) - implementation
 - in EssentialFeedTests:
-- create Shared API (below Helpers)
+- create Shared API folder (below Helpers)
 -- Helpers (HTTPClientSpy) 
-- create Shared API Infra
+- create Shared API Infra folder
 -- Helpers (URLProtocolStub)
 - URLSessionHTTPClientTests
 [move HTTPClient protocol and implementation to standalone folders representing modules]
 - in EssentialFeed:
-- create Image Comment API (RemoteImageCommentsLoader, ImageCommentsMapper)
+- create Image Comment API folder (RemoteImageCommentsLoader, ImageCommentsMapper)
 - in EssentialFeedTests: 
-- create Image Commets API (LoadImageCommentsFromRemoteUseCaseTests) TS
+- create Image Commets API folder (LoadImageCommentsFromRemoteUseCaseTests) TS
 [move Image Comments API to standalone folders representing modules]
 - refactor old FeedItemsMapper (move the array extension to the mapper)
 - use a helper var images: [FeedImage] { items.map { FeedImage(id: $0.id ...}}

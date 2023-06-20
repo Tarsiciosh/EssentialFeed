@@ -374,7 +374,6 @@
 			children = (
 				57B5AF5D29D79A8A00A1A87A /* Helpers */,
 				57DCAA5028F61D9000EEFCAF /* LoadFeedFromRemoteUseCaseTests.swift */,
-				570977682A411C9500682255 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
 				57B5AF3029D3B49D00A1A87A /* LoadFeedImageDataFromRemoteUseCaseTests.swift */,
 			);
 			path = "Feed API";
@@ -477,8 +476,6 @@
 				576C751C28F6357700D4DB5A /* RemoteFeedLoader.swift */,
 				57283BAD290C68DB00C71555 /* FeedItemsMapper.swift */,
 				57619F8029314E7900CB83C1 /* RemoteFeedItem.swift */,
-				5709776A2A411DA300682255 /* RemoteImageCommentsLoader.swift */,
-				57880CD22A425F260062FA53 /* ImageCommentsMapper.swift */,
 				57B5AF6029D79C2A00A1A87A /* RemoteFeedImageDataLoader.swift */,
 			);
 			path = "Feed API";
@@ -541,6 +538,23 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		57880CDD2A4272B20062FA53 /* Image Comment API */ = {
+			isa = PBXGroup;
+			children = (
+				5709776A2A411DA300682255 /* RemoteImageCommentsLoader.swift */,
+				57880CD22A425F260062FA53 /* ImageCommentsMapper.swift */,
+			);
+			path = "Image Comment API";
+			sourceTree = "<group>";
+		};
+		57880CDE2A42730E0062FA53 /* Image Comments API */ = {
+			isa = PBXGroup;
+			children = (
+				570977682A411C9500682255 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
+			);
+			path = "Image Comments API";
+			sourceTree = "<group>";
+		};
 		57B5AF5D29D79A8A00A1A87A /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -590,6 +604,7 @@
 				57880CD72A42706D0062FA53 /* Shared API */,
 				57880CD82A4270840062FA53 /* Chared API Infra */,
 				57880CD42A4265870062FA53 /* Image Comments Feature */,
+				57880CDD2A4272B20062FA53 /* Image Comment API */,
 				57DCAA3428F498D300EEFCAF /* Feed Feature */,
 				576114FE293001C300FA5D4D /* Feed Cache */,
 				576C751B28F6353800D4DB5A /* Feed API */,
@@ -605,6 +620,7 @@
 				57394112291596E600615D4E /* Helpers */,
 				57880CD92A4270DD0062FA53 /* Shared API */,
 				57880CDB2A4271390062FA53 /* Shared API Infra */,
+				57880CDE2A42730E0062FA53 /* Image Comments API */,
 				57EABEC0292C0C78002BEBDB /* Feed Cache */,
 				57283BBD291053AB00C71555 /* Feed API */,
 				5755EE9F29CBC19000BF1D4F /* Feed Presentation */,
