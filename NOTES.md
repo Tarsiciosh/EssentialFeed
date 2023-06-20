@@ -2368,11 +2368,11 @@ private init..
 ```
 - create new LoadImageCommentsFromRemoteUseCaseTests based on LoadFeedFromRemoteUseCaseTests
 - copy and paste the tests TS
-- perform a find and replace RemoteFeedLoader -> RemoteImageCommentsLoader TF
+- find and replace RemoteFeedLoader -> RemoteImageCommentsLoader BE
 - create RemoteImageCommentsLoader based on RemoteFeedLoader (copy, paste and rename class) TF
-- create ImageCommentsMapper based on FeedItemsMapper (copy, paste)
+- create ImageCommentsMapper based on FeedItemsMapper (copy, paste and rename)
 - change to RemoteImageCommentsLoader.Error TS
-[publicate RemoteFeedLoader ...]
+[duplicate RemoteFeedLoader as RemoteImageCommentsLoader]
 - the speces says that it is ok when receiving 2xx response
 - test_load_deliversErrorOnNon2xxHTTPResponse [199, 150, 300, 400, 500] TS
 - test_load_deliversErrorOn2xxHTTPResponseWithInvalidJSON [200, 201, 250, 280, 299] TS
@@ -2569,13 +2569,28 @@ private func getFeedResult...
 - replace text containing FeedLoader.Result with Swift.Result<[FeedIamge], Error> BE
 - replace text containing FeedLoader.Publisher with AnyPublisher<[FeedImage], Error>
 - change the public extension FeedLoader to LocalFeedLoader BE
-- in the extension FeedUIIntegrationTests { class LoaderSpy: FeedImageDataLoader
-    func load ..
-    typealias Publisher = AnyPublisher<[FeedImage], Error>
-    func loadPublisher() -> Publisher {
-        Deferred {
-            Future
-        }
+- in the extension FeedUIIntegrationTests 
+import Combine
+class LoaderSpy: FeedImageDataLoader {
+...
+    private var feedRequests = [PassthroughSubject<[FeedImage, Error]>]()
+    
+    func loadPublisher() -> AnyPublisher<[FeedImage], Error> {
+        let publisher = PassthroughSubject<[FeedImage], Error>()
+        feedRequests.append(publisher)
+        return publisher.eraseToAnyPublisher()
     }
-}  
+    
+    func completeFeedLoading(with: feed: [FeedImage] = [], at index: Int = 0) {
+        feedRequests[index].send(feed)
+    }
+    
+    func completesFeedLoadingWithError(at index: Int = 0) {
+        let error = NSError(domain: "an error", code:0)
+        feedRequests[index].send(completion: .failure(error))
+    }
+} 
+- delete FeedLoader file 
+[remove FeedLoader protocol as we don't need it anymore - we are composing the types with universal abstractions provided by the Combine framework]
+- 
 ```
