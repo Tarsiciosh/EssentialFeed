@@ -2373,14 +2373,14 @@ private init..
 - create ImageCommentsMapper based on FeedItemsMapper (copy, paste and rename)
 - change to RemoteImageCommentsLoader.Error TS
 [duplicate RemoteFeedLoader as RemoteImageCommentsLoader]
-- the speces says that it is ok when receiving 2xx response
+- the specs says that it is ok when receiving 2xx responses
 - test_load_deliversErrorOnNon2xxHTTPResponse [199, 150, 300, 400, 500] TS
 - test_load_deliversErrorOn2xxHTTPResponseWithInvalidJSON [200, 201, 250, 280, 299] TS
 - test_load_deliversNoItemsOn2xxHTTPResponseWithEmptyJSONList [200, 201, 250, 280, 299] TF
 - create static func isOK(_ response: HTTPURLResponse) -> Bool in ImageCommentsMapper
 - (200...299).contains(reponse.statusCode) TS
 - test_load_deliversItemsOn2xxHTTPResponseWithJSONItems [200, 201, 250, 280, 299]
-[delivers ..]
+[delivers proper results on 2xx response]
 - change makeItem id: UUID, message: String, createdAt: Date, username: String
 - use not yet created ImmageComment, update id, message, created_at, author { username }
 - ISO8601DateFormatter.string(from: createdAt) -> this depend the time zone and locale
