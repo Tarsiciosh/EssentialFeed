@@ -2400,8 +2400,8 @@ private init..
 - let decoder = JSONDecoder()
 - decoder.dateDecodingStrategy = .iso8601 TS
 [add image comment data model]
-[implement image comment mapping]
-- have different modules for the client implementation) and client interface
+[implement ImageComment mapping]
+- the idea is to have different modules for the client implementation and client interface
 - in Essential Feed:
 - create Shared API folder (move the HTTPClient) - interface
 - create Shared API Infra (move URLSessionHTTPClient) - implementation
@@ -2409,7 +2409,8 @@ private init..
 - create Shared API (below Helpers)
 -- Helpers (HTTPClientSpy) 
 - create Shared API Infra
--- Helpers (URLSessionHTTPClient..)
+-- Helpers (URLProtocolStub)
+- URLSessionHTTPClientTests
 [move HTTPClient protocol and implementation to standalone folders representing modules]
 - in EssentialFeed:
 - create Image Comment API (RemoteImageCommentsLoader, ImageCommentsMapper)
