@@ -2388,7 +2388,7 @@ private init..
 - remove the compact map
 - create ImageComment (Image Comments Feature folder) public struct (public init)
 - make it Equatable 
-- fix test setup message: "a message", createdAt: (Date(timeIntervalSince1970: 1598627222), 
+- fix test setup message: "a message", createdAt: (Date(timeIntervalSince1970: 1598627222),
 - "2020-08-28T15:07:02+00:00"), username: "a user name"
 - 1577881882 "2020-01-01T12:31:22+00:00" BE
 - in RemoteImageCommentsLoader:
