@@ -2512,7 +2512,6 @@ XCTAssertEqual(result, [item1.model, item2.model]
 - repate the same with the LoadImageCommentFromRemoteUseCaseTests (ImageCommentsMapperTests)
 - make it public etc.. move the helpers to the SharedTestHelpers
 [move tests helpers to shared scope]
-- ...
 [test ImageCommentsMapper in isolation]
 - move ImageCommentsLoader to the SceneDelegate BE
 - in ImageCommentsMapper create a plublic enum Error: Swift.Error { case invalidData }
