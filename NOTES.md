@@ -2521,7 +2521,7 @@ XCTAssertEqual(result, [item1.model, item2.model]
 - replace the RemoteFeedLoader with a RemoteLoader and a mapper (FeedItemsMapper.map)
 - delete RemoteImageCommentsLoader and RemoteFeedLoader files
 - in SceneDelegate:
-let remoteFeedLoader = RemoteLoader(url: remoteURL, client: httpClient, mapper: FeedItemsMapper.map
+..lazy var remoteFeedLoader = RemoteLoader(url: remoteURL, client: httpClient, mapper: FeedItemsMapper.map
 - remove RemoteImageCommentsLoader typealias and extension (it is not yet used)
 [move RemoteLoader composition to the Composition Root]
 - (do the same with the FeedImageDataLoader as an excercise)
@@ -2543,8 +2543,8 @@ public extension HTTPClient
     }
 }
 - in the SceneDelegate:
-let remoteFeedLoader = httpClient.getPublisher(url: remoteURL).tryMap(FeedItemsMapper.map)
-- then just 
+- delete lazy var remoteFeedLoader = ..
+- and just
 return httpClient
     .getPublisher(url: remoteURL)
     .tryMap(FeedItemsMapper.map)
