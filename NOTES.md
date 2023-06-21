@@ -2465,6 +2465,10 @@ public extension RemoteImageCommentsLoader {
     }
 } TS
 - remove duplication in the tests (LoadImageCommentsFromRemoteUseCaseTests)
+- leave test_load_deliversErrorOnNon2xxHTTPResponse, 
+- test_load_deliversErrorOn200HTTPResponseWithInvalidJSON, 
+- test_load_deliversNoItemsOn2xxHTTPResponseWithEmptyJSONList and
+- test_load_deliversItemsOn2xxHTTPReponseWithJSONItems
 [replace the RemoteImageCommentsLoader with RemoteLoader to remove duplication]
 - repeate the same with the RemoteFeedLoader (also remove duplication from tests)
 [replace RemoteFeedLoader with generic RemoteLoader to remove duplication]
