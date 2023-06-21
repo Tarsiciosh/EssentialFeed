@@ -2511,7 +2511,7 @@ XCTAssertEqual(result, [item1.model, item2.model]
 [test FeedItemsMapper in isolation]
 - repate the same with the LoadImageCommentFromRemoteUseCaseTests (ImageCommentsMapperTests)
 - make it public etc.. move the helpers to the SharedTestHelpers
-[move tests helpers to shared scope
+[move tests helpers to shared scope]
 - ...
 [test ImageCommentsMapper in isolation]
 - move ImageCommentsLoader to the SceneDelegate BE
