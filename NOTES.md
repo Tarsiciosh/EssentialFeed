@@ -2428,31 +2428,32 @@ private init..
 - add RemoteLoader to EssentialFeed/Shared API (copy and paste from RemoteFeedLoader) TF
 - change the error in the mapper to Error.invalidData TS
 [duplicate RemoteFeedLoader as RemoteLoader]
-- remove case specific tests test_load_deliversErrorOn200 ...
 - rename test_load_deliversErrorOn200HTTPResponseWithInvalidJSON to 
 - test_load_deliversErrorOnMapperError
 - rename test_load_deliversItemsOn200HTTPREsponseWithJSONItems to 
 - test_load_deliversMappedResource
+- remove case specific tests test_load_deliversErrorOn200 ...
 - the idea is to inject the mapper (to the sut in this case) makeSUT(mappper: {_, _ in 
     throw anyError
 })
 - the mapper receives the data and the response and returns the source
-- change JSONError to anyData (any data pass to a mapper that throws an error should deliver 
+- change invalidJSON to anyData (any data pass to a mapper that throws an error should deliver 
 - .invalidData
 - change the makeSUT to inject the mapper: @escaping Mapper
 - typealias Mapper<Resource> = (Data, HTTPURLResponse) throws -> Resource
 - pass the mapper to the remote loader implementation RemoteLoader(... mapper: mapper)
 - move the Mapper to the RemoteLoader and move the generic to the RemoteLoader type 
 - keep a reference to the mapper (stored property, initialized in init)
-- change mapper @escaping RemoteLoader<String>.Mapper (any type will do)
+- back in RemoteLoaderTests:
+- change mapper: @escaping RemoteLoader<String>.Mapper (any type will do)
 - find and replace RemoteLoader to RemoteLoader<String>
-- add the mapper to the instance deallocation test {_, _ in in "any"} and a default to the makeSUT
+- add the mapper to the instance deallocation test {_, _ in "any"} and a default to the makeSUT
 - in the test_load_deliversMappedResource 
 - let resource = "a resource"
 - data: Data(resource.utf8)
-- .. mapper: { data, _ in String(data: data, encoding: .utf8)
+- .. mapper: { data, _ in String(data: data, encoding: .utf8)!
 - change the RemoteLoader Result = Swift.Result<Resource, Switf.Error>
-- remote FeedLoader conformance, use the mapper in the RemoteLoader 
+- remove FeedLoader conformance, use the mapper in the RemoteLoader 
 - change the map function to be an instance function TS
 [implement generic RemoteLoader]
 - in the RemoteImageCommentsLoader:
