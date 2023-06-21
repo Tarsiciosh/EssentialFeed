@@ -2473,7 +2473,7 @@ public extension RemoteImageCommentsLoader {
 - repeate the same with the RemoteFeedLoader (also remove duplication from tests)
 [replace RemoteFeedLoader with generic RemoteLoader to remove duplication]
 - in the Feed API module the RemoteFeedLoader is composed with the RemoteLoader and the mapper
-- run the tests in the EssentialApp scheme TF
+- run the tests in the EssentialApp scheme BE
 - in the sceneDelegate:
 - extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
 [make RemoteLoader conform to FeedLoader in the composition root]
