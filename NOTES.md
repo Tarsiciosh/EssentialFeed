@@ -2484,7 +2484,7 @@ public extension RemoteImageCommentsLoader {
 - make FeedItemsMapper public (class and map method)
 - change test_load_deliversErrorOnNon200HTTPResponse to test_map_throwsErrorOnNon200HTTPResponse 
 change test to throws 
-samples.enum...
+try samples.enum...
     let json = makeItemsJSON([])
     XCTAssertThrowsError(
         try FeedItemsMapper.map(json, from: HTTPURLResponse(anyURL(), statuCode: code,
