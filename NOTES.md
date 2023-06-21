@@ -2417,7 +2417,8 @@ private init..
 - in EssentialFeedTests: 
 - create Image Commets API folder (LoadImageCommentsFromRemoteUseCaseTests) TS
 [move Image Comments API to standalone folders representing modules]
-- refactor old FeedItemsMapper (move the array extension to the mapper)
+- both remotes are almost identical so to make them even more identical
+- refactor old FeedItemsMapper (move the RemoteFeedItem to the Root)
 - use a helper var images: [FeedImage] { items.map { FeedImage(id: $0.id ...}}
 - move the RemoteFeedItem inside the Root delete empty file (RemoteFeedItem)
 [move FeedImage mapping to the FeedItemsMapper]
