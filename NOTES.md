@@ -2599,4 +2599,8 @@ class LoaderSpy: FeedImageDataLoader {
 } 
 - delete FeedLoader file 
 [remove FeedLoader protocol as we don't need it anymore - we are composing the types with universal abstractions provided by the Combine framework]
+- rename LoadFeedImageDataFromRemoteUseCaseTests to FeedImageDataMapperTests
+- create FeedImageDataMapper
+- copy the same test idea from the other mappers
+[test FeedImageDataMapper in isolation]
 ```
