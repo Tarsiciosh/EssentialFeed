@@ -1,10 +1,12 @@
 import XCTest
 import EssentialFeed
+import Combine
 
+/*
 protocol FeedLoaderTestCase: XCTestCase {}
 
 extension FeedLoaderTestCase {
-    func expect(_ sut: FeedLoader, toCompleteWith expectedResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) {
+    func expect(_ sut: FeedLoader, toCompleteWith expectedResult: Swift.Result<[FeedImage], Error>, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
         
         sut.load { receivedResult in
@@ -25,3 +27,4 @@ extension FeedLoaderTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 }
+*/

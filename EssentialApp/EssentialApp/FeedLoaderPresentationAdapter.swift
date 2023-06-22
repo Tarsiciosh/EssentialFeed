@@ -3,12 +3,12 @@ import EssentialFeediOS
 import Combine
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
-    private let feedLoader: () -> FeedLoader.Publisher
+    private let feedLoader: () -> AnyPublisher<[FeedImage], Error>
     var presenter: FeedPresenter?
     
     private var cancellable: Cancellable?
     
-    init(feedLoader: @escaping () -> FeedLoader.Publisher) {
+    init(feedLoader: @escaping () -> AnyPublisher<[FeedImage], Error>) {
         self.feedLoader = feedLoader
     }
     

@@ -2571,22 +2571,23 @@ private func getFeedResult...
 - in SceneDelegate delete extension RemoteLoader: FeedLoader where Resource == [FeedImage] {} TS
 [remove unused RemoteLoader]
 - FeedLoader is only conformed by the LocalFeedLoader so it is no more longer needed
-- commented BE, remote FeedLoader conformance to LocalFeedLoader
+- commented BE, remove FeedLoader conformance to LocalFeedLoader
 - replace text containing FeedLoader.Result with Swift.Result<[FeedIamge], Error> BE
 - replace text containing FeedLoader.Publisher with AnyPublisher<[FeedImage], Error>
-- change the public extension FeedLoader to LocalFeedLoader BE
-- in the extension FeedUIIntegrationTests 
+- change the public FeedLoader publisher extension to LocalFeedLoader BE
+- remove XCTestCase+FeedLoader
+- in the extension FeedUIIntegrationTests+LoaderSpy
 import Combine
 class LoaderSpy: FeedImageDataLoader {
 ...
     private var feedRequests = [PassthroughSubject<[FeedImage, Error]>]()
     
-    func loadPublisher() -> AnyPublisher<[FeedImage], Error> {
+    func loadPublisher() -> AnyPublisher<[FeedImage], Error> { //replace old load function
         let publisher = PassthroughSubject<[FeedImage], Error>()
         feedRequests.append(publisher)
         return publisher.eraseToAnyPublisher()
     }
-    
+    ...
     func completeFeedLoading(with: feed: [FeedImage] = [], at index: Int = 0) {
         feedRequests[index].send(feed)
     }
@@ -2598,5 +2599,4 @@ class LoaderSpy: FeedImageDataLoader {
 } 
 - delete FeedLoader file 
 [remove FeedLoader protocol as we don't need it anymore - we are composing the types with universal abstractions provided by the Combine framework]
-- 
 ```
