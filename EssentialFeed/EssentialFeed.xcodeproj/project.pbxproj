@@ -364,7 +364,6 @@
 		57283BBD291053AB00C71555 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
-				57B5AF5D29D79A8A00A1A87A /* Helpers */,
 				57DCAA5028F61D9000EEFCAF /* FeedItemsMapperTests.swift */,
 				57B5AF3029D3B49D00A1A87A /* FeedImageDataMapperTests.swift */,
 			);
@@ -526,13 +525,6 @@
 				570977682A411C9500682255 /* ImageCommentsMapperTests.swift */,
 			);
 			path = "Image Comments API";
-			sourceTree = "<group>";
-		};
-		57B5AF5D29D79A8A00A1A87A /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		57CC5DD829B1378500960D6E /* Feed UI */ = {
