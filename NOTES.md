@@ -2603,4 +2603,7 @@ class LoaderSpy: FeedImageDataLoader {
 - create FeedImageDataMapper
 - copy the same test idea from the other mappers
 [test FeedImageDataMapper in isolation]
+- delete RemoteFeedImageDataLoader and replace in SceneDelegat by the new httpClient publisher
+- fix EssentialFeedEndToEndTests
+[replace RemoteFeedImageDataLoader with HTTPClient publisher composed with FeedImageDataMapper]
 ```
