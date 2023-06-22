@@ -2606,4 +2606,6 @@ class LoaderSpy: FeedImageDataLoader {
 - delete RemoteFeedImageDataLoader and replace in SceneDelegat by the new httpClient publisher
 - fix EssentialFeedEndToEndTests
 [replace RemoteFeedImageDataLoader with HTTPClient publisher composed with FeedImageDataMapper]
+- delete HTTPClientSpy
+[remove unused test spy]
 ```

@@ -1,7 +1,7 @@
 import XCTest
 import EssentialFeed
 
-class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
+class FeedImageDataMapperTests: XCTestCase {
 
     func test_map_throwsErrorOnNon200HTTPResponse() throws {
         let json = makeItemsJSON([])
