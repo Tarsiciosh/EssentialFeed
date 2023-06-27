@@ -2612,30 +2612,32 @@ class LoaderSpy: FeedImageDataLoader {
 
 ### 2) [Image Comments Presentation] Reusable Presentation Logic
 ```
-- can add a delay to the feed loader and image data loader 
+- we can add a delay to the feed loader and image data loader to see the changing states 
 httpClient
-    .getPublisher(url: remoteURL)
+    .getPublisher(url: url)
     .delay(for: 2, scheduler: DispatchQueue.main)
 ...
 - the idea is to have different modules not depending from each other
-- Feed Presentation module 
-(FeedPresenter map FeedImage into FeedViewModel)
-(FeddImagePresenter maps FeedImage into FeedImageViewModel)
-- Image Comments Presentation module
-(ImageCommentsPresenter maps ImageComments into ImageCommentsViewModel)
+Feed Presentation module: 
+(FeedPresenter mapping FeedImage into FeedViewModel)
+(FeddImagePresenter mapping FeedImage into FeedImageViewModel)
+Image Comments Presentation module:
+(ImageCommentsPresenter mapping ImageComments into ImageCommentsViewModel)
+- so the flow would be (using the FeedPresenter and FeedImagePresenter as examples)
 - data in -> creates view models -> data out to the UI
 - void -> creates view models -> sends to the UI (didStartLoadingFeed)
 - [FeedImage] -> creates view models -> sends to the UI (didFinishLoadingFeed with feed)
 - Error -> creates view models -> send to the UI (didFinishLoadingFeed with error)
-- Resource -> create ResourceViewModel -> sends to the UI (generic case)
+- so the generic case would be:  
+- Resource -> create ResourceViewModel -> sends to the UI 
 - Data -> UIImage -> send to the UI (we can apply the generic case here also)
-- the idea is to create the generic presenter ResourcePresenter
+- the idea is to create a generic presenter: LoadResourcePresenter
 - create EssentialFeedTests/Shared Presentation/LoadResourcePresenterTests (below Helpers folder)
 - copy the tests from the FeedPresenterTests TS
-- find and replace FeedPresenter -> LoadResourcePresenter BE
+- find and replace FeedPresenter -> LoadResourcePresenter (4) BE
 - create EssentialFeed/Shared Presentation/LoadResourcePresenter (below Shared API Infra)
 - copy and paste from FeedPresenter
-[duplicate...]
+[duplicate FeedPresenter as LoadResourcePresenter]
 - search for what it is specific and delete it (tests and production code) e.g. title
 [remov...]
 - test_didStartLoading_displayNoErrorMessagesAndStartsLoading
