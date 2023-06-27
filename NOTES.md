@@ -2361,3 +2361,251 @@ static let shared = Self()
 private init.. 
 [check isMainQueue instead of just isMainThread since there's no guarantee that the main thread is running the main queue]
 ```
+
+## FIFTH MODULE - ADDING A NEW FEATURE
+
+### 1) [Image Comments API] From Dependency Injection to Dependency Rejection
+```
+- create new LoadImageCommentsFromRemoteUseCaseTests based on LoadFeedFromRemoteUseCaseTests
+- copy and paste the tests TS
+- find and replace RemoteFeedLoader -> RemoteImageCommentsLoader BE
+- create RemoteImageCommentsLoader based on RemoteFeedLoader (copy, paste and rename class) TF
+- create ImageCommentsMapper based on FeedItemsMapper (copy, paste and rename)
+- change to RemoteImageCommentsLoader.Error TS
+[duplicate RemoteFeedLoader as RemoteImageCommentsLoader]
+- the specs says that it is ok when receiving 2xx responses
+- test_load_deliversErrorOnNon2xxHTTPResponse [199, 150, 300, 400, 500] TS
+- test_load_deliversErrorOn2xxHTTPResponseWithInvalidJSON [200, 201, 250, 280, 299] TS
+- test_load_deliversNoItemsOn2xxHTTPResponseWithEmptyJSONList [200, 201, 250, 280, 299] TF
+- create static func isOK(_ response: HTTPURLResponse) -> Bool in ImageCommentsMapper
+- (200...299).contains(reponse.statusCode) TS
+- test_load_deliversItemsOn2xxHTTPResponseWithJSONItems [200, 201, 250, 280, 299]
+[delivers proper results on 2xx response]
+- change makeItem id: UUID, message: String, createdAt: Date, username: String
+- use not yet created ImmageComment, update id, message, created_at, author: ["username": username] 
+- ISO8601DateFormatter().string(from: createdAt) -> this depend from the time zone and locale
+- createdAt: (date: Date, iso8601String: String)
+- remove the compact map
+- create ImageComment (Image Comments Feature folder) public struct (public init)
+- make it Equatable 
+- fix test setup message: "a message", createdAt: (Date(timeIntervalSince1970: 1598627222),
+- "2020-08-28T15:07:02+00:00"), username: "a user name"
+- 1577881882 "2020-01-01T12:31:22+00:00" BE
+- in RemoteImageCommentsLoader:
+- public typealias Result = Swift.Result<[ImageComment], Swift.Error> remove FeedLoader conformance
+- move the mapping to the mapper 
+- private struct Item: Decodable { let id ... }
+- private stuct Author: Decodable { let username: String}
+- var comments: [ImageComment] { items.map{ ImageComment(id: $0.id ... }}
+- let decoder = JSONDecoder()
+- decoder.dateDecodingStrategy = .iso8601 TS
+[add image comment data model]
+[implement ImageComment mapping]
+- the idea is to have different modules for the client implementation and client interface
+- in Essential Feed:
+- create Shared API folder (move the HTTPClient) - interface
+- create Shared API Infra folder (move URLSessionHTTPClient) - implementation
+- in EssentialFeedTests:
+- create Shared API folder (below Helpers)
+-- Helpers (HTTPClientSpy) 
+- create Shared API Infra folder
+-- Helpers (URLProtocolStub)
+- URLSessionHTTPClientTests
+[move HTTPClient protocol and implementation to standalone folders representing modules]
+- in EssentialFeed:
+- create Image Comment API folder (RemoteImageCommentsLoader, ImageCommentsMapper)
+- in EssentialFeedTests: 
+- create Image Commets API folder (LoadImageCommentsFromRemoteUseCaseTests) TS
+[move Image Comments API to standalone folders representing modules]
+- both remotes are almost identical so to make them even more identical
+- refactor old FeedItemsMapper (move the RemoteFeedItem to the Root)
+- use a helper var images: [FeedImage] { items.map { FeedImage(id: $0.id ...}}
+- move the RemoteFeedItem inside the Root delete empty file (RemoteFeedItem)
+[move FeedImage mapping to the FeedItemsMapper]
+- in EssentialFeedTests/Shared API create RemoteLoaderTests
+- copy and paste the tests from LoadFeedFromRemoteUseCaseTests
+- rename RemoteFeedLoader to RemoteLoader BE
+- add RemoteLoader to EssentialFeed/Shared API (copy and paste from RemoteFeedLoader) TF
+- change the error in the mapper to Error.invalidData TS
+[duplicate RemoteFeedLoader as RemoteLoader]
+- rename test_load_deliversErrorOn200HTTPResponseWithInvalidJSON to 
+- test_load_deliversErrorOnMapperError
+- rename test_load_deliversItemsOn200HTTPREsponseWithJSONItems to 
+- test_load_deliversMappedResource
+- remove case specific tests test_load_deliversErrorOn200 ...
+- the idea is to inject the mapper (to the sut in this case) makeSUT(mappper: {_, _ in 
+    throw anyError
+})
+- the mapper receives the data and the response and returns the source
+- change invalidJSON to anyData (any data pass to a mapper that throws an error should deliver 
+- .invalidData
+- change the makeSUT to inject the mapper: @escaping Mapper
+- typealias Mapper<Resource> = (Data, HTTPURLResponse) throws -> Resource
+- pass the mapper to the remote loader implementation RemoteLoader(... mapper: mapper)
+- move the Mapper to the RemoteLoader and move the generic to the RemoteLoader type 
+- keep a reference to the mapper (stored property, initialized in init)
+- back in RemoteLoaderTests:
+- change mapper: @escaping RemoteLoader<String>.Mapper (any type will do)
+- find and replace RemoteLoader to RemoteLoader<String>
+- add the mapper to the instance deallocation test {_, _ in "any"} and a default to the makeSUT
+- in the test_load_deliversMappedResource 
+- let resource = "a resource"
+- data: Data(resource.utf8)
+- .. mapper: { data, _ in String(data: data, encoding: .utf8)!
+- change the RemoteLoader Result = Swift.Result<Resource, Switf.Error>
+- remove FeedLoader conformance, use the mapper in the RemoteLoader 
+- change the map function to be an instance function TS
+[implement generic RemoteLoader]
+- in the RemoteImageCommentsLoader:
+- public typealias RemoteImageCommentsLoader = RemoteLoader<[ImageComment]>
+- (using a typealias don't break clients)
+public extension RemoteImageCommentsLoader {
+    convenience init(url: URL, client: HTTPClient) {
+        self.init(url: url, client: client, mapper: ImageCommentsMapper.map)
+    }
+} TS
+- remove duplication in the tests (LoadImageCommentsFromRemoteUseCaseTests)
+- leave test_load_deliversErrorOnNon2xxHTTPResponse, 
+- test_load_deliversErrorOn200HTTPResponseWithInvalidJSON, 
+- test_load_deliversNoItemsOn2xxHTTPResponseWithEmptyJSONList and
+- test_load_deliversItemsOn2xxHTTPReponseWithJSONItems
+[replace the RemoteImageCommentsLoader with RemoteLoader to remove duplication]
+- repeate the same with the RemoteFeedLoader (also remove duplication from tests)
+[replace RemoteFeedLoader with generic RemoteLoader to remove duplication]
+- in the Feed API module the RemoteFeedLoader is composed with the RemoteLoader and the mapper
+- run the tests in the EssentialApp scheme BE
+- in the sceneDelegate:
+- extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
+[make RemoteLoader conform to FeedLoader in the composition root]
+- the idea is to compose the remotes in the composition root
+- so the idea is to make the mapper public so that can be use to compose the remote loaders
+- the mappers can be test in isolation (only test the behavior of the mapper) 
+- in LoadFeedFromRemoteUseCaseTests
+- make FeedItemsMapper public (class and map method)
+- change test_load_deliversErrorOnNon200HTTPResponse to test_map_throwsErrorOnNon200HTTPResponse 
+change test to throws 
+try samples.enum...
+    let json = makeItemsJSON([])
+    XCTAssertThrowsError(
+        try FeedItemsMapper.map(json, from: HTTPURLResponse(anyURL(), statuCode: code,
+            httpVersion:nil, headerField: nil)
+    )
+- remove the enumerated (index is not more needed)
+- move json upwards, create a helper
+private extension HTTPURLResponse {
+    convenience init(statusCode: Int) {
+        self.init(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: nil)
+    }
+}
+- test_map_throwsErrorOn200HTTPResponseWithInvalidJSON
+- repeat the same procedure (statusCode: 200)
+T) test_map_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() throws 
+let result = try FeedItemsMapper...
+XCTAssertEqual(result, [])
+T) test_map_deliversItemsOn200HTTPResponseWithJSONItems() throws
+let json = makeItemsJSON([item1.json, item2.json]
+let result = ...
+XCTAssertEqual(result, [item1.model, item2.model]
+- remove all unneded test code
+- rename test to FeedItemsMapperTests 
+[test FeedItemsMapper in isolation]
+- repate the same with the LoadImageCommentFromRemoteUseCaseTests (ImageCommentsMapperTests)
+- make it public etc.. move the helpers to the SharedTestHelpers
+[move tests helpers to shared scope]
+[test ImageCommentsMapper in isolation]
+- move ImageCommentsLoader (RemoteLoader extension) to the SceneDelegate BE
+- in ImageCommentsMapper create a plublic enum Error: Swift.Error { case invalidData }
+- now the ImageCommentsMapper is a standalone class TS
+- more RemoteFeedLoader to the SceneDelegate BE
+- repeate the same BE in the end to end tests
+- replace the RemoteFeedLoader with a RemoteLoader and a mapper (FeedItemsMapper.map)
+- delete RemoteImageCommentsLoader and RemoteFeedLoader files
+- in SceneDelegate:
+..lazy var remoteFeedLoader = RemoteLoader(url: remoteURL, client: httpClient, mapper: FeedItemsMapper.map
+- remove RemoteImageCommentsLoader typealias and extension (it is not yet used)
+[move RemoteLoader composition to the Composition Root]
+- (do the same with the FeedImageDataLoader as an excercise)
+- the generic RemoteLoader can be replaced using Combine 
+- in the CombineHelpers: 
+public extension HTTPClient
+    typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
+    
+    func getPublisher(url: URL) -> Publisher {
+        var task: HTTPClientTask?
+        
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
+    }
+}
+- in the SceneDelegate:
+- delete lazy var remoteFeedLoader = ..
+- and just
+return httpClient
+    .getPublisher(url: remoteURL)
+    .tryMap(FeedItemsMapper.map)
+    .caching(to: localFeedLoader)
+    .fallback(to: localFeedLoader.loadPublisher
+- run the tests in the EssentialApp scheme TS
+[replace RemoteLoader composition with HTTPClient publisher composed with FeedItemsMapper]
+- delete the generic RemoteLoader and the test RemoteLoaderTests
+- run the test in the CI_iOS scheme api end to end test BE
+- in the EssentialFeedAPIEndToEndTests:
+private func getFeedResult...
+    let client = ephemeralClient()
+    
+    client.get(from: feedTestServerURL) { result in 
+        receivedResult = result.flatMap { (data, response) in
+            do {
+                return .success(try FeedItemsMapper.map(data, from: response))
+            } catch {
+                return .failure(error)
+            }
+        }
+        exp.fullfill()
+    }
+- in SceneDelegate delete extension RemoteLoader: FeedLoader where Resource == [FeedImage] {} TS
+[remove unused RemoteLoader]
+- FeedLoader is only conformed by the LocalFeedLoader so it is no more longer needed
+- commented BE, remove FeedLoader conformance to LocalFeedLoader
+- replace text containing FeedLoader.Result with Swift.Result<[FeedIamge], Error> BE
+- replace text containing FeedLoader.Publisher with AnyPublisher<[FeedImage], Error>
+- change the public FeedLoader publisher extension to LocalFeedLoader BE
+- remove XCTestCase+FeedLoader
+- in the extension FeedUIIntegrationTests+LoaderSpy
+import Combine
+class LoaderSpy: FeedImageDataLoader {
+...
+    private var feedRequests = [PassthroughSubject<[FeedImage, Error]>]()
+    
+    func loadPublisher() -> AnyPublisher<[FeedImage], Error> { //replace old load function
+        let publisher = PassthroughSubject<[FeedImage], Error>()
+        feedRequests.append(publisher)
+        return publisher.eraseToAnyPublisher()
+    }
+    ...
+    func completeFeedLoading(with: feed: [FeedImage] = [], at index: Int = 0) {
+        feedRequests[index].send(feed)
+    }
+    
+    func completesFeedLoadingWithError(at index: Int = 0) {
+        let error = NSError(domain: "an error", code:0)
+        feedRequests[index].send(completion: .failure(error))
+    }
+} 
+- delete FeedLoader file 
+[remove FeedLoader protocol as we don't need it anymore - we are composing the types with universal abstractions provided by the Combine framework]
+- rename LoadFeedImageDataFromRemoteUseCaseTests to FeedImageDataMapperTests
+- create FeedImageDataMapper
+- copy the same test idea from the other mappers
+[test FeedImageDataMapper in isolation]
+- delete RemoteFeedImageDataLoader and replace in SceneDelegat by the new httpClient publisher
+- fix EssentialFeedEndToEndTests
+[replace RemoteFeedImageDataLoader with HTTPClient publisher composed with FeedImageDataMapper]
+- delete HTTPClientSpy
+[remove unused test spy]
+```
