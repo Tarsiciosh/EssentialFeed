@@ -2638,8 +2638,8 @@ Image Comments Presentation module:
 - create EssentialFeed/Shared Presentation/LoadResourcePresenter (below Shared API Infra)
 - copy and paste from FeedPresenter
 [duplicate FeedPresenter as LoadResourcePresenter]
-- search for what it is specific and delete it (tests and production code) e.g. title
-[remov...]
+- search for what it is specific and delete it (tests and production code) i.e. title
+[remove title from generic presenter since it's specific to each presenter]
 - test_didStartLoading_displayNoErrorMessagesAndStartsLoading
 - didStartLoading (test and production)
 [rename ...]
