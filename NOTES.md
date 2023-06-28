@@ -2738,8 +2738,8 @@ var feedTitle: String {
 - create Shared Presentation/ResourceLoadingView (cut and paste the old one) 
 - rename and move also ResouceLoadingViewModel 
 [rename and move ResourceLoadingView and ResouceLoadingViewModel to Shared module]
-- repeate the same for ResourceErrorView and ResourceErrorView (do it manually cause it failed)
-[rename and move ..]
+- repeate the same for ResourceErrorView and ResourceErrorViewModel (do it manually cause it failed)
+[rename and move ResourceErrorView and ViewModel to Shared module]
 - in FeedPresenterTests (now the goal is to implement the FeedPresenter using the generic one)
 T) test_map_createsViewModels
 - create a feed and pass it to the FeedPresenter map function 
