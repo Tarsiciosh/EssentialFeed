@@ -2684,29 +2684,29 @@ T) test_didFinishLoadingWithError...
 - rename method didFinishLoading(with error: Error) TS
 - rename ...localized("GENERIC_CONNECTION_ERROR" (global find and replace)
 [replace "FEED_VIEW_CONNECTION_ERROR" key with "GENERIC_CONNECTION_ERROR"]
-- don't like the key be used in different modules also not define in hte String Files 
+- don't like the idea of the key be used in different modules also not define in the String Files 
 - create a new Shared.strings file in hte Shared Presentation "module"
 - move the generic connection error to the new file 
-- fix localization tests with table "Shared"
-- update the LoadResourcePresenter
-- private var loadError: String (use "Shared" tableName) bundle Self.self 
+- fix LoadResourcePresenterTests tests with table "Shared"
+- and update the LoadResourcePresenter:
+- private var loadError: String (tableName "Shared", bundle: Self.self) 
 - comment: "Error ... can't load the resource ..."
-- in FeedPresenterTests
-- ... localized( ... String, table: String = "Feed"
+- in FeedPresenterTests:
+- ... localized( ...key: String, table: String = "Feed"
 - and pass the table in the error case 
-- change FeedPresenter with "Shared" 
+- change FeedPresenter with "Shared" (this is only temporary to make the tests pass)
 - add a new test SharedPresentation/SharedLocalizationTests 
 - (copy and paste from FeedLoalizationTests) table Shared, 
-- bundle LoadResourcePresenterTests<Any, DummyView>.self
-- private class DummyView: ResourceView {  .. any ... }
+- bundle LoadResourcePresenter<Any, DummyView>.self
+- private class DummyView: ResourceView {  .. Any ... }
 - add localization (right pane) for all languages TS 
 - change scheme to EssentialApp TF
 - in FeedUIImtegrationTest we can create a DSL 
-test_loadFeedCompletion_rendersErrorMessageOnErrorUntilNextReload
+T) test_loadFeedCompletion_rendersErrorMessageOnErrorUntilNextReload
 ... (sut.errorMessage, loadError)
-- in FeedUIIntegrationTests+Localization
+- in FeedUIIntegrationTests+Localization: 
 - var loadError: String {
-    localized("GENERIC_CONNECTION_ERROR")
+    localized("GENERIC_CONNECTION_ERROR", table: "Shared")
 ..
     func localized(_ key: String, table: String = "Feed"
 } TS
@@ -2714,7 +2714,7 @@ test_loadFeedCompletion_rendersErrorMessageOnErrorUntilNextReload
 - in LoadResourcePresenter make loadError public static
 - then the DSL for the test
 var loadError: String{
-    LoadResourcePresenter<Any, DummyView>.loadError
+    LoadResourcePresenter<Any, DummyView>.loadError (add again the DummyView)
 }
 - remove the localized helper method BE
 - create a new DSL feedTitle
@@ -2723,7 +2723,8 @@ var feedTitle: String {
     FeedPresenter.title
 }
 - now the test don't depend on the keys anymore TS
-[move ... ]
+- we already test the keys in the presentation layer
+[move "GENERIC_CONNECTION_ERROR" localization key to new Shared.strings]
 - now the SharedLocalizationTests and FeedLocalizationTests are very similar 
 - method to refactor: select eveything that is similar -> refactor extract method
 - helper name is assertLocalizedKeyAndValues(in ) move it to the helper section
