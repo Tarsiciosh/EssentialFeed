@@ -2783,9 +2783,9 @@ T) test_map_createsViewModels
 T) test_map_createsViewModel()
 - create an image (uniqueImage) and map it with a FeedImagePresenter.map
 - XCTAssert(viewModel.description, image.description) also .location
-- Add the generics FeedImagePresenter<ViewSpy, AnyImage>
+- add the generics FeedImagePresenter<ViewSpy, AnyImage>
 - create the map function public static map(_ image: FeedImage) -> FeedImageViewModel<Image> TS
-[add ...]
+[add FeedImagePresenter map]
 - replace the old FeedImageDataLoaderPresentationAdapter with the generic one
 - LoadResourcePresentationAdapter<Data, FeedImageCellController>
 - pass a custom closure that calls the imageLoader with the model.url
