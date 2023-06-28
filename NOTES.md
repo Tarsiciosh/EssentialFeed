@@ -2640,10 +2640,11 @@ Image Comments Presentation module:
 [duplicate FeedPresenter as LoadResourcePresenter]
 - search for what it is specific and delete it (tests and production code) i.e. title
 [remove title from generic presenter since it's specific to each presenter]
-- test_didStartLoading_displayNoErrorMessagesAndStartsLoading
+T) test_didStartLoading_displayNoErrorMessagesAndStartsLoading
 - didStartLoading (test and production)
-[rename ...]
-- test_didFinishLoadingResource_displaysResourceAndStopsLoading
+[rename method]
+the idea is to convert a "resouce" to "resource view model"
+T) test_didFinishLoadingResource_displaysResourceAndStopsLoading
 let (sut, view) = makeSUT(mapper: { resource in
     resource + " view model"
 })
@@ -2652,18 +2653,19 @@ sut.didFinishLoading(with: "resource")
 .display(resourceViewModel: "resource view model")
 .dipslay(isLoading: false)
 - add the mapper to the makeSUT (mapper: @escaping (String) -> String) = { _ in "any"}
-- add the mapper to the LoadResourcePresenter typealias Mapper = (String) -> String 
-- hold a reference to it (private let mapper: Mapper)
-- change type in makeSUT BE
-- change LoadResourcePresenter functions 
-feedView.display(resource) BE cannot convert String to FeedViewModel
+- add the mapper to the LoadResourcePresenter (on top) typealias Mapper = (String) -> String 
+- hold a reference to it (private let mapper: Mapper) and set in the init
+- pass the resource directly 
+- fix makeSUT BE
+- change didFinishLoading to match the new types 
+feedView.display(resource) BE cannot convert value type String to FeedViewModel
 - add public protocol ResourceView {
     func display(_ viewModel: String)
 }
-- change the init and stored property BE
+- change the init and stored property for new resourceView BE
 - modify spy case display(resourceViewModel: String) TF
 - add the mapper in LoadResourcePresenter
-[displays ..]
+[displays mapped resource on successful resource loading]
 - add the generic type 
 public protocol ResourceView {
     associatedtype ResourceViewModel
