@@ -2737,7 +2737,7 @@ var feedTitle: String {
 - rename FeedLoadingView to ResourceLoadingView (in all the project)
 - create Shared Presentation/ResourceLoadingView (cut and paste the old one) 
 - rename and move also ResouceLoadingViewModel 
-[rename and move...]
+[rename and move ResourceLoadingView and ResouceLoadingViewModel to Shared module]
 - repeate the same for ResourceErrorView and ResourceErrorView (do it manually cause it failed)
 [rename and move ..]
 - in FeedPresenterTests (now the goal is to implement the FeedPresenter using the generic one)
