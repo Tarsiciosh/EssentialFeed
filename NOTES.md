@@ -2744,9 +2744,9 @@ var feedTitle: String {
 T) test_map_createsViewModels
 - create a feed and pass it to the FeedPresenter map function 
 - assert that the vieModel.feed is equal to the feed 
-- add the map function to the FeedPresenter (feed -> feedViewModel)
-- use it in the didFinishLoadingFeed func
-[add ...]
+- add the map function to the FeedPresenter ([FeedImage] -> FeedViewModel) public static
+- use it in the didFinishLoadingFeed func (just to test it more)
+[add FeedPresenter map]
 - now we have all we need to replace in the composition with the generic one
 - in FeedUIComposer (EssentialApp scheme)
 - replace the FeedPresenter with the LoadResourcePresenter

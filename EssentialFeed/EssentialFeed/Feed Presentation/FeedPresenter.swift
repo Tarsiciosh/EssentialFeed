@@ -1,11 +1,8 @@
-import Foundation
+import UIKit
 
 public protocol FeedView {
     func display(_ viewModel: FeedViewModel)
 }
-
-
-
 
 public class FeedPresenter {
     private let feedView: FeedView
@@ -16,6 +13,10 @@ public class FeedPresenter {
         self.feedView = feedView
         self.loadingView = loadingView
         self.errorView = errorView
+    }
+    
+    public static func map(_ feed: [FeedImage]) -> FeedViewModel {
+        FeedViewModel(feed: feed)
     }
     
     public static var title: String {
@@ -38,7 +39,7 @@ public class FeedPresenter {
     }
     
     public func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(FeedViewModel(feed: feed))
+        feedView.display(Self.map(feed))
         loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
     
