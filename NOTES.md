@@ -2751,11 +2751,13 @@ T) test_map_createsViewModels
 - in FeedUIComposer (EssentialApp scheme)
 - replace the FeedPresenter with the LoadResourcePresenter
 - FeedViewAdapter needs now to implement the ResourceView protocol
-- FeedLoaderPresentationAdapter should hold a reference to a LoadResourcePresenter<[FeedImage],
+- FeedLoaderPresentationAdapter presenter in now a LoadResourcePresenter<[FeedImage],
 - FeedViewAdapter>
 - update methods names 
 - add the mapper function (map func created previously) TS
-[replace ...]
+- the associated type ResourceViewModel is infered to be FeedViewModel because the FeedViewAdapter
+- conforms to the ReourceView and implements the method display with that type
+[replace FeedImagePresenter with LoadResourcePresenter]
 - remove all logic that is no longer need from the FeedPresenter (only remains the title and map)
 - remove from FeedPresenterTests uneded tests (localized title and map)
 [remove ...]
