@@ -2677,8 +2677,9 @@ LoadResourcePresenter<Resource, View: ResourceView>
 private let resourceView: View
 - fix the tests with the generic <String, ViewSpy>
 - add typealias ResourceViewModel = String
-- to avoid duplication private typealias SUT = LoadResourcePresenter<String, ViewSpy>
-[make..]
+- to avoid duplication add private typealias SUT = LoadResourcePresenter<String, ViewSpy>
+- (above the makeSUT func)
+[make LoadResourcePresenter generic over the Resource types]
 T) test_didFinishLoadingWithError...
 - rename method didFinishLoading(with error: Error) TS
 - rename ...localized("GENERIC_CONNECTION_ERROR" (global find and replace)
