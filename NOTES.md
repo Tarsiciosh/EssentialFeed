@@ -2683,7 +2683,7 @@ private let resourceView: View
 T) test_didFinishLoadingWithError...
 - rename method didFinishLoading(with error: Error) TS
 - rename ...localized("GENERIC_CONNECTION_ERROR" (global find and replace)
-[replace...]
+[replace "FEED_VIEW_CONNECTION_ERROR" key with "GENERIC_CONNECTION_ERROR"]
 - don't like the key be used in different modules also not define in hte String Files 
 - create a new Shared.strings file in hte Shared Presentation "module"
 - move the generic connection error to the new file 
