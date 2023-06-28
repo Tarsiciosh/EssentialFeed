@@ -2763,22 +2763,23 @@ T) test_map_createsViewModels
 [remove unused FeedPresenter logic]
 - in line the table = "Feed"
 [inline param]
-- now the goal is to repeat the same but with image data loading
-- make the presentation adapter generic rename FeedLoaderPresentationAdapter 
-- this is the one that makes the actual call to the source and pass the info the the presenter
+- now the goal is to repeat the same but with image data loading to do so we can 
+- make the presentation adapter generic (take FeedLoaderPresentationAdapter as a model)
+- so rename it to LoadResourcePresentatioAdapter
+- this is the component that makes the actual call to the source and pass the info to the presenter
 - LoadResourcePresentationAdapter<Resource, View: ResourceView>
 - feedLoader -> loader (also in init) 
-- feed -> resource
+- feed -> resource (update all types)
 - move the conformance of the FeedViewControllerDelegate to an extension
-- didRequestFeedRefresh -> loadResource
-- (EsentialApp scheme) TF
-- in FeedUIComposer
+- in didRequestFeedRefresh call loadResource (new name) 
+- (EsentialApp scheme) BE
+- in FeedUIComposer:
 - LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter> TS
-[make...]
+[make Presentation Adapter generic so it can be reused]
 - now the idea is to replace the FeedImagePresenter by the new generic one
-- in the FeedImagePresenter
-- the FeedImageViewModel has the image view part but also the loading (so it need to be split)
-- in FeedImagePrsenterTests
+- in the FeedImagePresenter:
+- the FeedImageViewModel has the image view part but also the loading (so it need to be splitted)
+- in FeedImagePrsenterTests:
 T) test_map_createsViewModel()
 - create an image (uniqueImage) and map it with a FeedImagePresenter.map
 - XCTAssert(viewModel.description, image.description) also .location
