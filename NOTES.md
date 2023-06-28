@@ -2729,9 +2729,10 @@ var feedTitle: String {
 - method to refactor: select eveything that is similar -> refactor extract method
 - helper name is assertLocalizedKeyAndValues(in ) move it to the helper section
 - move all helpers methods into the EssentialFeedTests/Helpers/SharedLocalizationTestHelpers
-- inject file and line to the assetLocalizedKey... (3 placesç)
+- inject file and line to the assetLocalizedKey... (3 places)
+- rename presentationBundle to bundle
 - use new method in FeedLocalizationTests
-[move duplication... ]
+[remove duplication in the localization tests]
 - LoadResourcePresenter still depend on types that lives in the Feed Presentation module
 - rename FeedLoadingView to ResourceLoadingView (in all the project)
 - create Shared Presentation/ResourceLoadingView (cut and paste the old one) 
