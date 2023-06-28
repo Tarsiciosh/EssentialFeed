@@ -2757,10 +2757,10 @@ T) test_map_createsViewModels
 - add the mapper function (map func created previously) TS
 - the associated type ResourceViewModel is infered to be FeedViewModel because the FeedViewAdapter
 - conforms to the ReourceView and implements the method display with that type
-[replace FeedImagePresenter with LoadResourcePresenter]
+[replace FeedPresenter with generic presenter]
 - remove all logic that is no longer need from the FeedPresenter (only remains the title and map)
 - remove from FeedPresenterTests uneded tests (localized title and map)
-[remove ...]
+[remove unused FeedPresenter logic]
 - in line the table = "Feed"
 [inline param]
 - now the goal is to repeat the same but with image data loading
