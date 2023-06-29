@@ -2880,10 +2880,11 @@ public display(_ viewModel: FeedImageViewModel<... {} (empty this func) TS
 [replace FeedImagePresenter with LoadResourcePresenter]
 - clean the FeedImagePresenter (keep only the map func)
 - remove FeedImageView
-- update FeedImageViewModel (only location and description)
-- fix FeedImagePresenterTests (onl test_map... remove generic)
-- in FeedImageCellController (remove FeedImage and generic for FeedImageViewModel
-- remove public display(_ viewModel: FeedImageViewModel<... {}
+- update FeedImageViewModel (only location and description related things - remove generic Image)
+- fix FeedImagePresenterTests (only test_map... remove generic)
+- in FeedImageCellController (remove FeedImageView and generic for FeedImageViewModel)
+- remove public display(_ viewModel: FeedImageViewModel<... {} (EssentialFeed) TS
+- (CI_iOS) BE
 - in FeedSnapshotTests:
 - remove generic from FeedImageViewModel
 - private extension FeedViewController..
@@ -2901,11 +2902,12 @@ if let image = image {
 } else {
     controller?.display(ResourceErrorViewModel(message: "any")
 }
-- now we can remove all and only left description and location TS
-(EssentialApp) TF
+- now we need to send all the necesary messages to the "views" in this case the FeedImageCellController
+- (EssentialFeediOS) TS
+- (EssentialApp) TF
 - delete FeedImageDataPresentationAdapter
 - in FeedViewAdapter remove generics from the FeedIamgePresenter
-[remove ...]
+[remove unused FeedImagePresenter logic]
 - add EssentialFeedTests/Image Comments Presentation folder (after Image Comments API)
 - create ImageCommentsPresenterTests (copy and paste from FeedPresenterTests)
 - remove the map test replace FeedPresenter to ImageCommentsPresenter and ""
