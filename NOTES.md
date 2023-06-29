@@ -2926,7 +2926,7 @@ if let image = image {
 - copy and paste from SharedLocalizationTests TF
 - table = "ImageComments" bundle(for: ImageCommentsPresenter.self (import EssentialFeed)
 - add the localized versions TS 
-[]
+[localize image comments title]
 - the idea now is to add the viewmodel model etc
 - in ImageCommentsPresenterTests: 
 T) test_map_createsViewModels() {
@@ -2936,8 +2936,8 @@ T) test_map_createsViewModels() {
          username: "a username"
     ] "another message", "another username" now.adding(days: -1)
 }
-- in FeedCAhceTestHelpers
-extension Data {
+- in FeedCacheTestHelpers
+extension Datae {
     func adding(minutes)..
     func adding(days)..
 }
@@ -2945,9 +2945,9 @@ extension Data {
 T) test_map_createViewModel ..
 let viewModel = ImageCommentsPresenter.map(comments)
 XCTAssertEqual(viewModel.comments, [
-    ImageCommentsViewModel(
+    ImageCommentViewModel(
         message: "a message",
-        date: "5 min ago",
+        date: "5 minutes ago",
         username: "a username"
     ), idem "1 day ago"
 ]
@@ -2955,7 +2955,7 @@ in ImageCommentsPresenter:
 public struct ImageCommentsViewModel: Equatable {
     public let comments: [ImageCommentViewModel]
 }
-public struct ImageComment { 
+public struct ImageCommentViewModel { 
     public let message: String
     public let date: String
     public let username: String
@@ -2971,7 +2971,7 @@ public static func map(_ comments: [ImageComment]) -> ImageCommentsViewModel {
         date: formatter.localizedString(for: comment.createdAt, relativeTo: Date()),
         username: comment.username
 } TS
-[map image...]
+[map ImageComments into ImageCommentsViewModels]
 - but the test depend on locale, calendar, language etc
 - inject all of these to run in any environment
 - son in the test
