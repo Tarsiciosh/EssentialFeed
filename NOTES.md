@@ -2609,3 +2609,397 @@ class LoaderSpy: FeedImageDataLoader {
 - delete HTTPClientSpy
 [remove unused test spy]
 ```
+
+### 2) [Image Comments Presentation] Reusable Presentation Logic
+```
+- we can add a delay to the feed loader and image data loader to see the changing states 
+httpClient
+    .getPublisher(url: url)
+    .delay(for: 2, scheduler: DispatchQueue.main)
+...
+- the idea is to have different modules not depending from each other
+Feed Presentation module: 
+(FeedPresenter mapping FeedImage into FeedViewModel)
+(FeddImagePresenter mapping FeedImage into FeedImageViewModel)
+Image Comments Presentation module:
+(ImageCommentsPresenter mapping ImageComments into ImageCommentsViewModel)
+- so the flow would be (using the FeedPresenter and FeedImagePresenter as examples)
+- data in -> creates view models -> data out to the UI
+- void -> creates view models -> sends to the UI (didStartLoadingFeed)
+- [FeedImage] -> creates view models -> sends to the UI (didFinishLoadingFeed with feed)
+- Error -> creates view models -> send to the UI (didFinishLoadingFeed with error)
+- so the generic case would be:  
+- Resource -> create ResourceViewModel -> sends to the UI 
+- Data -> UIImage -> send to the UI (we can apply the generic case here also)
+- the idea is to create a generic presenter: LoadResourcePresenter
+- create EssentialFeedTests/Shared Presentation/LoadResourcePresenterTests (below Helpers folder)
+- copy the tests from the FeedPresenterTests TS
+- find and replace FeedPresenter -> LoadResourcePresenter (4) BE
+- create EssentialFeed/Shared Presentation/LoadResourcePresenter (below Shared API Infra)
+- copy and paste from FeedPresenter
+[duplicate FeedPresenter as LoadResourcePresenter]
+- search for what it is specific and delete it (tests and production code) i.e. title
+[remove title from generic presenter since it's specific to each presenter]
+T) test_didStartLoading_displayNoErrorMessagesAndStartsLoading
+- didStartLoading (test and production)
+[rename method]
+the idea is to convert a "resouce" to "resource view model"
+T) test_didFinishLoadingResource_displaysResourceAndStopsLoading
+let (sut, view) = makeSUT(mapper: { resource in
+    resource + " view model"
+})
+sut.didFinishLoading(with: "resource")
+...
+.display(resourceViewModel: "resource view model")
+.dipslay(isLoading: false)
+- add the mapper to the makeSUT (mapper: @escaping (String) -> String) = { _ in "any"}
+- add the mapper to the LoadResourcePresenter (on top) typealias Mapper = (String) -> String 
+- hold a reference to it (private let mapper: Mapper) and set in the init
+- pass the resource directly 
+- fix makeSUT BE
+- change didFinishLoading to match the new types 
+feedView.display(resource) BE cannot convert value type String to FeedViewModel
+- add public protocol ResourceView {
+    func display(_ viewModel: String)
+}
+- change the init and stored property for new resourceView BE
+- modify spy case display(resourceViewModel: String) TF
+- add the mapper in LoadResourcePresenter
+[displays mapped resource on successful resource loading]
+- add the generic type 
+public protocol ResourceView {
+    associatedtype ResourceViewModel
+    func display(_ viewModel: ResourceViewModel)
+}
+LoadResourcePresenter<Resource, View: ResourceView>
+    public typealias Mapper = (Resource) -> View.ResourceViewModel
+...
+private let resourceView: View
+- fix the tests with the generic <String, ViewSpy>
+- add typealias ResourceViewModel = String
+- to avoid duplication add private typealias SUT = LoadResourcePresenter<String, ViewSpy>
+- (above the makeSUT func)
+[make LoadResourcePresenter generic over the Resource types]
+T) test_didFinishLoadingWithError...
+- rename method didFinishLoading(with error: Error) TS
+- rename ...localized("GENERIC_CONNECTION_ERROR" (global find and replace)
+[replace "FEED_VIEW_CONNECTION_ERROR" key with "GENERIC_CONNECTION_ERROR"]
+- don't like the idea of the key be used in different modules also not define in the String Files 
+- create a new Shared.strings file in hte Shared Presentation "module"
+- move the generic connection error to the new file 
+- fix LoadResourcePresenterTests tests with table "Shared"
+- and update the LoadResourcePresenter:
+- private var loadError: String (tableName "Shared", bundle: Self.self) 
+- comment: "Error ... can't load the resource ..."
+- in FeedPresenterTests:
+- ... localized( ...key: String, table: String = "Feed"
+- and pass the table in the error case 
+- change FeedPresenter with "Shared" (this is only temporary to make the tests pass)
+- add a new test SharedPresentation/SharedLocalizationTests 
+- (copy and paste from FeedLoalizationTests) table Shared, 
+- bundle LoadResourcePresenter<Any, DummyView>.self
+- private class DummyView: ResourceView {  .. Any ... }
+- add localization (right pane) for all languages TS 
+- change scheme to EssentialApp TF
+- in FeedUIImtegrationTest we can create a DSL 
+T) test_loadFeedCompletion_rendersErrorMessageOnErrorUntilNextReload
+... (sut.errorMessage, loadError)
+- in FeedUIIntegrationTests+Localization: 
+- var loadError: String {
+    localized("GENERIC_CONNECTION_ERROR", table: "Shared")
+..
+    func localized(_ key: String, table: String = "Feed"
+} TS
+- but still is not a good idea because the tables and key can change
+- in LoadResourcePresenter make loadError public static
+- then the DSL for the test
+var loadError: String{
+    LoadResourcePresenter<Any, DummyView>.loadError (add again the DummyView)
+}
+- remove the localized helper method BE
+- create a new DSL feedTitle
+- back in FeedUIIntegrationTests+Localization
+var feedTitle: String {
+    FeedPresenter.title
+}
+- now the test don't depend on the keys anymore TS
+- we already test the keys in the presentation layer
+[move "GENERIC_CONNECTION_ERROR" localization key to new Shared.strings]
+- now the SharedLocalizationTests and FeedLocalizationTests are very similar 
+- method to refactor: select eveything that is similar -> refactor extract method
+- helper name is assertLocalizedKeyAndValues(in ) move it to the helper section
+- move all helpers methods into the EssentialFeedTests/Helpers/SharedLocalizationTestHelpers
+- inject file and line to the assetLocalizedKey... (3 places)
+- rename presentationBundle to bundle
+- use new method in FeedLocalizationTests
+[remove duplication in the localization tests]
+- LoadResourcePresenter still depend on types that lives in the Feed Presentation module
+- rename FeedLoadingView to ResourceLoadingView (in all the project)
+- create Shared Presentation/ResourceLoadingView (cut and paste the old one) 
+- rename and move also ResouceLoadingViewModel 
+[rename and move ResourceLoadingView and ResouceLoadingViewModel to Shared module]
+- repeate the same for ResourceErrorView and ResourceErrorViewModel (do it manually cause it failed)
+[rename and move ResourceErrorView and ViewModel to Shared module]
+- in FeedPresenterTests (now the goal is to implement the FeedPresenter using the generic one)
+T) test_map_createsViewModels
+- create a feed and pass it to the FeedPresenter map function 
+- assert that the vieModel.feed is equal to the feed 
+- add the map function to the FeedPresenter ([FeedImage] -> FeedViewModel) public static
+- use it in the didFinishLoadingFeed func (just to test it more)
+[add FeedPresenter map]
+- now we have all we need to replace in the composition with the generic one
+- in FeedUIComposer (EssentialApp scheme)
+- replace the FeedPresenter with the LoadResourcePresenter
+- FeedViewAdapter needs now to implement the ResourceView protocol
+- FeedLoaderPresentationAdapter presenter in now a LoadResourcePresenter<[FeedImage],
+- FeedViewAdapter>
+- update methods names 
+- add the mapper function (map func created previously) TS
+- the associated type ResourceViewModel is infered to be FeedViewModel because the FeedViewAdapter
+- conforms to the ReourceView and implements the method display with that type
+[replace FeedPresenter with generic presenter]
+- remove all logic that is no longer need from the FeedPresenter (only remains the title and map)
+- remove from FeedPresenterTests uneded tests (localized title and map)
+[remove unused FeedPresenter logic]
+- in line the table = "Feed"
+[inline param]
+- now the goal is to repeat the same but with image data loading to do so we can 
+- make the presentation adapter generic (take FeedLoaderPresentationAdapter as a model)
+- so rename it to LoadResourcePresentatioAdapter
+- this is the component that makes the actual call to the source and pass the info to the presenter
+- LoadResourcePresentationAdapter<Resource, View: ResourceView>
+- feedLoader -> loader (also in init) 
+- feed -> resource (update all types)
+- move the conformance of the FeedViewControllerDelegate to an extension
+- in didRequestFeedRefresh call loadResource (new name) 
+- (EsentialApp scheme) BE
+- in FeedUIComposer:
+- LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter> TS
+[make Presentation Adapter generic so it can be reused]
+- now the idea is to replace the FeedImagePresenter by the new generic one
+- in the FeedImagePresenter:
+- the FeedImageViewModel has the image view part but also the loading (so it need to be splitted)
+- in FeedImagePrsenterTests:
+T) test_map_createsViewModel()
+- create an image (uniqueImage) and map it with a FeedImagePresenter.map
+- XCTAssert(viewModel.description, image.description) also .location
+- add the generics FeedImagePresenter<ViewSpy, AnyImage>
+- create the map function public static map(_ image: FeedImage) -> FeedImageViewModel<Image> TS
+[add FeedImagePresenter map]
+- in FeedViewAdapter: 
+- replace the old FeedImageDataLoaderPresentationAdapter with the generic one
+- LoadResourcePresentatioAdapter<Data, FeedImageCellController>
+- pass a custom closure that calls the imageLoader with the model.url
+- (this is called partial application of functions)
+LoadResourcePresentationAdapter<Data,  
+WeakRefVirtualProxy<FeedImageCellController>>(loader: { [imageLoader] in
+    imageLoader(model.url)
+})
+- we can pass the viewModel to the FeedImageCellController directly
+- (things that don't change can be passed by construction injection, things that can be change
+- by property injection or method injection)
+let view = FeedImageCellController(
+    viewModel: FeedImagePresenter.map(model),
+    delegate: adapter)
+- with this we can get rid of the custom FeedImageDataLoaderPresentationAdapter and use the generic
+- change the FeedImageCellController to get the viewModel: FeedImageViewModel<UIImage>
+- and hold a reference to it 
+- move all the settings of location and descrition to the view(in) func (cell creation) 
+- (EssentialFeed) TS 
+- (EssentialApp scheme) BE
+- change the WeakRefVirtualProxy extension for FeedImageView to ResourceView 
+- T.ResourceViewMode == UIImage (UIImage) model: UIImage
+- add ImageCellController conformance to the ResourceView protocol
+public typealias ResourceViewModel = UIImage (on top)
+...
+add public func display(_ viewModel: UIImage) {
+    cell?.feedImageView.setImageAnimated(viewModel)
+} BE
+- in FeedViewAdapter:
+- FeedImagePresenter<FeedImageCellController, UIImage>
+- in LoadResourcePresentationAdapter:
+- add extension to LoadResourcePresentatioAdapter conforming to FeedImageCellControllerDelegate
+func didRequestImage() {
+    loadResource()
+}
+func didCancelImageRequest() {
+    cancellable?.cancel()
+} BE
+in FeedViewAdapter:
+- replace the FeedImagePresenter with the new generic
+LoadResourcePresenter(
+    resourceView: WeakRefVirtualProxy(view)
+    loadingView: WeakRefVirtualProxy(view)
+    errorView: WeakRefVirtualProxy(view)
+    mapper: UIImage.init(data:)
+)
+- add ResourceLoadingView and ResourceErrorView conformance to the FeeImageCellController
+public func display(_ viewModel: ResourceLoadingView) {
+    cell?.feedImageContainer.isShimmering = viewModel.isLoading
+}
+public func display(_ viewModel: ResourceErrorViewModel) {
+    cell?.feedImageRetryButton.isHidden = viewModel.message == nil
+}
+- UIImage.init(data:) has an error
+- if the image fails to be mapped it should show the retry button 
+- in the LoadResourcePresenter:
+- prublic typealias ... () throws -> ... 
+- in the LoadResourcePresenterTests:
+T) test_didFinishLoadingWithMapperError_displaysLocalizedErrorMessageAndStopsLoading
+let (sut, view) = makeSUT(mapper: { resource in 
+    throw anyError()
+}
+sut.didFinishLoading(with: "resource")
+XCTAssertEqual(view.messages, [
+    .display(errorMessage: localized("GENERIC_CONNECTION_ERROR")), 
+]
+- in LoadResourcePresenter 
+public func didFinishLoading(with resource: Resource) {
+    do {
+        resourceView.display(try mapper(resource)
+        laodingView.display(Resou...)
+    } catch {
+        didFinishLoading(with: error)
+    }
+} (EssentialFeed scheme) TS
+[display error on mapper error] only commit this
+- back to the FeedViewAdapter:
+mapper: { data in 
+    guard let image = UIImage(data: data) else {
+        throw InvalidImageDataError()
+    }
+    return image
+}
+private struct InvalidImageDataError: Error {} TF
+- in FeedIamgeCellController:
+func view...
+cell?.descriptionLabel.text = viewModel.description
+cell?.onRetry = delegate.didRequestImage (add this line)
+public display(_ viewModel: FeedImageViewModel<... {} (empty this func) TS
+- add Cancellable = nil (LoadResourePresentationAdapter)
+[replace FeedImagePresenter with LoadResourcePresenter]
+- clean the FeedImagePresenter (keep only the map func)
+- remove FeedImageView
+- update FeedImageViewModel (only location and description related things - remove generic Image)
+- fix FeedImagePresenterTests (only test_map... remove generic)
+- in FeedImageCellController (remove FeedImageView and generic for FeedImageViewModel)
+- remove public display(_ viewModel: FeedImageViewModel<... {} (EssentialFeed) TS
+- (CI_iOS) BE
+- in FeedSnapshotTests:
+- remove generic from FeedImageViewModel
+- private extension FeedViewController..
+...FeedImageCellController(viewModel: stub.viewModel, ...
+private class ImageStub..
+    let image: UIImage?
+    init ..
+        self.viewModel =
+        self.image = image
+...didRequest...
+controller?.display(ResourceLoadingViewModel(isLoading: false)
+if let image = image {
+    controller?.display(image) 
+    controller?.display(ResourceErrorViewModel(message: .none)
+} else {
+    controller?.display(ResourceErrorViewModel(message: "any")
+}
+- now we need to send all the necesary messages to the "views" in this case the FeedImageCellController
+- (EssentialFeediOS) TS
+- (EssentialApp) TF
+- delete FeedImageDataPresentationAdapter
+- in FeedViewAdapter remove generics from the FeedIamgePresenter
+[remove unused FeedImagePresenter logic]
+- add EssentialFeedTests/Image Comments Presentation folder (after Image Comments API)
+- create ImageCommentsPresenterTests (copy and paste from FeedPresenterTests)
+- remove the map test replace FeedPresenter to ImageCommentsPresenter and ""
+- "IMAGE_COMMENTS_VIEW_TITLE"
+- table = "ImageComments"
+- create EssentialFeed/Image Comments Presentation (after Image Comments API)
+- create Image Comments Presentation/ImageCommentsPresenter (copy and paste from FeedPresenter) BS
+- create Image Comments Presentation/ImageComments.strings
+- "IMAGE_COMMENST_VIEW_TITLE" = "Comments"
+- bundle Self.self "Title for the image comments view"
+[add...]
+- create EssentialFeedTests/Image Comments Presentation/ImageCommentsLocalizationTests
+- copy and paste from SharedLocalizationTests TF
+- table = "ImageComments" bundle(for: ImageCommentsPresenter.self (import EssentialFeed)
+- add the localized versions TS 
+[]
+- the idea now is to add the viewmodel model etc
+- in ImageCommentsPresenterTests: 
+T) test_map_createsViewModels() {
+    let now = Date()
+    let comments = [
+        ImageComment(id: message: "a message", createdAt: now.adding(minutes: -5),
+         username: "a username"
+    ] "another message", "another username" now.adding(days: -1)
+}
+- in FeedCAhceTestHelpers
+extension Data {
+    func adding(minutes)..
+    func adding(days)..
+}
+- move this extension to the SharedTestHelpers BS
+T) test_map_createViewModel ..
+let viewModel = ImageCommentsPresenter.map(comments)
+XCTAssertEqual(viewModel.comments, [
+    ImageCommentsViewModel(
+        message: "a message",
+        date: "5 min ago",
+        username: "a username"
+    ), idem "1 day ago"
+]
+in ImageCommentsPresenter:
+public struct ImageCommentsViewModel: Equatable {
+    public let comments: [ImageCommentViewModel]
+}
+public struct ImageComment { 
+    public let message: String
+    public let date: String
+    public let username: String
+    create init
+}
+public static func map(_ comments: [ImageComment]) -> ImageCommentsViewModel {
+    ImageCommentsViewModel(comments: [])
+} TF
+... map { comment in
+    let formatter = RelativeDateTimeFormatter()
+    return ImageCommentViewMode(
+        message: comment.message,
+        date: formatter.localizedString(for: comment.createdAt, relativeTo: Date()),
+        username: comment.username
+} TS
+[map image...]
+- but the test depend on locale, calendar, language etc
+- inject all of these to run in any environment
+- son in the test
+T) test_map..
+let now = Date()
+let calendar = Calendar(identifier: .gregorian)
+let locale = Locale(identifier: "en_US_POSIX"
+... viewModel .. map {
+    comments,
+    currentDate: now,
+    calendar: calendar,
+    locale: locale
+}
+- add the parameters to the map func with defaults (.current)
+- set the formatter calendar, locale and use the currentDate TS
+- test with other local "pt_BR" TF hà 5 minutos, hà 1 dia TS
+- restore english version
+[inject ...]
+- inject calendar in the adding minutes and day helpers (use this in the test)
+[inject ...]
+- in FeedUIComposer
+private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapters>
+- get rid of Presenter you can use the viewModel initializer instead e.g.
+public struct FeedViewModel {
+    public let feed: [FeedImage]
+    
+    public init(feed: [FeedImage]) {
+        self.feed = feed
+    }
+} and passs to the mapper this init
+- other way of handling the strings files is to have only one in the composition root and inject
+- it with contruction injection when instanciating the types 
+- 
+```
