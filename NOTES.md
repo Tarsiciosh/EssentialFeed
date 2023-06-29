@@ -2786,15 +2786,16 @@ T) test_map_createsViewModel()
 - add the generics FeedImagePresenter<ViewSpy, AnyImage>
 - create the map function public static map(_ image: FeedImage) -> FeedImageViewModel<Image> TS
 [add FeedImagePresenter map]
+- in FeedViewAdapter: 
 - replace the old FeedImageDataLoaderPresentationAdapter with the generic one
-- LoadResourcePresentationAdapter<Data, FeedImageCellController>
+- LoadResourcePresentatioAdapter<Data, FeedImageCellController>
 - pass a custom closure that calls the imageLoader with the model.url
 - (this is called partial application of functions)
 LoadResourcePresentationAdapter<Data,  
 WeakRefVirtualProxy<FeedImageCellController>>(loader: { [imageLoader] in
     imageLoader(model.url)
 })
-- we can pass to the FeedImageCellController directly the viewModel
+- we can pass the viewModel to the FeedImageCellController directly
 - (things that don't change can be passed by construction injection, things that can be change
 - by property injection or method injection)
 let view = FeedImageCellController(
@@ -2803,24 +2804,28 @@ let view = FeedImageCellController(
 - with this we can get rid of the custom FeedImageDataLoaderPresentationAdapter and use the generic
 - change the FeedImageCellController to get the viewModel: FeedImageViewModel<UIImage>
 - and hold a reference to it 
-- the setting of setting the location and description can be moved to cell creation time
+- move all the settings of location and descrition to the view(in) func (cell creation) 
+- (EssentialFeed) TS 
 - (EssentialApp scheme) BE
-- change the WeakRefVirtualProxy extension FeedImageView -> ResourceView 
-- T.ResourceViewMode == UIImage (UIImage)
+- change the WeakRefVirtualProxy extension for FeedImageView to ResourceView 
+- T.ResourceViewMode == UIImage (UIImage) model: UIImage
 - add ImageCellController conformance to the ResourceView protocol
-public typealias ResourceViewModel = UIImage
+public typealias ResourceViewModel = UIImage (on top)
 ...
-public func display(_ viewModel: UIImage) {
+add public func display(_ viewModel: UIImage) {
     cell?.feedImageView.setImageAnimated(viewModel)
 } BE
+- in FeedViewAdapter:
 - FeedImagePresenter<FeedImageCellController, UIImage>
-- add extension to LoadResourcePresentationAdapter conforming to FeedImageCellControllerDelegate
+- in LoadResourcePresentationAdapter:
+- add extension to LoadResourcePresentatioAdapter conforming to FeedImageCellControllerDelegate
 func didRequestImage() {
     loadResource()
 }
 func didCancelImageRequest() {
     cancellable?.cancel()
 } BE
+in FeedViewAdapter:
 - replace the FeedImagePresenter with the new generic
 LoadResourcePresenter(
     resourceView: WeakRefVirtualProxy(view)
@@ -2830,22 +2835,23 @@ LoadResourcePresenter(
 )
 - add ResourceLoadingView and ResourceErrorView conformance to the FeeImageCellController
 public func display(_ viewModel: ResourceLoadingView) {
-    cell?.feeImageContainer.isShimmering = viewModel.isLoading
+    cell?.feedImageContainer.isShimmering = viewModel.isLoading
 }
 public func display(_ viewModel: ResourceErrorViewModel) {
     cell?.feedImageRetryButton.isHidden = viewModel.message == nil
 }
-- if the image fails to be mapped it should show the retry button
+- UIImage.init(data:) has an error
+- if the image fails to be mapped it should show the retry button 
 - in the LoadResourcePresenter:
 - prublic typealias ... () throws -> ... 
-- in the LoadResourcePresenterTests
+- in the LoadResourcePresenterTests:
 T) test_didFinishLoadingWithMapperError_displaysLocalizedErrorMessageAndStopsLoading
 let (sut, view) = makeSUT(mapper: { resource in 
     throw anyError()
 }
 sut.didFinishLoading(with: "resource")
 XCTAssertEqual(view.messages, [
-    
+    .display(errorMessage: localized("GENERIC_CONNECTION_ERROR")), 
 ]
 - in LoadResourcePresenter 
 public func didFinishLoading(with resource: Resource) {
@@ -2855,8 +2861,8 @@ public func didFinishLoading(with resource: Resource) {
     } catch {
         didFinishLoading(with: error)
     }
-} TS
-[display error on mapper error]
+} (EssentialFeed scheme) TS
+[display error on mapper error] only commit this
 - back to the FeedViewAdapter:
 mapper: { data in 
     guard let image = UIImage(data: data) else {

@@ -44,12 +44,23 @@ final class LoadResourcePresenterTests: XCTestCase {
         ])
     }
     
+    func test_didFinishLoadingWithMapperError_displaysLocalizedErrorMessageAndStopsLoading() {
+        let (sut, view) = makeSUT(mapper: { resouce in
+            throw anyNSError()
+        })
+        sut.didFinishLoading(with: "resource")
+        XCTAssertEqual(view.messages, [
+            .display(errorMessage: localized("GENERIC_CONNECTION_ERROR")),
+            .display(isLoading: false)
+        ])
+    }
+    
     //MARK: - Helpers
     
     private typealias SUT = LoadResourcePresenter<String, ViewSpy>
     
     private func makeSUT(
-        mapper: @escaping (String) -> String = { _ in "any"},
+        mapper: @escaping (String) throws -> String = { _ in "any"},
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (sut: SUT, view: ViewSpy) {
