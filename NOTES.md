@@ -2873,10 +2873,11 @@ mapper: { data in
 private struct InvalidImageDataError: Error {} TF
 - in FeedIamgeCellController:
 func view...
-cell?.onRetry = delegate.didRequestImage
-public display(_ viewModel: FeedImageViewModel<... {} TS
+cell?.descriptionLabel.text = viewModel.description
+cell?.onRetry = delegate.didRequestImage (add this line)
+public display(_ viewModel: FeedImageViewModel<... {} (empty this func) TS
 - add Cancellable = nil (LoadResourePresentationAdapter)
-[replace...]
+[replace FeedImagePresenter with LoadResourcePresenter]
 - clean the FeedImagePresenter (keep only the map func)
 - remove FeedImageView
 - update FeedImageViewModel (only location and description)
