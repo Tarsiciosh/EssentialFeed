@@ -2908,6 +2908,9 @@ if let image = image {
 - delete FeedImageDataPresentationAdapter
 - in FeedViewAdapter remove generics from the FeedIamgePresenter
 [remove unused FeedImagePresenter logic]
+- create typealiases for the adapter to shorten the code (in FeedUIComposer and FeedViewAdapter)
+[add type aliases to shorten type definitions with generics]
+[move UIImage creation to a tryMake extension]
 - add EssentialFeedTests/Image Comments Presentation folder (after Image Comments API)
 - create ImageCommentsPresenterTests (copy and paste from FeedPresenterTests)
 - remove the map test replace FeedPresenter to ImageCommentsPresenter and ""
@@ -2916,9 +2919,9 @@ if let image = image {
 - create EssentialFeed/Image Comments Presentation (after Image Comments API)
 - create Image Comments Presentation/ImageCommentsPresenter (copy and paste from FeedPresenter) BS
 - create Image Comments Presentation/ImageComments.strings
-- "IMAGE_COMMENST_VIEW_TITLE" = "Comments"
+- "IMAGE_COMMENST_VIEW_TITLE" = "Comments";
 - bundle Self.self "Title for the image comments view"
-[add...]
+[add image comments title]
 - create EssentialFeedTests/Image Comments Presentation/ImageCommentsLocalizationTests
 - copy and paste from SharedLocalizationTests TF
 - table = "ImageComments" bundle(for: ImageCommentsPresenter.self (import EssentialFeed)
