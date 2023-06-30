@@ -2908,6 +2908,9 @@ if let image = image {
 - delete FeedImageDataPresentationAdapter
 - in FeedViewAdapter remove generics from the FeedIamgePresenter
 [remove unused FeedImagePresenter logic]
+- create typealiases for the adapter to shorten the code (in FeedUIComposer and FeedViewAdapter)
+[add type aliases to shorten type definitions with generics]
+[move UIImage creation to a tryMake extension]
 - add EssentialFeedTests/Image Comments Presentation folder (after Image Comments API)
 - create ImageCommentsPresenterTests (copy and paste from FeedPresenterTests)
 - remove the map test replace FeedPresenter to ImageCommentsPresenter and ""
@@ -2916,14 +2919,14 @@ if let image = image {
 - create EssentialFeed/Image Comments Presentation (after Image Comments API)
 - create Image Comments Presentation/ImageCommentsPresenter (copy and paste from FeedPresenter) BS
 - create Image Comments Presentation/ImageComments.strings
-- "IMAGE_COMMENST_VIEW_TITLE" = "Comments"
+- "IMAGE_COMMENST_VIEW_TITLE" = "Comments";
 - bundle Self.self "Title for the image comments view"
-[add...]
+[add image comments title]
 - create EssentialFeedTests/Image Comments Presentation/ImageCommentsLocalizationTests
 - copy and paste from SharedLocalizationTests TF
 - table = "ImageComments" bundle(for: ImageCommentsPresenter.self (import EssentialFeed)
 - add the localized versions TS 
-[]
+[localize image comments title]
 - the idea now is to add the viewmodel model etc
 - in ImageCommentsPresenterTests: 
 T) test_map_createsViewModels() {
@@ -2933,8 +2936,8 @@ T) test_map_createsViewModels() {
          username: "a username"
     ] "another message", "another username" now.adding(days: -1)
 }
-- in FeedCAhceTestHelpers
-extension Data {
+- in FeedCacheTestHelpers
+extension Datae {
     func adding(minutes)..
     func adding(days)..
 }
@@ -2942,9 +2945,9 @@ extension Data {
 T) test_map_createViewModel ..
 let viewModel = ImageCommentsPresenter.map(comments)
 XCTAssertEqual(viewModel.comments, [
-    ImageCommentsViewModel(
+    ImageCommentViewModel(
         message: "a message",
-        date: "5 min ago",
+        date: "5 minutes ago",
         username: "a username"
     ), idem "1 day ago"
 ]
@@ -2952,7 +2955,7 @@ in ImageCommentsPresenter:
 public struct ImageCommentsViewModel: Equatable {
     public let comments: [ImageCommentViewModel]
 }
-public struct ImageComment { 
+public struct ImageCommentViewModel { 
     public let message: String
     public let date: String
     public let username: String
@@ -2968,27 +2971,27 @@ public static func map(_ comments: [ImageComment]) -> ImageCommentsViewModel {
         date: formatter.localizedString(for: comment.createdAt, relativeTo: Date()),
         username: comment.username
 } TS
-[map image...]
+[map ImageComments into ImageCommentsViewModels]
 - but the test depend on locale, calendar, language etc
 - inject all of these to run in any environment
-- son in the test
+- so, in the test
 T) test_map..
 let now = Date()
 let calendar = Calendar(identifier: .gregorian)
 let locale = Locale(identifier: "en_US_POSIX"
-... viewModel .. map {
+... viewModel ImageCommentsPresenter.map(
     comments,
     currentDate: now,
     calendar: calendar,
     locale: locale
-}
+)
 - add the parameters to the map func with defaults (.current)
 - set the formatter calendar, locale and use the currentDate TS
 - test with other local "pt_BR" TF hà 5 minutos, hà 1 dia TS
 - restore english version
-[inject ...]
+[inject currentDate, locale, and calendar to make tests reliable in any locale]
 - inject calendar in the adding minutes and day helpers (use this in the test)
-[inject ...]
+[inject calendar to make tests reliable]
 - in FeedUIComposer
 private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapters>
 - get rid of Presenter you can use the viewModel initializer instead e.g.
