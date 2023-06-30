@@ -2974,22 +2974,22 @@ public static func map(_ comments: [ImageComment]) -> ImageCommentsViewModel {
 [map ImageComments into ImageCommentsViewModels]
 - but the test depend on locale, calendar, language etc
 - inject all of these to run in any environment
-- son in the test
+- so, in the test
 T) test_map..
 let now = Date()
 let calendar = Calendar(identifier: .gregorian)
 let locale = Locale(identifier: "en_US_POSIX"
-... viewModel .. map {
+... viewModel ImageCommentsPresenter.map(
     comments,
     currentDate: now,
     calendar: calendar,
     locale: locale
-}
+)
 - add the parameters to the map func with defaults (.current)
 - set the formatter calendar, locale and use the currentDate TS
 - test with other local "pt_BR" TF hà 5 minutos, hà 1 dia TS
 - restore english version
-[inject ...]
+[inject currentDate, locale, and calendar to make tests reliable in any locale]
 - inject calendar in the adding minutes and day helpers (use this in the test)
 [inject ...]
 - in FeedUIComposer
