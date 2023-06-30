@@ -2991,7 +2991,7 @@ let locale = Locale(identifier: "en_US_POSIX"
 - restore english version
 [inject currentDate, locale, and calendar to make tests reliable in any locale]
 - inject calendar in the adding minutes and day helpers (use this in the test)
-[inject ...]
+[inject calendar to make tests reliable]
 - in FeedUIComposer
 private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapters>
 - get rid of Presenter you can use the viewModel initializer instead e.g.
