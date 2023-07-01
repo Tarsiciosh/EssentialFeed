@@ -3006,3 +3006,88 @@ public struct FeedViewModel {
 - it with contruction injection when instanciating the types 
 - 
 ```
+
+### 3 - 1) Part 1 - Adding a feature-specific UI without duplication
+```
+- the idea is to have a generic ListViewController that can handle a collection of CellController s (protocol)
+- then each case would implement the CellController protocol with the specific needs for each case
+- in FeedViewController:
+- create the CellController (public protocol
+- find and replace (this file) FeedImageCellController to CellController
+- add the methods that it needs (func view(in: UITableView) -> UITableViewCell, preload, cancelLoad)
+- make ImageCellController implement CellController (make methods public because it's a public protocol)
+- (EssentialApp) TS
+[add ..]
+- rename FeedViewController -> ListViewController
+[rename ...]
+- get rid of the protocol FeedViewControllerDelegate (all protocol with one method can be replaced with a closure)
+public var onRefresh: (() -> Void)?
+- fix issues
+- LoadResourcePresentationAdapter used to conform to that protocol (not needed anymore)
+- fix makeFeedViewController (remove delegate) compose the onReresh directly (presentationAdapter.loadResource)
+[replace]
+- create EssentialFeediOS/Shared UI (first folder) 
+- /Controllers/ListView..
+- /Views/ErrorView 
+- /Views/Helpers/UTableView+deque.., UIRefreshCon, UITalbe+resize
+- (also we can have shared storyboard and shared assets)
+[move ...]
+- create EssentialFeediOSTests/Shared UI (below helpers)
+- (EssentialFeediOS) BE rename Feed... to ListViewController
+[fix ...] (not the project - just the test change)
+- create Shared UI/ListSnapshotTests
+- move the test_emptyFeed import EssentialFeediOS @testable import EssentialFeed
+- copy makeSUT and cut emtpyFeed TF because of the snapshot files loaction
+- create Shared UI/snapshots folder (move the images needed)
+- rename to test_emptyList and helper emptyList "EMPTY_LIST_light" "E..", Cellcontroller
+- move the test_feedWithErrorMessage (repeat the procedure) listWithError, "LIST_WITH"
+[extract ...]
+- the idea is to test drive the mew UI with the snapshot tests
+- EssentialFeediOSTests/Image Comments UI/ImageCommentsSnapshotTests (below Shared UI)
+- copy test_feedWithContent -> listWithComments
+- sut.display(comments())
+- copy the makeSUT and feedWithContent (rename to comments)
+- instead of returning an ImageStub we can return CellController
+- replace ImageStubs array with ImageCommentCellController
+model: ImageCommentViewModel( message: use the same, date: "1000 year ago", username: "a long long long username"
+- create other with "East dise... " "10 day ago" "a username"
+- "nice" "1 hour ago" "a."
+- create EssentialFeediOS/Image Comments UI/Controllers (below Shared UI) /ImageCellController
+- public class (import EssentialFeed) init model keep a reference to the model
+- return an empty cell to avoid compile error
+- "IMAGE_COMMENTS_light" "IMAGE_COMMENTS_dark"
+- what about the storyboard? -> "ImageComments"
+- create Image Comments UI/Views/ (below controllers) /ImageComments
+- copy the Feed storyboard (it is hard to do it - but there is a trick) copy and paste the xml content (using diff button)
+- remove the cell
+- change assert to record
+- copy the snapshot to EssentialFeediOSTests/Image Comments UI/snapshots
+- don't like the fact that the record is not failing when run again
+- in XCTCase ... func record ... do {..  XCTAssert("Record succeded - use `assert` to compare the snapshot from now on.")}
+[add... ] (only the )
+- in ImageCommentsCellController return a ImageCommentCell
+- create ImageCommentCell (copy from FeedImageCell)
+- need three labels massageLabel, usernameLabel, dateLabel
+- now: 
+let cell = ImageCell = tableView.dequeueReusableCell
+cell.messageLabel = model.message
+cell.usernam...
+return cell 
+- BE (could not dequeue cell)
+- in storyboard set the identity and reusable identifier
+- set the labels (hook them) TF (but generate the snapshots)
+- embed the top one in a stakc view and the result with the bottom one in other stack view
+- pin the outer stack to the super view (all) (0,0,0,0) contraint to the margin = true
+- pin the inner stack to the super view (left and right) (0,0)
+- comments label lines = 0
+- the top labels are fighting now for the space (error)
+- date always visible -> content hugging priority horizontal = 250, compression resistance = 751
+- username -> content hugging priority horizontal = 252, compression resistance = 749, bold
+- date align right the date, secondary label color 
+- outter stack view spacing = 8, inner stack view spacing = 8
+- take a snaphot then make user name longer to see it cropping
+- revert record with assert  
+[imple]
+- with swift UI have a live preview for developing when you are happy take a snapshot and then automate regression testing
+- 
+```
