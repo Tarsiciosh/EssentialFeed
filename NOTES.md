@@ -3013,11 +3013,11 @@ public struct FeedViewModel {
 - then each case would implement the CellController protocol with the specific needs for each case
 - in FeedViewController:
 - create the CellController (public protocol
-- find and replace (this file) FeedImageCellController to CellController
+- find and replace (this file) FeedImageCellController to CellController 
 - add the methods that it needs (func view(in: UITableView) -> UITableViewCell, preload, cancelLoad)
 - make ImageCellController implement CellController (make methods public because it's a public protocol)
 - (EssentialApp) TS
-[add ..]
+[add CellController protocol in preparation to support any cell controller type]
 - rename FeedViewController -> ListViewController
 [rename ...]
 - get rid of the protocol FeedViewControllerDelegate (all protocol with one method can be replaced with a closure)
