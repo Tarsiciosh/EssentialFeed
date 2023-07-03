@@ -3034,15 +3034,13 @@ public var onRefresh: (() -> Void)?
 - (also we can have shared storyboard and shared assets)
 [move Shared UI to new folder]
 - create EssentialFeediOSTests/Shared UI (below helpers)
-- (EssentialFeediOS) BE rename Feed... to ListViewController
-[fix ...] (not the project - just the test change)
 - create Shared UI/ListSnapshotTests
 - move the test_emptyFeed import EssentialFeediOS @testable import EssentialFeed
 - copy makeSUT and cut emtpyFeed TF because of the snapshot files loaction
 - create Shared UI/snapshots folder (move the images needed)
-- rename to test_emptyList and helper emptyList "EMPTY_LIST_light" "E..", Cellcontroller
+- rename to test_emptyList and helper emptyList "EMPTY_LIST_light" "EMPTY..", [Cellcontroller]
 - move the test_feedWithErrorMessage (repeat the procedure) listWithError, "LIST_WITH"
-[extract ...]
+[extract shared ListViewController snapshot tests]
 - the idea is to test drive the mew UI with the snapshot tests
 - EssentialFeediOSTests/Image Comments UI/ImageCommentsSnapshotTests (below Shared UI)
 - copy test_feedWithContent -> listWithComments
