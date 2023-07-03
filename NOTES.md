@@ -3026,12 +3026,13 @@ public var onRefresh: (() -> Void)?
 - LoadResourcePresentationAdapter used to conform to that protocol (not needed anymore)
 - fix makeFeedViewController (remove delegate) compose the onReresh directly (presentationAdapter.loadResource)
 [replace FeedViewControllerDelegate with a closure]
+- reorder new shared components
 - create EssentialFeediOS/Shared UI (first folder) 
-- /Controllers/ListView..
+- /Controllers/ListViewController
 - /Views/ErrorView 
-- /Views/Helpers/UTableView+deque.., UIRefreshCon, UITalbe+resize
+- /Views/Helpers/UIRefreshControl+Helpers, UITableView+Dequeueing, UITableView+HeaderSizing
 - (also we can have shared storyboard and shared assets)
-[move ...]
+[move Shared UI to new folder]
 - create EssentialFeediOSTests/Shared UI (below helpers)
 - (EssentialFeediOS) BE rename Feed... to ListViewController
 [fix ...] (not the project - just the test change)
