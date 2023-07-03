@@ -3025,7 +3025,7 @@ public var onRefresh: (() -> Void)?
 - fix issues
 - LoadResourcePresentationAdapter used to conform to that protocol (not needed anymore)
 - fix makeFeedViewController (remove delegate) compose the onReresh directly (presentationAdapter.loadResource)
-[replace]
+[replace FeedViewControllerDelegate with a closure]
 - create EssentialFeediOS/Shared UI (first folder) 
 - /Controllers/ListView..
 - /Views/ErrorView 
