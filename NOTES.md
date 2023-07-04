@@ -3090,3 +3090,96 @@ return cell
 - with swift UI have a live preview for developing when you are happy take a snapshot and then automate regression testing
 - 
 ```
+
+### 3 - 2) Part 2 - Decoupling feature-specific UI from the Shared module
+```
+- the ImageCommentCellController has two unused methods preload and cancelload
+- violation of the interface segregation principle (empy implementations)
+- simple way to solve this to add empty implementations to an extension (like optionals)
+[add..]
+- the idea now is to replace the CellController protocol with with common abastractions given by UITableView apis
+- make a typealias CellController that conforms to UITableViewDataSourcePrefetching & ..Delegate & ..DataSource
+- when creating a cell we can get the cellController and call controller.tableView(tableView, cellForRow:..)
+- when prfetching repeat the same
+- in cancelCellControllerLoad.. we get the controller and then set to nil in the loadingControllers and return it
+- remove method with removeLoadingController
+- now in didEndDisplaying.. we can get the controller from the removeLoadingController and call the same method (dideEn..)
+- in cancelPrefetching... for each indexPath we get the controller and call cancelPref...
+- now ImageCommentCellController needs to implement the three protocols (to implement these olso need to be NSObject)
+- number of rows 1
+- cellForRow copy the existing cell creation
+- prefetch left empty
+- now repeat the same with FeedImageCellController
+- number of rows 1
+- cell for row idem
+- in prefetch call didRequestImage
+- in didEndDisplaying call cancelLoad (now it can be private)
+- in cancelPrefetching.. call cancelLoad 
+- now the cellController controls the whole lifecycle of the cell (the list view controller only send the messages) 
+- (EssentialFeedOS) TS (EssentialApp) TS
+- move implementations to extensions CellController and ResourceView, ResourseLoadingView, ResourceErrorView
+[replace custom...]
+- now we don't have the dependencies on the shared method but we have empty methods implementations
+- again a violation of the interface segregation priciple (we could repeat the same of extension with empty methods)
+- but there is a better solution to do this intead of using protocol composition into one type
+- compose them into a type that hold three types one for each implementation
+- a type that has three instances of these protocols
+- public typealias CellController = (dataSource: UITableViewDataSource, delegate: UITab..?, dataSourcePrefetching: ..?)
+- fix issues .dataSource ds (rename - the shortes the scope the shortest the name can be)
+- .delegate dl, dataSourcePrefetching dsp
+- we cannot implement a tuple - instead conform to the protocol we care about (delete the not used method)
+- FeedImageCellController: UITableViewDataSource, ..., ...
+- BE in FeedViewAdapter return the tuple CellController(view, view, view) (EssentialApp) TS
+- (EssentialFeediOS) BE
+- in ImageCommentsSnapshotTests:
+- comments(rename to commentsControllers) -> [ImageCommentsCellControllers] 
+private func comments() -> [CellController] {
+    commentsContollers().map { CellController($0, nil, nil) }
+}
+- in FeedSnapshotTests: 
+func display(_ stubs: [])
+let cells = [CellController] = ...
+return CellController(cellController, cellController, cellController) TS
+- annoying to pass three times
+- change CellController to be a struct (user let dataSource etc..)
+- create public init (_ dataSource: .. & .. & ..) 
+- that implements all of the protocols 
+- now we can pass in FeedSnaphotTest only one cellController
+- for the case that only implement one protocol:
+public init(_ dataSource: UITableDataSource) {
+    self.dataSource = dataSource
+    self.delegate = nil
+    self.dataSourcePrefetching = nil
+} 
+- make the fixes TS
+- move the CellController to its own file (import UIKit)
+[replace ..]
+- there is still a problem the error view is duplicated (we can compose storyboards)
+- the other solution is to configure the error view in code (snapshots test will check if they are the same)
+- in ErrorView: 
+- remove the outlet and change the label to be lazy 
+- textColor white, textAligment center, numOfLines 0, font systemForn(size 17)
+public override init(frame: CGRect) {
+    super.init(frame: frame)
+    configure()
+}
+required init(coder: NSCoder) { super.init(coder: coder) }
+- extract the code perform in awakefromnib (hideMessage) call it also in hideMessageAnimated
+private func configure() {
+    backgroundColor = .errorBackgroundColor 
+    configureLabel()
+    hideMessage
+}
+private func configureLabel(){
+    addSubView(label)
+    label.translateAutoRe... = false
+    NSLayoutContraints.activate([
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
+        traling 8 invert the order
+        bottom top 
+    ])
+}
+extension UIColor { static var ..}
+- in ListViewController: 
+- private(set) public var errorView = ErroView()
+```
