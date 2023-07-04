@@ -3095,8 +3095,8 @@ return cell
 ```
 - the ImageCommentCellController has two unused methods preload and cancelload
 - violation of the interface segregation principle (empy implementations)
-- simple way to solve this to add empty implementations to an extension (like optionals)
-[add..]
+- simple way to solve this to add empty implementations to a public extension (like optionals) TS
+[add default implementation for optional methods in the CellController protocol]
 - the idea now is to replace the CellController protocol with with common abastractions given by UITableView apis
 - make a typealias CellController that conforms to UITableViewDataSourcePrefetching & ..Delegate & ..DataSource
 - when creating a cell we can get the cellController and call controller.tableView(tableView, cellForRow:..)
