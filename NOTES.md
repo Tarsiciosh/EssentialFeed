@@ -3097,12 +3097,12 @@ return cell
 - violation of the interface segregation principle (empy implementations)
 - simple way to solve this to add empty implementations to a public extension (like optionals) TS
 [add default implementation for optional methods in the CellController protocol]
-- the idea now is to replace the CellController protocol with with common abastractions given by UITableView apis
+- the idea now is to replace the CellController protocol with common abastractions given by UITableView apis
 - make a typealias CellController that conforms to UITableViewDataSourcePrefetching & ..Delegate & ..DataSource
 - when creating a cell we can get the cellController and call controller.tableView(tableView, cellForRow:..)
 - when prfetching repeat the same
-- in cancelCellControllerLoad.. we get the controller and then set to nil in the loadingControllers and return it
-- remove method with removeLoadingController
+- in cancelCellControllerLoad.. we get the controller and then set to nil in the loadingControllers and return it (?)
+- rename method with removeLoadingController
 - now in didEndDisplaying.. we can get the controller from the removeLoadingController and call the same method (dideEn..)
 - in cancelPrefetching... for each indexPath we get the controller and call cancelPref...
 - now ImageCommentCellController needs to implement the three protocols (to implement these olso need to be NSObject)
@@ -3116,9 +3116,9 @@ return cell
 - in didEndDisplaying call cancelLoad (now it can be private)
 - in cancelPrefetching.. call cancelLoad 
 - now the cellController controls the whole lifecycle of the cell (the list view controller only send the messages) 
-- (EssentialFeedOS) TS (EssentialApp) TS
+- (EssentialFeediOS) TS (EssentialApp) TS
 - move implementations to extensions CellController and ResourceView, ResourseLoadingView, ResourceErrorView
-[replace custom...]
+[replace custom CellController protocol with a composition of the UITableViewDataSource/Delegate/Prefetching, so we can decouple other modules from the Shared UI module]
 - now we don't have the dependencies on the shared method but we have empty methods implementations
 - again a violation of the interface segregation priciple (we could repeat the same of extension with empty methods)
 - but there is a better solution to do this intead of using protocol composition into one type
