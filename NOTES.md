@@ -3123,12 +3123,14 @@ return cell
 - again a violation of the interface segregation priciple (we could repeat the same of extension with empty methods)
 - but there is a better solution to do this intead of using protocol composition into one type
 - compose them into a type that hold three types one for each implementation
-- a type that has three instances of these protocols
+- a type that has three instances each one conforming to each protocol
+- this can be achieve using a tuple: 
 - public typealias CellController = (dataSource: UITableViewDataSource, delegate: UITab..?, dataSourcePrefetching: ..?)
 - fix issues .dataSource ds (rename - the shortes the scope the shortest the name can be)
 - .delegate dl, dataSourcePrefetching dsp
 - we cannot implement a tuple - instead conform to the protocol we care about (delete the not used method)
 - FeedImageCellController: UITableViewDataSource, ..., ...
+- ImageCommentCellController: UITableViewDataSource
 - BE in FeedViewAdapter return the tuple CellController(view, view, view) (EssentialApp) TS
 - (EssentialFeediOS) BE
 - in ImageCommentsSnapshotTests:
@@ -3140,8 +3142,8 @@ private func comments() -> [CellController] {
 func display(_ stubs: [])
 let cells = [CellController] = ...
 return CellController(cellController, cellController, cellController) TS
-- annoying to pass three times
-- change CellController to be a struct (user let dataSource etc..)
+- it worked but it's annoying to pass three times the same instance
+- change CellController to be a struct (let dataSource etc..)
 - create public init (_ dataSource: .. & .. & ..) 
 - that implements all of the protocols 
 - now we can pass in FeedSnaphotTest only one cellController
@@ -3153,7 +3155,7 @@ public init(_ dataSource: UITableDataSource) {
 } 
 - make the fixes TS
 - move the CellController to its own file (import UIKit)
-[replace ..]
+[replace protocol composition in a single type with a struct composition to prevent forcing clients to implement methods they don't care about]
 - there is still a problem the error view is duplicated (we can compose storyboards)
 - the other solution is to configure the error view in code (snapshots test will check if they are the same)
 - in ErrorView: 

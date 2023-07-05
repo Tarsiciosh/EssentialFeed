@@ -112,6 +112,7 @@
 		57CF5A8E2A538E2A00E2F628 /* LIST_WITH_ERROR_MESSAGE_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CF5A822A538E2A00E2F628 /* LIST_WITH_ERROR_MESSAGE_light.png */; };
 		57CF5A922A53902700E2F628 /* ImageCommentsSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CF5A902A53902700E2F628 /* ImageCommentsSnapshotTests.swift */; };
 		57CF5A972A5394C400E2F628 /* ImageCommentCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CF5A962A5394C400E2F628 /* ImageCommentCellController.swift */; };
+		57D182432A560B5B00A54FA4 /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D182422A560B5B00A54FA4 /* CellController.swift */; };
 		57DC04202A4E4B60007704DE /* ImageCommentsLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC041F2A4E4B60007704DE /* ImageCommentsLocalizationTests.swift */; };
 		57DC04212A4E4BD8007704DE /* ImageComments.strings in Resources */ = {isa = PBXBuildFile; fileRef = 57DC04232A4E4BD8007704DE /* ImageComments.strings */; };
 		57DCAA2128F0BF7C00EEFCAF /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DCAA1828F0BF7C00EEFCAF /* EssentialFeed.framework */; };
@@ -276,6 +277,7 @@
 		57CF5A822A538E2A00E2F628 /* LIST_WITH_ERROR_MESSAGE_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LIST_WITH_ERROR_MESSAGE_light.png; sourceTree = "<group>"; };
 		57CF5A902A53902700E2F628 /* ImageCommentsSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsSnapshotTests.swift; sourceTree = "<group>"; };
 		57CF5A962A5394C400E2F628 /* ImageCommentCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentCellController.swift; sourceTree = "<group>"; };
+		57D182422A560B5B00A54FA4 /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
 		57DC041F2A4E4B60007704DE /* ImageCommentsLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsLocalizationTests.swift; sourceTree = "<group>"; };
 		57DC04222A4E4BD8007704DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ImageComments.strings; sourceTree = "<group>"; };
 		57DC04242A4E4BDA007704DE /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/ImageComments.strings; sourceTree = "<group>"; };
@@ -681,6 +683,7 @@
 			isa = PBXGroup;
 			children = (
 				57648033299AF71A00365642 /* ListViewController.swift */,
+				57D182422A560B5B00A54FA4 /* CellController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1134,6 +1137,7 @@
 				57E0E18B2A04862500A08064 /* UITableView+HeaderSizing.swift in Sources */,
 				5755EE9929CBB3B200BF1D4F /* ErrorView.swift in Sources */,
 				5755EE9E29CBBD0600BF1D4F /* UIRefreshControl+Helpers.swift in Sources */,
+				57D182432A560B5B00A54FA4 /* CellController.swift in Sources */,
 				5714002A299D916E005666BD /* UIView+Shimmering.swift in Sources */,
 				5702DD6E29BAAE6B00EF8AD7 /* UITableView+Dequeueing.swift in Sources */,
 				57648034299AF71A00365642 /* ListViewController.swift in Sources */,
