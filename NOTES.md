@@ -3156,17 +3156,17 @@ public init(_ dataSource: UITableDataSource) {
 - make the fixes TS
 - move the CellController to its own file (import UIKit)
 [replace protocol composition in a single type with a struct composition to prevent forcing clients to implement methods they don't care about]
-- there is still a problem the error view is duplicated (we can compose storyboards)
+- there is still a problem: the error view is duplicated (we can compose storyboards like youtube video)
 - the other solution is to configure the error view in code (snapshots test will check if they are the same)
 - in ErrorView: 
 - remove the outlet and change the label to be lazy 
-- textColor white, textAligment center, numOfLines 0, font systemForn(size 17)
+- textColor white, textAligment center, numOfLines 0, font systemFont(size 17)
 public override init(frame: CGRect) {
     super.init(frame: frame)
     configure()
 }
 required init(coder: NSCoder) { super.init(coder: coder) }
-- extract the code perform in awakefromnib (hideMessage) call it also in hideMessageAnimated
+- extract the code perform in awakeFromNib (hideMessage) call it also in hideMessageAnimated
 private func configure() {
     backgroundColor = .errorBackgroundColor 
     configureLabel()
@@ -3182,6 +3182,120 @@ private func configureLabel(){
     ])
 }
 extension UIColor { static var ..}
+```
+
+### 3 - 3) Part 3 - Creating UI Programmatically, Memory Graph Debugger, Dynamic Type, and Diffable Data Sources
+```
 - in ListViewController: 
-- private(set) public var errorView = ErroView()
+- private(set) public var errorView = ErroView() - fix issues
+- create func configureErrorView (private) and call it in viewDidLoad
+let container = UIView()
+container.backgroudnColor = .clear
+container.addSubview(errorView)
+(add same code to pin it to the parent without constant)
+tableView.tableHeaderView = container
+- remove error views from storyboards (EssentialApp) BE fix issues TS
+- (EssentialFeediOS) TS
+- run the app and add a fake error (LisViewController display ..)
+- tapping on it it didn't dismisse it we should have a test to catch this
+- in FeedUIIntegrationTests:
+T) test_tapOnErrorView_hidesErrorMessage()
+copy from test_loadFeedCompletion_rendersErrorMessageOnErrorUntil..
+sut.simulateErrorViewTap()
+XCTAssertEqual(sut.errorMessage, nil)
+- in FeedViewController+TestHelpers:
+func simulateErrorViewTap {
+    errorView.simulateTap() -> but its need to be a button
+}
+- in ErrorView: change it to be a UIButton
+..configure() { addTarget(self, action: #selector(hideMessageAnimate), for .touchUpInside) 
+a button is much more testable and provide a better user experience (EssentialApp) TS
+- instead of adding a label we can use the label that the button already have
+- cut the label creating code, delete label and paste it in configureLabel (replace label with titleLabel)
+- remove autolayout but add the contentEdgeInsets = .init(top: 8, ...
+- fix message .. title(for: .normal), showAnimated and hideMessage .. setTitle(message, for: .normal) 
+(EssentialApp) TS (EssentialFeediOS) TF comparing the images there is a hugh diference in the top
+- set the contentEdgeInsets to 0 0 0 0 (then change to -2.5 0 -2.5 0) the button and set to 8 when showing a message
+- run the app - the header is not updating - when updating the table view header you need to manually update the frame 
+- when tapping the error view we need to update the header but there is no way for the listController to know
+- in ErrorView: add a callback 
+- public var onHide: (() -> Void)? call it in hideMessage
+in ListViewController:
+configureErrorView ..
+errorView.onHide = { [weak self] in self?.tableView.sizeTableHeaderToFit() } 
+but its not animated -> add self.tableView.beginUpdates() ... self.tableView.endUpdates()
+(EssentialApp) TF loader spy should have been deallocated some times it passes sometime it doesnt
+- in FeedUIIntegrationTests:
+- add a breakpoint in the trackForMemoryLeaks
+- run the tests and the po the instance
+- if running the test in isolation it doesn't happen
+- when catch then open the memory debugger EssentialAppTests -> LoaderSpy
+- the cell is holding a refernce to it -> serach the cell and the closure onRetry 
+in FeedImageCellController:
+cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
+- it's not a retain cicle but because of the animation it is retaining an instance for longer than it should
+[weakify self within onRetry closure to prevent cell from holding strong references to other components]
+- remove awakefromnib func
+- change the hideMessageAnimated to be @obj (EssentialApp) TS, (EssentialFeediOS) TS
+[configure ...]
+- in ListSnapshotTests: 
+- remove storyboard use to create a ListViewController TF
+- in ListViewController: viewDidLoad -> tableView.separatorStyle = .none (not want this)
+- add this instaed in the makeSUT of the listsnpashottests
+[run ]
+- the idea is to use dynamic types
+- in ListSnapshotsTests test_listWithErrorMessage: 
+- add a new assertion passing a contentSize (modify the iphone8 func) 
+[enable..]
+- add LIST_WITH_.._extraExtraExtraLarge record, drag the snapshot to the project
+- in ErroView, configureLabel titleLabel?.font = .preferedFont(forTextStyle: .body) and adjustFontFor.. = true
+- retake all snapshots 
+- in ImageCommentsSnapshots add new one and re record all and drag to the project
+- set dynamic fonts in storyboard username headline, date subhead, message body (automatically adjust font)
+- in FeedSanpshots repeat the same, add test, change fonts, record drag etc
+- location subhead ,description body
+[replace ...]
+- the idea is to update the table only the part that chage (diffable data sources)
+- in ListViewController replace model with private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController>
+- in CellController add extension conform to Equatable and Hashable
+- add let id: AnyHashable (could add also a default value with UUID)
+- public static func == (lhs: ...) { lhs.id == rhs.id (equatable) }
+- public static hash { hasher.combine(id) 
+- in ListViewController: dataSource... { 
+    .init(tableView: tableView) { (tableView, index, controller) -> UITableViewCell in -copy cell creating-}
+- use controller directly and index
+- remove laodingControllers
+- in display (cellControlle..
+    var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+    snapshot.appendSections([0])
+    snapshot.appendItems(cellcontrollers, toSection: 0)
+    dataSource.apply(snapshot)
+- this will check what changed and apply what it's necessary 
+- remove numberOfRowsInSection and cellForRowAtIndexPath
+- in viewDidLoad tableView.dataSource = dataSource; configureError...
+- remove removeLoadingControlles
+- cellController(at indexPath .. { dataSource.itemIdentifier(for: indexPat) }
+- use this method in all places where a cellController is needed BE
+- in FeedViewAdapter: return CellController(id: model, view) the FeedImage model is already Hashable
+- (EssentialApp) TF (26) 
+- in FeedViewController+TestHelpers:
+- numberOfRenderedImageViews... { tableView.numberOfSections == 0 ? 0: tableView.numberOfRows(inSection: feedImagesSec..}
+- to resolve the out of bound issue
+- in FeeUIIntegraionTests: the diffaible datasource is requesting the image before the image is visible 
+- in LisViewController dataSource print("\(index.row)" loads a bunch of cell (we request the image as we create the cell)
+- this can be because of wrong estimate hight -> set the table view estimate row hight to 580
+- if you cannot estimate the row height is to move the loading of the image to the 
+- othe options is to in FeeImageCellController: move delegate.didRequestImage to new willDisplay cell {  } 
+- even it is loading two images ahead of time - one solution is to set in the test the frame of the table view to small
+- value test_feedImageViewLoadingIndicator... sut.tableView.frame = CGrect.. 0 0 1 1
+- move this to a helper override loadViewIfNeeded... { super. ..  sut.tableView...} in FeedViewController+TestHelpers
+- (EssentialApp) TS (EssentialFeediOS) BE in ImageCommentsSnapshotTests comments .. id: UUID() and FeedSnapsho
+- snapshot dont match anymore there is no labels etc
+- in ListViewController:
+viewDidLayout... 
+public override func traitCollectionDidChange
+    if previous?.preferedContentSizeCategory != traitCollection.preferr
+        tableView.reloadData() run the app is works
+- (EssentialFeediOS) TS (EssentialApp) TS
+[use ...]
 ```
