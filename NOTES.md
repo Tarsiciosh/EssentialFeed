@@ -3239,10 +3239,10 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - change the hideMessageAnimated to be @obj (EssentialApp) TS, (EssentialFeediOS) TS
 [configure ErrorView programmatically so we don't duplicate layout logic in storyboards]
 - in ListSnapshotTests: 
-- remove storyboard use to create a ListViewController TF
+- remove storyboard used to create a ListViewController TF
 - in ListViewController: viewDidLoad -> tableView.separatorStyle = .none (not want this)
 - add this instaed in the makeSUT of the listsnpashottests
-[run ]
+[run ListSnapshotTests without storyboard]
 - the idea is to use dynamic types
 - in ListSnapshotsTests test_listWithErrorMessage: 
 - add a new assertion passing a contentSize (modify the iphone8 func) 
