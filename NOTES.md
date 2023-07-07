@@ -3237,7 +3237,7 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 [weakify self within onRetry closure to prevent cell from holding strong references to other components]
 - remove awakefromnib func
 - change the hideMessageAnimated to be @obj (EssentialApp) TS, (EssentialFeediOS) TS
-[configure ...]
+[configure ErrorView programmatically so we don't duplicate layout logic in storyboards]
 - in ListSnapshotTests: 
 - remove storyboard use to create a ListViewController TF
 - in ListViewController: viewDidLoad -> tableView.separatorStyle = .none (not want this)
