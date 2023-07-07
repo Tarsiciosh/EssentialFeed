@@ -3246,7 +3246,7 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - the idea is to use dynamic types
 - in ListSnapshotsTests test_listWithErrorMessage: 
 - add a new assertion passing a contentSize (modify the iphone8 func) 
-[enable..]
+[enable content size category config when taking a snapshot] commit only this
 - add LIST_WITH_.._extraExtraExtraLarge record, drag the snapshot to the project
 - in ErroView, configureLabel titleLabel?.font = .preferedFont(forTextStyle: .body) and adjustFontFor.. = true
 - retake all snapshots 
