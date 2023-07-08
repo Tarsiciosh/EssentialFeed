@@ -3247,14 +3247,14 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - in ListSnapshotsTests test_listWithErrorMessage: 
 - add a new assertion passing a contentSize (modify the iphone8 func) 
 [enable content size category config when taking a snapshot] commit only this
-- add LIST_WITH_.._extraExtraExtraLarge record, drag the snapshot to the project
+- add LIST_WITH_..light_extraExtraExtraLarge record, drag the snapshot to the project
 - in ErroView, configureLabel titleLabel?.font = .preferedFont(forTextStyle: .body) and adjustFontFor.. = true
 - retake all snapshots 
-- in ImageCommentsSnapshots add new one and re record all and drag to the project
+- in ImageCommentsSnapshots: add new one and re record all and drag to the project
 - set dynamic fonts in storyboard username headline, date subhead, message body (automatically adjust font)
 - in FeedSanpshots repeat the same, add test, change fonts, record drag etc
 - location subhead ,description body
-[replace ...]
+[replace hardcoded fonts with dynamic fonts]
 - the idea is to update the table only the part that chage (diffable data sources)
 - in ListViewController replace model with private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController>
 - in CellController add extension conform to Equatable and Hashable
