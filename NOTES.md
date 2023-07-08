@@ -3303,4 +3303,5 @@ public override func traitCollectionDidChange
 [use diffable data source to only reload cells when needed]
 [set data source default row animation to fade]
 [add `UIView.makeContainer` helper]
+[extract table view configuration into a helper method]
 ```
