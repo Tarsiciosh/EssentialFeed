@@ -3255,14 +3255,15 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - in FeedSanpshots repeat the same, add test, change fonts, record drag etc
 - location subhead ,description body
 [replace hardcoded fonts with dynamic fonts]
-- the idea is to update the table only the part that chage (diffable data sources)
-- in ListViewController replace model with private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController>
-- in CellController add extension conform to Equatable and Hashable
+- the idea is to update the table but only the part that changed (diffable data source)
+- in ListViewController:
+- replace tableModel with private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {}()
+- in CellController add extensions conforming to Equatable and Hashable
 - add let id: AnyHashable (could add also a default value with UUID)
-- public static func == (lhs: ...) { lhs.id == rhs.id (equatable) }
-- public static hash { hasher.combine(id) 
+- public static func func == (lhs: ...) { lhs.id == rhs.id (equatable) }
+- public func hash(into: hasher: inout Hasher) { hasher.combine(id) 
 - in ListViewController: dataSource... { 
-    .init(tableView: tableView) { (tableView, index, controller) -> UITableViewCell in -copy cell creating-}
+    .init(tableView: tableView) { (tableView, index, controller) in -copy cell creating code-}
 - use controller directly and index
 - remove laodingControllers
 - in display (cellControlle..
@@ -3274,7 +3275,8 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - remove numberOfRowsInSection and cellForRowAtIndexPath
 - in viewDidLoad tableView.dataSource = dataSource; configureError...
 - remove removeLoadingControlles
-- cellController(at indexPath .. { dataSource.itemIdentifier(for: indexPat) }
+- cellController(at *old forRowAt* indexPath  .. { dataSource.itemIdentifier(for: indexPath) }
+- return an optional CellController
 - use this method in all places where a cellController is needed BE
 - in FeedViewAdapter: return CellController(id: model, view) the FeedImage model is already Hashable
 - (EssentialApp) TF (26) 
@@ -3282,14 +3284,15 @@ cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
 - numberOfRenderedImageViews... { tableView.numberOfSections == 0 ? 0: tableView.numberOfRows(inSection: feedImagesSec..}
 - to resolve the out of bound issue
 - in FeeUIIntegraionTests: the diffaible datasource is requesting the image before the image is visible 
-- in LisViewController dataSource print("\(index.row)" loads a bunch of cell (we request the image as we create the cell)
+- in LisViewController dataSource .init...  print("\(index.row)" loads a bunch of cell 
+- (we request the image as we create the cell)
 - this can be because of wrong estimate hight -> set the table view estimate row hight to 580
 - if you cannot estimate the row height is to move the loading of the image to the 
 - othe options is to in FeeImageCellController: move delegate.didRequestImage to new willDisplay cell {  } 
 - even it is loading two images ahead of time - one solution is to set in the test the frame of the table view to small
 - value test_feedImageViewLoadingIndicator... sut.tableView.frame = CGrect.. 0 0 1 1
 - move this to a helper override loadViewIfNeeded... { super. ..  sut.tableView...} in FeedViewController+TestHelpers
-- (EssentialApp) TS (EssentialFeediOS) BE in ImageCommentsSnapshotTests comments .. id: UUID() and FeedSnapsho
+- (EssentialApp) TS (EssentialFeediOS) BE in ImageCommentsSnapshotTests comments .. id: UUID() and FeedSnapshop also
 - snapshot dont match anymore there is no labels etc
 - in ListViewController:
 viewDidLayout... 
@@ -3297,5 +3300,5 @@ public override func traitCollectionDidChange
     if previous?.preferedContentSizeCategory != traitCollection.preferr
         tableView.reloadData() run the app is works
 - (EssentialFeediOS) TS (EssentialApp) TS
-[use ...]
+[use diffable data source to only reload cells when needed]
 ```
