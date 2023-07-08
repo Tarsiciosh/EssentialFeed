@@ -3302,4 +3302,5 @@ public override func traitCollectionDidChange
 - (EssentialFeediOS) TS (EssentialApp) TS
 [use diffable data source to only reload cells when needed]
 [set data source default row animation to fade]
+[add `UIView.makeContainer` helper]
 ```
