@@ -3301,4 +3301,5 @@ public override func traitCollectionDidChange
         tableView.reloadData() run the app is works
 - (EssentialFeediOS) TS (EssentialApp) TS
 [use diffable data source to only reload cells when needed]
+[set data source default row animation to fade]
 ```
