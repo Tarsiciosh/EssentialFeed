@@ -3304,5 +3304,8 @@ public override func traitCollectionDidChange
 [set data source default row animation to fade]
 [add `UIView.makeContainer` helper]
 [extract table view configuration into a helper method]
-[use applySnapshotUsingReloadData on iOS 15+ to maintain the same data source behavior we have on iOS 14 and before.]
+update 1
+[use applySnapshotUsingReloadData on iOS 15+ to maintain the same data source behavior we have on iOS 14 and before.] 
+update 2 3 (not implemented yet)
+[configure Error View with the new UIButton.Configuration APIs]
 ```
