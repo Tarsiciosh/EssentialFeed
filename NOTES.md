@@ -3006,3 +3006,306 @@ public struct FeedViewModel {
 - it with contruction injection when instanciating the types 
 - 
 ```
+
+### 3 - 1) Part 1 - Adding a feature-specific UI without duplication
+```
+- the idea is to have a generic ListViewController that can handle a collection of CellController s (protocol)
+- then each case would implement the CellController protocol with the specific needs for each case
+- in FeedViewController:
+- create the CellController (public protocol
+- find and replace (this file) FeedImageCellController to CellController 
+- add the methods that it needs (func view(in: UITableView) -> UITableViewCell, preload, cancelLoad)
+- make ImageCellController implement CellController (make methods public because it's a public protocol)
+- (EssentialApp) TS
+[add CellController protocol in preparation to support any cell controller type]
+- rename FeedViewController -> ListViewController
+[rename ...]
+- get rid of the protocol FeedViewControllerDelegate (all protocol with one method can be replaced with a closure)
+public var onRefresh: (() -> Void)?
+- fix issues
+- LoadResourcePresentationAdapter used to conform to that protocol (not needed anymore)
+- fix makeFeedViewController (remove delegate) compose the onReresh directly (presentationAdapter.loadResource)
+[replace FeedViewControllerDelegate with a closure]
+- reorder new shared components
+- create EssentialFeediOS/Shared UI (first folder) 
+- /Controllers/ListViewController
+- /Views/ErrorView 
+- /Views/Helpers/UIRefreshControl+Helpers, UITableView+Dequeueing, UITableView+HeaderSizing
+- (also we can have shared storyboard and shared assets)
+[move Shared UI to new folder]
+- create EssentialFeediOSTests/Shared UI (below helpers)
+- create Shared UI/ListSnapshotTests
+- move the test_emptyFeed import EssentialFeediOS @testable import EssentialFeed
+- copy makeSUT and cut emtpyFeed TF because of the snapshot files loaction
+- create Shared UI/snapshots folder (move the images needed)
+- rename to test_emptyList and helper emptyList "EMPTY_LIST_light" "EMPTY..", [Cellcontroller]
+- move the test_feedWithErrorMessage (repeat the procedure) listWithError, "LIST_WITH"
+[extract shared ListViewController snapshot tests]
+- the idea is to test drive the new UI with the snapshot tests
+- create EssentialFeediOSTests/Image Comments UI/ImageCommentsSnapshotTests (below Shared UI)
+- copy test_feedWithContent -> listWithComments
+- sut.display(comments())
+- copy the makeSUT and feedWithContent (rename to comments)
+- instead of returning an ImageStubs we can return CellControllers
+- replace ImageStubs array with CellController
+model: ImageCommentViewModel( message: ""The East Side ..", date: "1000 year ago", username: "a long long long username"
+- create other with ""East Side Gallery.. " "10 day ago" "a username"
+- "nice" "1 hour ago" "a."
+- create EssentialFeediOS/Image Comments UI(below Shared UI)/Controllers/ImageCommentCellController
+- public class (import EssentialFeed) conforming to CellController, init model keep a reference to the model
+- return an empty cell to avoid compile error
+- "IMAGE_COMMENTS_light" "IMAGE_COMMENTS_dark"
+- what about the storyboard? -> "ImageComments"
+- create Image Comments UI/Views/ (below controllers) /ImageComments.storyboard
+- copy the Feed storyboard (it is hard to do it - but there is a trick) copy and paste the xml content (using diff button)
+- remove the cell
+- change assert to record
+- copy the snapshot to EssentialFeediOSTests/Image Comments UI/snapshots
+- don't like the fact that the record is not failing when run again
+- in XCTCase ... func record ... do {..  XCTAssert("Record succeded - use `assert` to compare the snapshot from now on.")}
+[add XCTFail to remind us to call assert after recording a snapshot]
+- in ImageCommentsCellController return a ImageCommentCell
+- create ImageCommentCell (copy from FeedImageCell)
+- need three labels massageLabel, usernameLabel, dateLabel
+- now: 
+let cell = ImageCell = tableView.dequeueReusableCell
+cell.messageLabel = model.message
+cell.usernam...
+return cell 
+- Crash (could not dequeue cell)
+- in storyboard set the identity and reusable identifier
+- set the labels (hook them) TF (but generate the snapshots)
+- embed the top one in a stakc view and the result with the bottom one in other stack view
+- pin the outer stack to the super view (all) (0,0,0,0) contraint to the margin = true
+- pin the inner stack to the super view (left and right) (0,0)
+- comments label lines = 0
+- the top labels are fighting now for the space (error)
+- date always visible -> content hugging priority horizontal = 250, compression resistance = 751
+- username -> content hugging priority horizontal = 252, compression resistance = 749, bold
+- date align right the date, secondary label color 
+- outter stack view spacing = 8, inner stack view spacing = 8
+- take a snaphot then make user name longer to see it cropping
+- revert record with assert  
+[implement Image Comments UI]
+- with swift UI have a live preview for developing when you are happy take a snapshot and then automate regression testing
+- 
+```
+
+### 3 - 2) Part 2 - Decoupling feature-specific UI from the Shared module
+```
+- the ImageCommentCellController has two unused methods preload and cancelload
+- violation of the interface segregation principle (empy implementations)
+- simple way to solve this to add empty implementations to a public extension (like optionals) TS
+[add default implementation for optional methods in the CellController protocol]
+- the idea now is to replace the CellController protocol with common abastractions given by UITableView apis
+- make a typealias CellController that conforms to UITableViewDataSourcePrefetching & ..Delegate & ..DataSource
+- when creating a cell we can get the cellController and call controller.tableView(tableView, cellForRow:..)
+- when prfetching repeat the same
+- in cancelCellControllerLoad.. we get the controller and then set to nil in the loadingControllers and return it (?)
+- rename method with removeLoadingController
+- now in didEndDisplaying.. we can get the controller from the removeLoadingController and call the same method (dideEn..)
+- in cancelPrefetching... for each indexPath we get the controller and call cancelPref...
+- now ImageCommentCellController needs to implement the three protocols (to implement these olso need to be NSObject)
+- number of rows 1
+- cellForRow copy the existing cell creation
+- prefetch left empty
+- now repeat the same with FeedImageCellController
+- number of rows 1
+- cell for row idem
+- in prefetch call didRequestImage
+- in didEndDisplaying call cancelLoad (now it can be private)
+- in cancelPrefetching.. call cancelLoad 
+- now the cellController controls the whole lifecycle of the cell (the list view controller only send the messages) 
+- (EssentialFeediOS) TS (EssentialApp) TS
+- move implementations to extensions CellController and ResourceView, ResourseLoadingView, ResourceErrorView
+[replace custom CellController protocol with a composition of the UITableViewDataSource/Delegate/Prefetching, so we can decouple other modules from the Shared UI module]
+- now we don't have the dependencies on the shared method but we have empty methods implementations
+- again a violation of the interface segregation priciple (we could repeat the same of extension with empty methods)
+- but there is a better solution to do this intead of using protocol composition into one type
+- compose them into a type that hold three types one for each implementation
+- a type that has three instances each one conforming to each protocol
+- this can be achieve using a tuple: 
+- public typealias CellController = (dataSource: UITableViewDataSource, delegate: UITab..?, dataSourcePrefetching: ..?)
+- fix issues .dataSource ds (rename - the shortes the scope the shortest the name can be)
+- .delegate dl, dataSourcePrefetching dsp
+- we cannot implement a tuple - instead conform to the protocol we care about (delete the not used method)
+- FeedImageCellController: UITableViewDataSource, ..., ...
+- ImageCommentCellController: UITableViewDataSource
+- BE in FeedViewAdapter return the tuple CellController(view, view, view) (EssentialApp) TS
+- (EssentialFeediOS) BE
+- in ImageCommentsSnapshotTests:
+- comments(rename to commentsControllers) -> [ImageCommentsCellControllers] 
+private func comments() -> [CellController] {
+    commentsContollers().map { CellController($0, nil, nil) }
+}
+- in FeedSnapshotTests: 
+func display(_ stubs: [])
+let cells = [CellController] = ...
+return CellController(cellController, cellController, cellController) TS
+- it worked but it's annoying to pass three times the same instance
+- change CellController to be a struct (let dataSource etc..)
+- create public init (_ dataSource: .. & .. & ..) 
+- that implements all of the protocols 
+- now we can pass in FeedSnaphotTest only one cellController
+- for the case that only implement one protocol:
+public init(_ dataSource: UITableDataSource) {
+    self.dataSource = dataSource
+    self.delegate = nil
+    self.dataSourcePrefetching = nil
+} 
+- make the fixes TS
+- move the CellController to its own file (import UIKit)
+[replace protocol composition in a single type with a struct composition to prevent forcing clients to implement methods they don't care about]
+- there is still a problem: the error view is duplicated (we can compose storyboards like youtube video)
+- the other solution is to configure the error view in code (snapshots test will check if they are the same)
+- in ErrorView: 
+- remove the outlet and change the label to be lazy 
+- textColor white, textAligment center, numOfLines 0, font systemFont(size 17)
+public override init(frame: CGRect) {
+    super.init(frame: frame)
+    configure()
+}
+required init(coder: NSCoder) { super.init(coder: coder) }
+- extract the code perform in awakeFromNib (hideMessage) call it also in hideMessageAnimated
+private func configure() {
+    backgroundColor = .errorBackgroundColor 
+    configureLabel()
+    hideMessage
+}
+private func configureLabel(){
+    addSubView(label)
+    label.translateAutoRe... = false
+    NSLayoutContraints.activate([
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
+        traling 8 invert the order
+        bottom top 
+    ])
+}
+extension UIColor { static var ..}
+```
+
+### 3 - 3) Part 3 - Creating UI Programmatically, Memory Graph Debugger, Dynamic Type, and Diffable Data Sources
+```
+- in ListViewController: 
+- private(set) public var errorView = ErroView() - fix issues
+- create func configureErrorView (private) and call it in viewDidLoad
+let container = UIView()
+container.backgroudnColor = .clear
+container.addSubview(errorView)
+(add same code to pin it to the parent without constant)
+tableView.tableHeaderView = container
+- remove error views from storyboards (EssentialApp) BE fix issues TS
+- (EssentialFeediOS) TS
+- run the app and add a fake error (LisViewController display ..)
+- tapping on it it didn't dismisse it we should have a test to catch this
+- in FeedUIIntegrationTests:
+T) test_tapOnErrorView_hidesErrorMessage()
+copy from test_loadFeedCompletion_rendersErrorMessageOnErrorUntil..
+sut.simulateErrorViewTap()
+XCTAssertEqual(sut.errorMessage, nil)
+- in FeedViewController+TestHelpers:
+func simulateErrorViewTap {
+    errorView.simulateTap() -> but its need to be a button
+}
+- in ErrorView: change it to be a UIButton
+..configure() { addTarget(self, action: #selector(hideMessageAnimate), for .touchUpInside) 
+a button is much more testable and provide a better user experience (EssentialApp) TS
+- instead of adding a label we can use the label that the button already have
+- cut the label creating code, delete label and paste it in configureLabel (replace label with titleLabel)
+- remove autolayout but add the contentEdgeInsets = .init(top: 8, ...
+- fix message .. title(for: .normal), showAnimated and hideMessage .. setTitle(message, for: .normal) 
+(EssentialApp) TS (EssentialFeediOS) TF comparing the images there is a hugh diference in the top
+- set the contentEdgeInsets to 0 0 0 0 (then change to -2.5 0 -2.5 0) the button and set to 8 when showing a message
+- run the app - the header is not updating - when updating the table view header you need to manually update the frame 
+- when tapping the error view we need to update the header but there is no way for the listController to know
+- in ErrorView: add a callback 
+- public var onHide: (() -> Void)? call it in hideMessage
+in ListViewController:
+configureErrorView ..
+errorView.onHide = { [weak self] in self?.tableView.sizeTableHeaderToFit() } 
+but its not animated -> add self.tableView.beginUpdates() ... self.tableView.endUpdates()
+(EssentialApp) TF loader spy should have been deallocated some times it passes sometime it doesnt
+- in FeedUIIntegrationTests:
+- add a breakpoint in the trackForMemoryLeaks
+- run the tests and the po the instance
+- if running the test in isolation it doesn't happen
+- when catch then open the memory debugger EssentialAppTests -> LoaderSpy
+- the cell is holding a refernce to it -> serach the cell and the closure onRetry 
+in FeedImageCellController:
+cell?.onRetry = { [weak self] in self?.delegate.didRequestImage() }
+- it's not a retain cicle but because of the animation it is retaining an instance for longer than it should
+[weakify self within onRetry closure to prevent cell from holding strong references to other components]
+- remove awakefromnib func
+- change the hideMessageAnimated to be @obj (EssentialApp) TS, (EssentialFeediOS) TS
+[configure ErrorView programmatically so we don't duplicate layout logic in storyboards]
+- in ListSnapshotTests: 
+- remove storyboard used to create a ListViewController TF
+- in ListViewController: viewDidLoad -> tableView.separatorStyle = .none (not want this)
+- add this instaed in the makeSUT of the listsnpashottests
+[run ListSnapshotTests without storyboard]
+- the idea is to use dynamic types
+- in ListSnapshotsTests test_listWithErrorMessage: 
+- add a new assertion passing a contentSize (modify the iphone8 func) 
+[enable content size category config when taking a snapshot] commit only this
+- add LIST_WITH_..light_extraExtraExtraLarge record, drag the snapshot to the project
+- in ErroView, configureLabel titleLabel?.font = .preferedFont(forTextStyle: .body) and adjustFontFor.. = true
+- retake all snapshots 
+- in ImageCommentsSnapshots: add new one and re record all and drag to the project
+- set dynamic fonts in storyboard username headline, date subhead, message body (automatically adjust font)
+- in FeedSanpshots repeat the same, add test, change fonts, record drag etc
+- location subhead ,description body
+[replace hardcoded fonts with dynamic fonts]
+- the idea is to update the table but only the part that changed (diffable data source)
+- in ListViewController:
+- replace tableModel with private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {}()
+- in CellController add extensions conforming to Equatable and Hashable
+- add let id: AnyHashable (could add also a default value with UUID)
+- public static func func == (lhs: ...) { lhs.id == rhs.id (equatable) }
+- public func hash(into: hasher: inout Hasher) { hasher.combine(id) 
+- in ListViewController: dataSource... { 
+    .init(tableView: tableView) { (tableView, index, controller) in -copy cell creating code-}
+- use controller directly and index
+- remove laodingControllers
+- in display (cellControlle..
+    var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+    snapshot.appendSections([0])
+    snapshot.appendItems(cellcontrollers, toSection: 0)
+    dataSource.apply(snapshot)
+- this will check what changed and apply what it's necessary 
+- remove numberOfRowsInSection and cellForRowAtIndexPath
+- in viewDidLoad tableView.dataSource = dataSource; configureError...
+- remove removeLoadingControlles
+- cellController(at *old forRowAt* indexPath  .. { dataSource.itemIdentifier(for: indexPath) }
+- return an optional CellController
+- use this method in all places where a cellController is needed BE
+- in FeedViewAdapter: return CellController(id: model, view) the FeedImage model is already Hashable
+- (EssentialApp) TF (26) 
+- in FeedViewController+TestHelpers:
+- numberOfRenderedImageViews... { tableView.numberOfSections == 0 ? 0: tableView.numberOfRows(inSection: feedImagesSec..}
+- to resolve the out of bound issue
+- in FeeUIIntegraionTests: the diffaible datasource is requesting the image before the image is visible 
+- in LisViewController dataSource .init...  print("\(index.row)" loads a bunch of cell 
+- (we request the image as we create the cell)
+- this can be because of wrong estimate hight -> set the table view estimate row hight to 580
+- if you cannot estimate the row height is to move the loading of the image to the 
+- othe options is to in FeeImageCellController: move delegate.didRequestImage to new willDisplay cell {  } 
+- even it is loading two images ahead of time - one solution is to set in the test the frame of the table view to small
+- value test_feedImageViewLoadingIndicator... sut.tableView.frame = CGrect.. 0 0 1 1
+- move this to a helper override loadViewIfNeeded... { super. ..  sut.tableView...} in FeedViewController+TestHelpers
+- (EssentialApp) TS (EssentialFeediOS) BE in ImageCommentsSnapshotTests comments .. id: UUID() and FeedSnapshop also
+- snapshot dont match anymore there is no labels etc
+- in ListViewController:
+viewDidLayout... 
+public override func traitCollectionDidChange
+    if previous?.preferedContentSizeCategory != traitCollection.preferr
+        tableView.reloadData() run the app is works
+- (EssentialFeediOS) TS (EssentialApp) TS
+[use diffable data source to only reload cells when needed]
+[set data source default row animation to fade]
+[add `UIView.makeContainer` helper]
+[extract table view configuration into a helper method]
+update 1
+[use applySnapshotUsingReloadData on iOS 15+ to maintain the same data source behavior we have on iOS 14 and before.] 
+update 2 3 (not implemented yet)
+[configure Error View with the new UIButton.Configuration APIs]
+```
