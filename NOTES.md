@@ -3313,6 +3313,7 @@ update 2 3 (not implemented yet)
 ### 4 - 1) [Image Comments Composition] Navigation and Feature Composition
 ```
 [rename file] (ListViewController+TestHelpers)
+[reorder test] (FeedUIIntegrationTests)
 - for simple views (dont require complex dependencies) you can present them directly
 - for example in the ListViewController display(error) func
 if let error = viewModel.message 
@@ -3335,7 +3336,7 @@ if let error = viewModel.message
 - create the CommentsUIComposer (below the FeedUIComposer)
 - copy and paste from it and change the names (only the needed for the test)
 - for the case of imageLoader replace it with a closure {_ in Empty<Data, Error>.eraseToAnyPublisher() } TS
-[duplicate ...]
+[duplicate FeedUIComposer as CommentsUIComposer]
 - the idea is to go one by one the tests removing the override and after all are done remove the subclassing
 T) test_commentsView_hasTitle
 - add new commentsTitle helper (FeedUIIntegrationTests extension?) TF
