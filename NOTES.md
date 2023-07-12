@@ -3312,28 +3312,29 @@ update 2 3 (not implemented yet)
 
 ### 4 - 1) [Image Comments Composition] Navigation and Feature Composition
 ```
+[rename file] (ListViewController+TestHelpers)
 - for simple views (dont require complex dependencies) you can present them directly
-- for example in the ListViewController display(error)
+- for example in the ListViewController display(error) func
 if let error = viewModel.message 
     let alert = UIAlerController(title: nil, message: message, preferredStyle: .alert) 
     present(alert, animated: true) 
-- other example if the FeedImageViewModel would have access to all the comments 
-- when selecting a row we could get the index and pass the comment to the comments view
-- one argument agaist this is that it would need to know if it is in a navegation controller 
-- to solve this we can use the show (it will handle the navigation for us) presented or pushed in a nav controller
+- other example if the FeedImageViewModel would have access to all the comments (array of comments)
+- when selecting a row we could get the index and pass the comment to the comments view and navigate 
+- one argument agaist this is that it would need to know if it is in a navegation controller or presented modally
+- to solve this we can use the show method (it will handle the navigation for us) presented or pushed in a nav controller
 - other api is showDetailViewController
 - olso you could set up the dependencies in the the prepare for segue
 - in generic view controllers we could not have this coupling
 - the idea is to handle navigation in the composition root
-- start with an integration test for the feed comments
+- so we start with an integration test for the feed comments
 - create EssentialAppTests/CommentsUIIntegrationTests (last)
-- copy and past from the FeedUIIntegrationTests (but it uses a bunch of helper methods)
-- so we could make it a subclass of it (remove the final) and override the methods (editor fix all issues) TS
-- remove all image specific tests (last ones) remove also helper
-- in makeSUT change to CommenstUIComposer.commentsComposedWith(commentsLoader: loader.loadPublisher
+- copy and past from the FeedUIIntegrationTests (but it uses a bunch of helper methods declared in test extensions!)
+- so we could make it a subclass of it (remove the final and override the methods) (editor fix all issues) TS
+- remove all image specific tests (not the last one test!) remove also makeImage helper
+- in makeSUT change to CommenstUIComposer.commentsComposedWith(commentsLoader: loader.loadPublisher)
 - create the CommentsUIComposer (below the FeedUIComposer)
-- copy and paste from this change the names 
-- for the case of imageLoader replace it with an closure {_ in Empty<Data, Error>.eraseToAnyPublisher() }
+- copy and paste from it and change the names (only the needed for the test)
+- for the case of imageLoader replace it with a closure {_ in Empty<Data, Error>.eraseToAnyPublisher() } TS
 [duplicate ...]
 - the idea is to go one by one the tests removing the override and after all are done remove the subclassing
 T) test_commentsView_hasTitle
@@ -3397,5 +3398,34 @@ T) test_tapOnErrorView_hidesErrorMessage
 [move...] only the change in the project
 [remove feed...]
 - now we have a ui composer that will instaciate the whole object graph
+- the idea now is to probe that the loading operation is cancelled (it is already cancelled when going back)
+- in CommentsUIIntegrationTests:
+T) test_deinit_cancelsRunningRequest
+var cancelCallCount = 0
+
+var sut: ListViewController? = CommentsUIComposer.commentsCompsedWith(commmentsLoader: {
+    PassthroughSubject<[ImageComment], Error>()
+        .handleEvents(receiveCancel: {
+            cancelCallCount += 1
+        }).eraseToAnyPublisher()
+})
+
+sut?.loadViewIfNeeded()
+weak var weakSUT = sut (after TF)
+
+XCTAssertEqual(cancelCallCount, 1)
+
+sut = nil
+
+XCTAssertNil(weakSUT) (after TF)
+XCTAssertEqual(cancelCallCount, 1)
+- TF -> add code to confirm that the instance is deallocated TF
+- this means that some global state is holding a reference
+- but it is deallocated by the time the track for memory leak test is excuted, it could be an autorelease issue
+- set a breakpoint in the last assertion (autorelease pool holding a reference to it)
+- all the things in an autorealease pool will liberate the objects in the next cycle when the test finishes
+- if we want to control the autorelease lifetime we can create our own autoreleasepool
+autoreleasepool { sut = ... } TS
+[proves..]
 - 
 ```
