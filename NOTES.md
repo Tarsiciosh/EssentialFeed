@@ -3309,3 +3309,93 @@ update 1
 update 2 3 (not implemented yet)
 [configure Error View with the new UIButton.Configuration APIs]
 ```
+
+### 4 - 1) [Image Comments Composition] Navigation and Feature Composition
+```
+- for simple views (dont require complex dependencies) you can present them directly
+- for example in the ListViewController display(error)
+if let error = viewModel.message 
+    let alert = UIAlerController(title: nil, message: message, preferredStyle: .alert) 
+    present(alert, animated: true) 
+- other example if the FeedImageViewModel would have access to all the comments 
+- when selecting a row we could get the index and pass the comment to the comments view
+- one argument agaist this is that it would need to know if it is in a navegation controller 
+- to solve this we can use the show (it will handle the navigation for us) presented or pushed in a nav controller
+- other api is showDetailViewController
+- olso you could set up the dependencies in the the prepare for segue
+- in generic view controllers we could not have this coupling
+- the idea is to handle navigation in the composition root
+- start with an integration test for the feed comments
+- create EssentialAppTests/CommentsUIIntegrationTests (last)
+- copy and past from the FeedUIIntegrationTests (but it uses a bunch of helper methods)
+- so we could make it a subclass of it (remove the final) and override the methods (editor fix all issues) TS
+- remove all image specific tests (last ones) remove also helper
+- in makeSUT change to CommenstUIComposer.commentsComposedWith(commentsLoader: loader.loadPublisher
+- create the CommentsUIComposer (below the FeedUIComposer)
+- copy and paste from this change the names 
+- for the case of imageLoader replace it with an closure {_ in Empty<Data, Error>.eraseToAnyPublisher() }
+[duplicate ...]
+- the idea is to go one by one the tests removing the override and after all are done remove the subclassing
+T) test_commentsView_hasTitle
+- add new commentsTitle helper (FeedUIIntegrationTests extension?) TF
+- in the CommentsUIComposer pass the right title (ImageComments..) TS
+[set ...]
+T) test_loadCommentsActions_requestCommentsFromLoader
+- loaderspy has loadFeedCallCount (we could create a generic one or create a new one)
+- create a new LoaderSpy: (in CommentsUIIntegrationTests) import Combine
+- rename types requets, loadCommentsCallCount, 
+- rename the simulateUserInitiatedFeed.. to simulateUserInitiatedReload (because it is generic now)
+[load...]
+T) test_loadingCommentsIndicator_isVisibleWhileLoadingComments
+- rename completeFeedLoading to comepleteCommentsLoadin also commentsLoadingWithError
+[lading..]
+T) test_loadCommentsCompletion_rendersSuccessfullyLoadedComments
+- rename to makeComment(message(not optional give a default value): username:) -> ImageComment, createdAt: Date()
+- remove all cases representing optional situations from the test
+- rename comment0 comment1, 
+T) test_loadCommenstCompletion_rendersSuccessfullyLoadedEmptyCommentsAfterNonEmptyComments
+- rename to comment (use only one)
+T) test_loadCommentsCompletion_doesNotAlterCurrentRenderingStateOnError
+- refactor completeCommentsLoading and LoaderSpy FeedImage -> ImageComments
+- follow the compiler to CommentsUIComposer, CommentsPresentationAdapter, 
+- the mapper takes only one parameter so we need to create a closure to handle that 
+- in CommentsUIcomposer create a new CommentsViewAdapter (based on the FeedViewAdapter)
+- remove imageLoader related code, CommmentsViewModel remove for now the code to display
+- rename to makeCommentsViewController and commentsController, in makeCommentsViewController rename to controller
+- storyboard is ImmageComments
+- back to the tests:
+- create a new assertThat (below makeSUT, makeComment) 
+XCTAssertEqual(sut.numberOfComments(), comments.count, "comments count"
+- in ListViewController helpers create numberOnfRenderedComments, commentsSection
+- split the ListViewControllers extensions in separate extensions what is feed specific and comments specific
+- add assertThat specific information for the compiler (EssentialApp) BS but TF we are not displaying the comments yet
+- in CommentsViewAdapter display
+contoller?.display(viewModel.comments.map { viewModel in 
+    CellController(id: viewModel, UITableViewController()) - because it implementes data source protocol
+} BE id needs to be Hashable so we can make ImageCommentsViewModel Hashable (it is just data) BS TS
+- we are only testing the count so far
+- in assertThat:
+let viewModel = ImageCommentsPresenter.map(comments) -> to be able to get the date already converted to string
+viewModel.comments.enumerated().forEach { index, comment in 
+    XCTAssertEqual(sut.commentMessage(at: index), comment.message, "message at \(index)", file...)
+    XCTAssertEqual(sut.commentDate(at: index), comment.date, "date at \(index)", file...)
+    XCTAssertEqual(sut.commentUsername(at: index), comment.username, "username at \(index)", file...)
+}
+- in ListViewControllerViewController+Helpers:
+- func commentMessage(at row: Int) -> String? { commentView(at: row).messageLabel.text } 
+- create new commentView (from feedImageView) with commentsSection, ImageCommentsCell, as? ImageCommentsCell, numOfre..
+- repeat the same for commentDate and commentUsername TF
+- in CommentsUIComposer CommenstViewAdapter:
+CellController(id: viewModel, ImageCommentsCellContrller(model: viewModel)) TS
+[render...]
+T) test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread
+[dispath..]
+T) test_loadCommenstCompletion_rendersErrorMessageOnErrorUntilNextReload
+T) test_tapOnErrorView_hidesErrorMessage
+- remove subclassing from FeeUIIntegrationTests BE
+- move the helpers from FeedUIIntegration+Helpers (delete file) to the SharedTestHelpers TS
+[move...] only the change in the project
+[remove feed...]
+- now we have a ui composer that will instaciate the whole object graph
+- 
+```
