@@ -3349,8 +3349,8 @@ T) test_loadCommentsActions_requestCommentsFromLoader
 - rename the simulateUserInitiatedFeed.. to simulateUserInitiatedReload (because it is generic now)
 [load actions request comments]
 T) test_loadingCommentsIndicator_isVisibleWhileLoadingComments
-- rename completeFeedLoading to comepleteCommentsLoadin also commentsLoadingWithError
-[lading..]
+- rename completeFeedLoading to completeCommentsLoading also completeCommentsLoadingWithError
+[loading indicator is visible while loading comments]
 T) test_loadCommentsCompletion_rendersSuccessfullyLoadedComments
 - rename to makeComment(message(not optional give a default value): username:) -> ImageComment, createdAt: Date()
 - remove all cases representing optional situations from the test
