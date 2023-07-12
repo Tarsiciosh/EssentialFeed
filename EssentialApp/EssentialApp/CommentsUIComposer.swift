@@ -14,7 +14,7 @@ public final class CommentsUIComposer {
         let presentationAdapter = FeedPresentationAdapter(loader: commentsLoader)
         
         let feedController = makeFeedViewController(
-            title: FeedPresenter.title)
+            title: ImageCommentsPresenter.title)
         
         feedController.onRefresh = presentationAdapter.loadResource
         

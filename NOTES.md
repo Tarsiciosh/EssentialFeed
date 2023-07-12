@@ -3337,11 +3337,11 @@ if let error = viewModel.message
 - copy and paste from it and change the names (only the needed for the test)
 - for the case of imageLoader replace it with a closure {_ in Empty<Data, Error>.eraseToAnyPublisher() } TS
 [duplicate FeedUIComposer as CommentsUIComposer]
-- the idea is to go one by one the tests removing the override and after all are done remove the subclassing
+- the idea is to go one by one removing the override for each test and after all are done remove the subclassing
 T) test_commentsView_hasTitle
 - add new commentsTitle helper (FeedUIIntegrationTests extension?) TF
 - in the CommentsUIComposer pass the right title (ImageComments..) TS
-[set ...]
+[set comments title]
 T) test_loadCommentsActions_requestCommentsFromLoader
 - loaderspy has loadFeedCallCount (we could create a generic one or create a new one)
 - create a new LoaderSpy: (in CommentsUIIntegrationTests) import Combine
