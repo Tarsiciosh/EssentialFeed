@@ -3345,9 +3345,9 @@ T) test_commentsView_hasTitle
 T) test_loadCommentsActions_requestCommentsFromLoader
 - loaderspy has loadFeedCallCount (we could create a generic one or create a new one)
 - create a new LoaderSpy: (in CommentsUIIntegrationTests) import Combine
-- rename types requets, loadCommentsCallCount, 
+- rename commentsRequests, loadCommentsCallCount, 
 - rename the simulateUserInitiatedFeed.. to simulateUserInitiatedReload (because it is generic now)
-[load...]
+[load actions request comments]
 T) test_loadingCommentsIndicator_isVisibleWhileLoadingComments
 - rename completeFeedLoading to comepleteCommentsLoadin also commentsLoadingWithError
 [lading..]
