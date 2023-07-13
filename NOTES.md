@@ -3401,7 +3401,7 @@ T) test_tapOnErrorView_hidesErrorMessage
 - move the helpers from FeedUIIntegration+Localization (delete file) to the SharedTestHelpers TS
 [move localization helpers to shared scope] only the change in the project]
 [remove feed references from comments integration tests]
-- now we have a ui composer that will instaciate the whole object graph
+- now we have a ui composer that will instantiate the whole object graph
 - the idea now is to probe that the loading operation is cancelled (it is already cancelled when going back)
 - in CommentsUIIntegrationTests:
 T) test_deinit_cancelsRunningRequest
@@ -3416,20 +3416,148 @@ var sut: ListViewController? = CommentsUIComposer.commentsCompsedWith(commmentsL
 
 sut?.loadViewIfNeeded()
 weak var weakSUT = sut (after TF)
-
-XCTAssertEqual(cancelCallCount, 1)
-
+XCTAssertEqual(cancelCallCount, 0)
 sut = nil
-
 XCTAssertNil(weakSUT) (after TF)
 XCTAssertEqual(cancelCallCount, 1)
-- TF -> add code to confirm that the instance is deallocated TF
+- TF -> add code to confirm that the instance is deallocated both last assertions failed TF
 - this means that some global state is holding a reference
 - but it is deallocated by the time the track for memory leak test is excuted, it could be an autorelease issue
 - set a breakpoint in the last assertion (autorelease pool holding a reference to it)
 - all the things in an autorealease pool will liberate the objects in the next cycle when the test finishes
 - if we want to control the autorelease lifetime we can create our own autoreleasepool
 autoreleasepool { sut = ... } TS
-[proves..]
-- 
+[proves request is canceled on comments view deinit]
+- if more tests would need to check the cancel call cound maybe it would be a good idea to move 
+- the tracking to the loader spy
+```
+
+### 4 - 2) Handling selection and navigation in the Composition Root
+```
+- the idea is to notify the composition root via a closure and someone listening to this 
+- will use the CommentsComposer to create the Comments view and push it in the nav
+- in FeedUIIntegrationTests:
+T) test_imageSelection_notifiesHandler()
+- copy and paste code from test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAf...
+- create two images, load view, present images on screen 
+var selectedImages = [FeedImage]()
+let (sut, loader) = makeSUT(selection: { selectedImage.append($0) })
+simulateTapOnFeedImage(at: 0)
+XCTAssertEqual(selectedImages,[image0])
+simulateTapOnFeedImage(at: 1)
+XCTAssertEqual(selectedImages,[image0, image1]) 
+- on ListViewController+TestHelpers:
+- func simulateTapOnFeedImage(at row: Int) {
+    let delegate = tableView.delegate
+    let index = IndePath(row: row, section: feedImageSection)
+    delegate?.tableView(tableView, didSelectRowAt: indexPath)
+}
+- back in the test
+- pass the selection closure to the makeSUT
+.. selection: @escaping (FeedImage) -> Void (give a default value)
+- forward the selection to the FeddUIComposer 
+- in FeedUIComposer 
+- add the selection handler to the feedComposedWith func TF
+- the question now it which component has the feed images?
+- in ListViewController:
+when tableView(didSelectRowAt) received, forward the message to the delegate
+let dl = cellController(at: indexPath)?.delegate
+dl?.tableView(tableView, didSelectRowAt: indexPath)
+- in ImageCellController:
+- when receives this message (need to forward too):
+public func tableView(... didSelectedRow) {
+    *
+}
+- In FeedImageCellController, add a method to the FeedImageCellControllerDelegate: 
+func didSelectImage() but this force implementations to force selections!
+- instead in FeedImageCellController pass a selection closure in the init mothod
+- (add a sotored property)
+- now we can call the selection closure in * BF
+- in FeedViewAdapter: 
+- ... selection: { [selection] in
+    selection(model)
+}
+- pass a selection closure also in hte FeedViewController init (stored in a property also)
+- in FeedUIComposer:
+- pass the selection to the FeedViewAdapter selection TS
+[notifies ...]
+- the idea now is to write an acceptance test for the navigation
+- in FeedAcceptanceTests
+T) test_onFeedImageSelection_displaysComments
+let comments = showCommentsForFirstImage() (comments represent the UI)
+XCTAssertEquals(comments.numberOfRenderedComments(), 1)
+- create the helper showCommentsForFirstImage -> ListViewController
+    let feed = launch(httpClient: .online(response), store: .empty)  (launch the app online)
+    feed.simulateTapOnFeedImage(at: 0)
+    RunLoop.current.run(until: Date()) (when pushing it do it animated, so to wait for the result)
+    let nav = feed.navigationController
+    return nav?.topViewController as! ListViewController TF
+- in makeData(for url)..
+case "/essential-feed/v1/image/{image-id}/comments"
+    return makeCommentsData()
+private func makeCommentsData() -> Data {
+    return try! JSONSerialization.data(withJSONObject ["items": [
+        "id" : UUID().uuidString
+        "message": makeCommentMessage()
+        "created_at": "2020-05-20T11_24:59+0000",
+        "author": [
+            "username": "a username"
+        ]
+    ]])
+}
+private func makeCommentMessage() -> String {
+    "a message"
+}
+- in the test:
+XCTAssertEqual(comments.commentMessage(at: 0), makeCommentMessage()
+- the idea now is to implement the navigation (the navigation controller is in the scene delegate)
+- in SceneDelegate:
+feedComposedWith.. selection: showComments
+private func showComments(for image: FeedImage) {
+    let url = URL(... /essential-feed/v1/image/\(image.ide)/comments
+    let comments = CommentsUIComposer.commentsComposedWith(
+        commentsLoader: makeRemoteCommentsLoader(url: url)
+    
+}
+private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComment], Error> {
+    return { [httpClient] in 
+        httpClient
+            .getPublisher(url: url)
+            .tryMap(ImageCommentsMapper.map)
+            .eraseToAnyPublisher()
+    }
+}
+- extract the navigation controller to a private lazy var (below localFeedLoader)
+- private lazy var navigationContrller = UINaviagionController (
+    -copy code from before-
+)
+- use it in configureWindow and showComments
+- navigationController.pushViewController(comments, animated: true) TS
+- private lazy var baseURL = URL(string: "...")
+- let url = baseURL.appendingPathComponent("/v1/image/\(image.id)/comments" and "/v1/feed" TS
+[show...]
+- run the app, it's working
+- httpClient is only created once and shared across features 
+- its not a singleton, it is created once and then injected where needed (but singleton lifetime)
+- LocalFeedImageDataLoader is transient lyfe time (only created when needed)
+- the url used it may be defined in the Image Comments API module (to not leak details)
+- everything that is contract specific can go here
+- in Image Comments API
+- create ImageCommentdEnspoint
+public enum ImageCommentsEndpoint {
+    case get(UUID)
+    
+    public func url(baseURL: URL) -> URL {
+        switch self {
+        case let .get(id):
+        return baseURL.appendingPathComment("...")
+        
+        }
+    }
+}
+- then let url = ImageCommentsEndpoint.get(image.id).url(baseURL: baseURL)
+- this can be reapeated for the feed as well
+- something we could do to mock the behavior could be 
+- var commentsFactory = CommentsUIComposer.commentsComposedWith(commentsLoader:)
+ then let comments = commentsFactory(makeRemoteCommentsLoader(url: url)
 ```
