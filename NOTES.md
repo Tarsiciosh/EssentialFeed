@@ -3394,7 +3394,7 @@ viewModel.comments.enumerated().forEach { index, comment in
 CellController(id: viewModel, ImageCommentsCellContrller(model: viewModel)) TS
 [render comments]
 T) test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread
-[dispath..]
+[dispatches from background to main queue]
 T) test_loadCommenstCompletion_rendersErrorMessageOnErrorUntilNextReload
 T) test_tapOnErrorView_hidesErrorMessage
 - remove subclassing from FeeUIIntegrationTests BE
