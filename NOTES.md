@@ -3398,8 +3398,8 @@ T) test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread
 T) test_loadCommenstCompletion_rendersErrorMessageOnErrorUntilNextReload
 T) test_tapOnErrorView_hidesErrorMessage
 - remove subclassing from FeeUIIntegrationTests BE
-- move the helpers from FeedUIIntegration+Helpers (delete file) to the SharedTestHelpers TS
-[move...] only the change in the project
+- move the helpers from FeedUIIntegration+Localization (delete file) to the SharedTestHelpers TS
+[move localization helpers to shared scope] only the change in the project]
 [remove feed...]
 - now we have a ui composer that will instaciate the whole object graph
 - the idea now is to probe that the loading operation is cancelled (it is already cancelled when going back)
