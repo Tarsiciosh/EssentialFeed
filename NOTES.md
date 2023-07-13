@@ -3358,23 +3358,26 @@ T) test_loadCommentsCompletion_rendersSuccessfullyLoadedComments
 T) test_loadCommenstCompletion_rendersSuccessfullyLoadedEmptyCommentsAfterNonEmptyComments
 - rename to comment (use only one)
 T) test_loadCommentsCompletion_doesNotAlterCurrentRenderingStateOnError
+- rename to comment
 - refactor completeCommentsLoading and LoaderSpy FeedImage -> ImageComments
-- follow the compiler to CommentsUIComposer, CommentsPresentationAdapter, 
-- the mapper takes only one parameter so we need to create a closure to handle that 
+- follow the compiler to CommentsUIComposer, rename to CommentsPresentationAdapter, 
+- the ImageCommentsPresenter.map takes more than one parameter (with dafault values) so we need to wrapped in a closure
+- to use call it there  
 - in CommentsUIcomposer create a new CommentsViewAdapter (based on the FeedViewAdapter)
-- remove imageLoader related code, CommmentsViewModel remove for now the code to display
+- remove imageLoader related code, ImageCommmentsViewModel, remove for now the code to display
 - rename to makeCommentsViewController and commentsController, in makeCommentsViewController rename to controller
 - storyboard is ImmageComments
 - back to the tests:
-- create a new assertThat (below makeSUT, makeComment) 
-XCTAssertEqual(sut.numberOfComments(), comments.count, "comments count"
-- in ListViewController helpers create numberOnfRenderedComments, commentsSection
+- create a new assertThat (below makeSUT, makeComment) delete all and add
+XCTAssertEqual(sut.numberOnfRenderedComments(), comments.count, "comments count"
+- in ListViewController+TestHelpers create numberOfRenderedComments, commentsSection
 - split the ListViewControllers extensions in separate extensions what is feed specific and comments specific
 - add assertThat specific information for the compiler (EssentialApp) BS but TF we are not displaying the comments yet
 - in CommentsViewAdapter display
 contoller?.display(viewModel.comments.map { viewModel in 
-    CellController(id: viewModel, UITableViewController()) - because it implementes data source protocol
-} BE id needs to be Hashable so we can make ImageCommentsViewModel Hashable (it is just data) BS TS
+    CellController(id: viewModel, UITableViewController()) - for now, because it implementes data source protocol
+} BE 
+- id needs to be Hashable so we can make ImageCommentViewModel Hashable (it is just data) BS TS
 - we are only testing the count so far
 - in assertThat:
 let viewModel = ImageCommentsPresenter.map(comments) -> to be able to get the date already converted to string
@@ -3383,13 +3386,13 @@ viewModel.comments.enumerated().forEach { index, comment in
     XCTAssertEqual(sut.commentDate(at: index), comment.date, "date at \(index)", file...)
     XCTAssertEqual(sut.commentUsername(at: index), comment.username, "username at \(index)", file...)
 }
-- in ListViewControllerViewController+Helpers:
+- in ListViewController+TestHelpers:
 - func commentMessage(at row: Int) -> String? { commentView(at: row).messageLabel.text } 
-- create new commentView (from feedImageView) with commentsSection, ImageCommentsCell, as? ImageCommentsCell, numOfre..
-- repeat the same for commentDate and commentUsername TF
+- create new func commentView (from feedImageView) with commentsSection, ImageCommentsCell, as? ImageCommentsCell, 
+- numOfre.., repeat the same for commentDate and commentUsername TF
 - in CommentsUIComposer CommenstViewAdapter:
 CellController(id: viewModel, ImageCommentsCellContrller(model: viewModel)) TS
-[render...]
+[render comments]
 T) test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread
 [dispath..]
 T) test_loadCommenstCompletion_rendersErrorMessageOnErrorUntilNextReload
