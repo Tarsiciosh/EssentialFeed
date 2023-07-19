@@ -3435,9 +3435,9 @@ autoreleasepool { sut = ... } TS
 ### 4 - 2) Handling selection and navigation in the Composition Root
 ```
 - the idea is to notify the composition root via a closure and someone listening to this 
-- will use the CommentsComposer to create the Comments view and push it in the nav
+- will use the CommentsComposer to create the Comments view and push it in the navigation controller
 - in FeedUIIntegrationTests:
-T) test_imageSelection_notifiesHandler()
+T) test_imageSelection_notifiesHandler() (below test_feedView_hasTitle)
 - copy and paste code from test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAf...
 - create two images, load view, present images on screen 
 var selectedImages = [FeedImage]()
@@ -3446,38 +3446,38 @@ simulateTapOnFeedImage(at: 0)
 XCTAssertEqual(selectedImages,[image0])
 simulateTapOnFeedImage(at: 1)
 XCTAssertEqual(selectedImages,[image0, image1]) 
-- on ListViewController+TestHelpers:
+- in ListViewController+TestHelpers:
 - func simulateTapOnFeedImage(at row: Int) {
     let delegate = tableView.delegate
     let index = IndePath(row: row, section: feedImageSection)
     delegate?.tableView(tableView, didSelectRowAt: indexPath)
 }
-- back in the test
+- back in the test:
 - pass the selection closure to the makeSUT
 .. selection: @escaping (FeedImage) -> Void (give a default value)
-- forward the selection to the FeddUIComposer 
-- in FeedUIComposer 
+- forward the selection to the FeedUIComposer (also give a default value)
+- in FeedUIComposer:
 - add the selection handler to the feedComposedWith func TF
 - the question now it which component has the feed images?
 - in ListViewController:
-when tableView(didSelectRowAt) received, forward the message to the delegate
+- when tableView(didSelectRowAt) received, forward the message to the delegate
 let dl = cellController(at: indexPath)?.delegate
 dl?.tableView(tableView, didSelectRowAt: indexPath)
-- in ImageCellController:
+- in FeedImageCellController:
 - when receives this message (need to forward too):
-public func tableView(... didSelectedRow) {
+public func tableView(... didSelectedRow.. ) {
     *
 }
 - In FeedImageCellController, add a method to the FeedImageCellControllerDelegate: 
-func didSelectImage() but this force implementations to force selections!
-- instead in FeedImageCellController pass a selection closure in the init mothod
+func didSelectImage() but this force the protocol implementations to handle selection!
+- instead in FeedImageCellController pass a selection closure (without param) in the init method
 - (add a sotored property)
 - now we can call the selection closure in * BF
 - in FeedViewAdapter: 
 - ... selection: { [selection] in
     selection(model)
 }
-- pass a selection closure also in hte FeedViewController init (stored in a property also)
+- pass a selection closure also in the FeedViewAdapter init (stored in a property also)
 - in FeedUIComposer:
 - pass the selection to the FeedViewAdapter selection TS
 [notifies ...]
