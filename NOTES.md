@@ -3535,22 +3535,22 @@ private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComm
 - * navigationController.pushViewController(comments, animated: true) TS
 - private lazy var baseURL = URL(string: "...")
 - let url = baseURL.appendingPathComponent("/v1/image/\(image.id)/comments" and "/v1/feed" TS
-[show...]
+[show comments on image selection]
 - run the app, it's working
 - httpClient is only created once and shared across features 
-- its not a singleton, it is created once and then injected where needed (but singleton lifetime)
-- LocalFeedImageDataLoader is transient lyfe time (only created when needed)
+- its not a singleton, it is created once and then injected where needed (singleton life time)
+- LocalFeedImageDataLoader is transient life time (only created when needed)
 - the url used it may be defined in the Image Comments API module (to not leak details)
 - everything that is contract specific can go here
 - in Image Comments API
-- create ImageCommentdEnspoint
-public enum ImageCommentsEndpoint {
+- create ImageCommentEndpoint
+public enum ImageCommentEndpoint {
     case get(UUID)
     
     public func url(baseURL: URL) -> URL {
         switch self {
         case let .get(id):
-        return baseURL.appendingPathComment("...")
+        return baseURL.appendingPathComment("/essential-feed/v1/image/\(id)/comments"Ima)
         
         }
     }
@@ -3560,4 +3560,7 @@ public enum ImageCommentsEndpoint {
 - something we could do to mock the behavior could be 
 - var commentsFactory = CommentsUIComposer.commentsComposedWith(commentsLoader:)
  then let comments = commentsFactory(makeRemoteCommentsLoader(url: url)
+- repeat the same for feed endopoint
+- add test for both cases
+[extract endpoint URL creation to the API modules]
 ```
