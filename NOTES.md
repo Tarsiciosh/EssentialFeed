@@ -3563,4 +3563,6 @@ public enum ImageCommentEndpoint {
 - repeat the same for feed endopoint
 - add test for both cases
 [extract endpoint URL creation to the API modules]
+- in ListViewController+TestHelpers:
+[extract helper methods to remove duplication]
 ```
