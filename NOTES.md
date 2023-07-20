@@ -3480,11 +3480,11 @@ func didSelectImage() but this force the protocol implementations to handle sele
 - pass a selection closure also in the FeedViewAdapter init (stored in a property also)
 - in FeedUIComposer:
 - pass the selection to the FeedViewAdapter selection TS
-[notifies ...]
-- the idea now is to write an acceptance test for the navigation
-- in FeedAcceptanceTests
+[notifies selection handler on image selection]
+- the idea now is to write an acceptance test to test the navigation
+- in FeedAcceptanceTests:
 T) test_onFeedImageSelection_displaysComments
-let comments = showCommentsForFirstImage() (comments represent the UI)
+let comments = showCommentsForFirstImage() (comments is the ListViewController - represent the UI)
 XCTAssertEquals(comments.numberOfRenderedComments(), 1)
 - create the helper showCommentsForFirstImage -> ListViewController
     let feed = launch(httpClient: .online(response), store: .empty)  (launch the app online)
@@ -3509,15 +3509,15 @@ private func makeCommentMessage() -> String {
     "a message"
 }
 - in the test:
-XCTAssertEqual(comments.commentMessage(at: 0), makeCommentMessage()
+XCTAssertEqual(comments.commentMessage(at: 0), makeCommentMessage() TF
 - the idea now is to implement the navigation (the navigation controller is in the scene delegate)
 - in SceneDelegate:
 feedComposedWith.. selection: showComments
 private func showComments(for image: FeedImage) {
-    let url = URL(... /essential-feed/v1/image/\(image.ide)/comments
+    let url = URL(... /essential-feed/v1/image/\(image.id)/comments)
     let comments = CommentsUIComposer.commentsComposedWith(
         commentsLoader: makeRemoteCommentsLoader(url: url)
-    
+    *
 }
 private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComment], Error> {
     return { [httpClient] in 
@@ -3531,8 +3531,8 @@ private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComm
 - private lazy var navigationContrller = UINaviagionController (
     -copy code from before-
 )
-- use it in configureWindow and showComments
-- navigationController.pushViewController(comments, animated: true) TS
+- use it in configureWindow and showComments 
+- * navigationController.pushViewController(comments, animated: true) TS
 - private lazy var baseURL = URL(string: "...")
 - let url = baseURL.appendingPathComponent("/v1/image/\(image.id)/comments" and "/v1/feed" TS
 [show...]
