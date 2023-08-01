@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="y8g-D6-FFx">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -71,7 +70,7 @@
                                 <accessibility key="accessibilityConfiguration" identifier="feed-image-cell"/>
                                 <connections>
                                     <outlet property="dateLabel" destination="RFZ-WE-dVQ" id="h7h-PP-LIL"/>
-                                    <outlet property="massageLabel" destination="MdP-pu-23L" id="mau-xz-Rth"/>
+                                    <outlet property="messageLabel" destination="MdP-pu-23L" id="mau-xz-Rth"/>
                                     <outlet property="usernameLabel" destination="aBh-MG-Svg" id="HQ9-EY-9I0"/>
                                 </connections>
                             </tableViewCell>
