@@ -3572,7 +3572,8 @@ public enum ImageCommentEndpoint {
 (this was made before the lecture)
 - forward willDisplayCell message
 [propagate willDisplayCell delegate method calls]
-- 
+- refactor init for CellController to use only one with as? for the optional parameters 
+[merge CellController initializers]
 - beginning of the lecture
 - limit page pagination explain in mentoring session #15
 - yeset based (aka  seek method)
