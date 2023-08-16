@@ -3577,13 +3577,13 @@ public enum ImageCommentEndpoint {
 - create makeImageData0 and makeImageData1 in FeedAcceptanceTests
 [improve coverage with distinct image data per index]
 - beginning of the lecture
-- limit page pagination explain in mentoring session #15
-- yeset based (aka  seek method)
+- limit page pagination explained in mentoring session #15
+- keyset based (aka  seek method)
 - after_key and before_key
 - the idea is to start with the UI - we need to add the activity indicator at the bottom - we could add it to the 
 - ListViewController 
 - (pull to refresh can be disabled in the stotyboard)
-- we can inject the activity indicator as a CellController
+- or we can inject it as a CellController
 - in FeedSnapshotTests (EssentialFeediOS scheme):
 T) test_feedWithLoadMoreIndicator
 - create feedWithLoadMoreIndicator (return array of CellController), record FEED_WITH_LOAD_MORE_INDICATOR_light and dark
@@ -3597,9 +3597,9 @@ private lazy var spinner: UIActivityIndicatorView = {
     contenView.addSubview(spinner)
     return spinner
 }
-- in LoadMoreCellController: ResourceLoadingView extension (same file):
-- add the display func
+- in LoadMoreCellController: ResourceLoadingView extension (same file): add the display func
 - in the test call that display func with the proper viewModel (isLoading)
+- feedWithLoadMoreIndicator
 - to make the spinner start animating instead of calling the spinner directly use a public computed var using a 
 - getter and a setter
 - cell.isLoading = viewModel.isLoading (add a reference to the cell private stored property) 
@@ -3610,7 +3610,7 @@ private lazy var spinner: UIActivityIndicatorView = {
 - create an FeedImageCellController with the last feedWithContent image stub 
 - and return the two cell controllers, change to assert TS
 - move the LoadMoreCell to the Views folder
-[add ...]
+[add "Load more" cell controller with loading indicator]
 - the idea now is to add the error message
 T) test_feedWithLoadMoreError
 - use feedWithLoadingMoreError func, FEED_WITH_MORE_ERROR_light, dark and extraExtraExtraLarge (we are using text)
