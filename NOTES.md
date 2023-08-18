@@ -3631,16 +3631,17 @@ T) test_feedWithLoadMoreError
 - even it can be a generic Paginated<Item> ... AnyPublisher<Paginated<Item> ..
 - move this new data model to the Shared API folder
 - but we cannot import Combine to not couple the shared model
-- createa a typealias LoadMoreCompletion (Result<Paginated<Item>, Error>) -> Void)
+- createa a typealias LoadMoreCompletion (Result<Paginated<Item>, Error>) -> Void
 - let loadMore: ((@escaping LoadMoreCompletion) -> Void)? now we don't need to depend on Combine
-- change the feedLoader to return a Paginated<Item> 
-- In FeedUIIntegrationTests change the feedRequests to handle Paginated<FeedImage> instead, make Paginated public
+- change the feedLoader to return a Paginated<FeedImage> 
+- In FeedUIIntegrationTests LoaderSpy extension
+- change the feedRequests to handle Paginated<FeedImage> instead, make Paginated public
 - remplace it everywhere - in completeFeedLoading create a Paginated(item: feed)
 - add a public init to Paginated with a default value of nil to the loadMore closure
 - follow the compiler to change it also in FeedUIComposer FeedViewAdapter (display viewModel Paginated<FeedImage>
 - change the mapper of FeedViewAdapter to be a closure to forward the items
-- also change makeRemoteFeedLoaderWithLocalFallback in sceneDelegate add map (to paginated) and eraseToAnyPublisher TS
-[make ...]
+- also change makeRemoteFeedLoaderWithLocalFallback in sceneDelegate add map to paginated type and eraseToAnyPublisher TS
+[make feed loader closure return Paginated<FeedImage>]
 - in FeedUIIntegrationTests: 
 T) test_loadMoreActions_requestMoreFromLoader (after test_loadFeedActions_requestFeedFromLoader)
 - add completeFeedLoading and assert loadMoreCallCount = 0 "expected no requests until load more action"
