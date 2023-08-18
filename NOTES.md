@@ -3617,13 +3617,14 @@ T) test_feedWithLoadMoreError
 - create the actual feedWithLoadMoreError (copy the previus but display an viewModel (ResourceErrorViewModel)
 - "This is a multiline\nerror message"
 - add to the extension the ResourceErrorView
-- set the error (not yet implemented
+- set the error (not yet implemented)
 - in LoadMoreCell: add a computed var message String to set and get the message text to a messageLabel text
-- create the messageLabel (also a lazy var) UILabel textColor tertiaryLabel, font .prefe... .footnote, num of lines 0 
+- create the messageLabel (also a lazy var) UILabel textColor tertiaryLabel, .font = .prefe... .footnote, num of lines 0 
 - text alignment center, adjustFontForConten... true
 - leading anchor with contentView, trailing, top and bottom all with constant 8 (record and drag files)
-- in FeedSnapshotTests: create feed(loadMore: ) -> [CellController] (use it previous helper funcs)
-[add load ...]
+- in FeedSnapshotTests: create func feedWith(loadMore: LoadMoreCellController) -> [CellController] 
+(use it in previous indicator and error funcs)
+[add "Load more" message label]
 - now the idea is to write integration tests
 - in FeedUIComposer: create struct PaginatedFeed { let feed: [FeedImage], loadMore: (() -> AnyPublisher...)?}
 - (this way the UI is decouple from the real implementation it can be page based, etc)
