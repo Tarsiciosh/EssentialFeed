@@ -3670,8 +3670,9 @@ sections.enumerated().forEach { section, cellControllers in
 - create a new init for LoadResourcePresenter for the case the ResourceViewModel is equal to Resource 
 - to be able not to include the mapper (this was added in the break?)
 [add default presentation mapper when the Resource type matches the ResourceViewModel type]
-
-[load more...]
+- delete FeedViewModel, test_map_createsViewModel and FeedPresenter map
+[remove unused code]
+[load more items on will display LoadMoreCell]
 - in test_loadMoreActions_requestMoreFromLoader
 - add another assertion of loadMoreCallCount to be 1 after simulating load more action
 - "Expected no request while loading more"

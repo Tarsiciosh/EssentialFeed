@@ -21,8 +21,14 @@ extension FeedUIIntegrationTests {
             return feedRequests.count
         }
         
+        var loadMoreCallCount = 0
+        
         func completeFeedLoading(with feed: [FeedImage] = [], at index: Int = 0) {
-            feedRequests[index].send( Paginated(items: feed) )
+            feedRequests[index].send(
+                Paginated(items: feed, loadMore: { [weak self] _  in
+                    self?.loadMoreCallCount += 1 }
+                )
+            )
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
