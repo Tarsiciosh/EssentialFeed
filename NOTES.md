@@ -3646,10 +3646,11 @@ T) test_feedWithLoadMoreError
 T) test_loadMoreActions_requestMoreFromLoader (after test_loadFeedActions_requestFeedFromLoader)
 - add completeFeedLoading and assert loadMoreCallCount = 0 "expected no requests until load more action"
 - then simulateLoadMoreFeedAction "expected load more request"
-- in the LoaderSpy add private(set) var loadMoreCallCount = 0 add it in loadMore closure of completeFeedLoading
-- in ListViewController + testHelpers: add simulateLoadMoreFeedAction (after simulateFeedImageViewNotNearVisible)
+- in the LoaderSpy add private(set) var loadMoreCallCount = 0 increment it in loadMore closure of completeFeedLoading
+- in ListViewController+TestHelpers: add simulateLoadMoreFeedAction (after simulateFeedImageViewNotNearVisible)
 - the idea is to load when the load more cell is going to be visible (separate it into other section)
-- section 1 is now the feedLoadMoreSection and send the message to the delegate willDisplayCell
+- section 1 is now the feedLoadMoreSection 
+- send the message willDisplayCell to the delegate 
 - before get the cell if it exists guard let cell = cell(row: 0, section: feedLoadMoreSection) TF
 - in LoadMoreCellController:
 - add conformace to UITableViewDelegate and add willDisplay cell ...
@@ -3666,6 +3667,10 @@ sections.enumerated().forEach { section, cellControllers in
     snapshot.appendSections([section])
     snapshot.appendItems(cellControllers, toSection: section) 
 } TF memory leak -> wekify self TS
+- create a new init for LoadResourcePresenter for the case the ResourceViewModel is equal to Resource 
+- to be able not to include the mapper (this was added in the break?)
+[add default presentation mapper when the Resource type matches the ResourceViewModel type]
+
 [load more...]
 - in test_loadMoreActions_requestMoreFromLoader
 - add another assertion of loadMoreCallCount to be 1 after simulating load more action
