@@ -3840,7 +3840,7 @@ var components = URLComponents()
 components.scheme = baseURL.scheme 
 components.host = baseURL.host
 components.path = baseURL.path + "/v1/feed" TS
-[set ..]
+[set FeedEndpoint limit to 10]
 - run the app and see only 10 images
 - create a new case getAfter(FeedImage) or case get(after: FeedImage? = nil) (last case will break clients)
 - in FeedEndpointTests:
