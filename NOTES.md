@@ -3850,14 +3850,14 @@ T) test_feed_endpointURLAfterGivenImage() { 
     ... "limit=10&after_id=\(image.id)", "query"
 } TF
 - in FeedEndpoint: ... .get(image) .. 
-    URLQueryItems(name: "limit", value: "10"),
-    image.map { URLQueryItems(name: "after_id", $0.id.uuid }
+    URLQueryItem(name: "limit", value: "10"),
+    image.map { URLQueryItems(name: "after_id", $0.id.uuidString } //done this way to handle the nil case
     ].compactMap { $0 } TS
 - if the order change it will brake the test
-- change test to XCTAssertEqual(recieved.query.contains("limit=10"), true, "query param"
-- and "after_id" TS
-[add ..]
-- composition
+- change test to XCTAssertEqual(recieved.query.contains("limit=10"), true, "limit query param"
+- and "after_id" "after_id query param" TS
+[add feed endpoint with "after_id" param]
+- the idea now is to handle the composition
 - in FeedAcceptanceTests, test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity
 XCTAssertTrue(feed.canLoadMoreFeed)
 - in ListViewController+TestHelpers:
