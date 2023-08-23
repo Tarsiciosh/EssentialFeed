@@ -18,7 +18,9 @@ public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITa
         return cell
     }
     
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, willDisplay: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard !cell.isLoading else { return }
+        
         callback()
     }
 }

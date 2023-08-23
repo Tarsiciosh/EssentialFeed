@@ -1,6 +1,18 @@
 import Combine
 import EssentialFeed
 
+public extension Paginated {
+    var loadMorePubliser: (() -> AnyPublisher<Self, Error>)? {
+        guard let loadMore = self.loadMore else { return nil }
+        
+        return {
+            Deferred {
+                Future(loadMore)
+            }.eraseToAnyPublisher()
+        }
+    }
+}
+
 public extension FeedImageDataLoader {
     typealias Publisher = AnyPublisher<Data, Error>
     

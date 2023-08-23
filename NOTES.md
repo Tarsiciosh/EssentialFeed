@@ -3675,17 +3675,18 @@ sections.enumerated().forEach { section, cellControllers in
 [load more items on will display LoadMoreCell]
 - in test_loadMoreActions_requestMoreFromLoader
 - add another assertion of loadMoreCallCount to be 1 after simulating load more action
-- "Expected no request while loading more"
+- "Expected no request while loading more" TF
 - in LoadMoreCellController: ... willDisplay
 - guard !cell.isLoading else { return } (remove cell parameter name TF never set it to isLoading
 - in FeedViewAdapter: add typealias LoadMorePresentationAdapter ... Paginated<FeedIamge> .. FeedViewAdapter
-- let loadMoreAdpater = LoadMorePresentationAdapter(loader: viewModel.loadMore) but the adapter spect in the loader
-- param a closure that returns a AnyPublisher
+- let loadMoreAdpater = LoadMorePresentationAdapter(loader: viewModel.loadMore) 
+- loadMoreAdpater.presenter = LoadResourcePresenter(resourceView: self ... )
+- but the loader expected in the adapter is a closure that returns an AnyPublisher
 - (we need to bridge the closure into the Combine world)
 - in CombineHelpers: (at the top)
 public extension Paginated {
     var loadMorePublisher: (() -> AnyPublisher<Self, Error>)? {
-        guard let loadMore: self else { return nil }
+        guard let loadMore = self.loadMore else { return nil }
         
         return {
             Deferred {
@@ -3704,7 +3705,7 @@ loadMoreAdapter.presenter = LoadResourcePresenter(
     mapper: { $0 })
 ) TF
 - change to let loadMore = LoadMoreCellController(callback: loadMoreAdapter.loadResource) TS
-[prevent load more action ...]
+[prevent load more action while loading more]
 - the idea now is to test the case where it need to call load more the second time (it should not be the last one)
 loader.completeLoadMore(lastPage: false, at: 0)
 sut.simulateLoadMoreFeedAction()
