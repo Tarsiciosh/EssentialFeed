@@ -3782,13 +3782,10 @@ var isShowingLoadMoreFeedIndicator: Bool {
 } replace previous 2 used cases with this TS
 [show loading more indicator while loading more]
 - in test_loadFeedCompletion_rendersSuccessfullyLoadedFeed
-
-
-- after loader.completeFeedLoding(with [image0, image1]
+- change loader.completeFeedLoding(with [image0]) to [image0, image1] 
 sut.simulateLoadMoreFeedAction()
 loader.completeLoadMore(with: [image0, image1, image2, image3], at: 0)
 assertThat(sut, isRendering: [image0, image1, image2, image3])
-
 sut.simulateUserInitiatedReload
 loader.completeFeedLoading(with: [image0, image1], at: 1)
 assertThat(sut, isRendering: [image0, image1]
@@ -3803,9 +3800,10 @@ sut.simulateLoadMoreFeedAction()
 loader.copmpleteLoadMoreWithError(at: 0)
 assertThat(sut, isRendering: [image0]
 - create func_loadMoreCompletion_dispatches..
+loader.completeFeedLoading(at: 0)
 sut.simulateLoadMoreFeedAction()
 ... loader.completeLoadMore
-[render..]
+[render items from "Load more" action]
 - now the idea is to show error message on failure
 - in FeedUIIntegrationTests: 
 T) testLoadMoreCompletion_rendersErrorMessageOnError (copy from previous)
