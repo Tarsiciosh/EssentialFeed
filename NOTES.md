@@ -3821,7 +3821,7 @@ T) test_tapOnLoadMoreErrorView_loadsMore
 - in ListViewController+TestHelpers: simulateTapOnLoadMoreFeedError (use table view did select) TF
 - in LoadMoreCellController: create didSelect.. { guard !cell.isLoading else { return } callback() } TS
 - create a helper function reloadIfNeeded 
-[load more..]
+[load more on error tap]
 - the idea is to implement the API now
 - in FeedEndpointTests: 
 - XCTAssertEqual(received.scheme, "http", "scheme")
