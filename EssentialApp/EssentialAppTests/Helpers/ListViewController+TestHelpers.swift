@@ -105,6 +105,10 @@ extension ListViewController {
         cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
     }
     
+    var loadMoreFeedErrorMessage: String? {
+        loadMoreFeedCell()?.message
+    }
+    
     func renderedFeedImageData(at index: Int) -> Data? {
         return simulateFeedImageViewVisible(at: index)?.renderedImage
     }

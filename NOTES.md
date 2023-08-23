@@ -3808,11 +3808,11 @@ sut.simulateLoadMoreFeedAction()
 - in FeedUIIntegrationTests: 
 T) testLoadMoreCompletion_rendersErrorMessageOnError (copy from previous)
 - add loader.completeFeedLoading, sut.simulateLoadMoreFeedAction() -> error should be nil
-- loader.completeLoadMoreRequestWithError -> assert error loadMoreFeedErrorMessage 
+- loader.completeLoadMoreRequestWithError -> assert error = loadError 
 - sut.simulateLoadMoreFeedAction -> error should be nil
 - in ListViewController+testHelpers:
 - add loadMoreFeedErrorMessage return loadMoreFeedCell()?.message TS
-[renders ..]
+[render load more error message]
 T) test_tapOnLoadMoreErrorView_loadsMore
 - copy first part of previous setup 
 - sut.simulateLoadMoreFeedAction -> loadMoreCallCount 1
