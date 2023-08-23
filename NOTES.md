@@ -3753,14 +3753,14 @@ func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at in
         }))
 } BE fix name in test TS
 [does not load more after loading last page]
-T) test_loadMoreIndicator_isVisibleWhileLoadingMore (we copy the previous one an use it as a guide)
+T) test_loadMoreIndicator_isVisibleWhileLoadingMore (we copy the previous (loading feed indi) one an use it as a guide)
 sut.loadViewIfNeeded() 
 XCTAssertFalse(sut.isShowingLoadMoreFeedIndicator) "Expected no loading indicator once view is loaded"
 
-loader.copmleteFeedLoading(at: 0) "Expected no loading indicator once loading completes successfully"
-X.. False "" 
+loader.copmleteFeedLoading(at: 0) 
+X.. False "Expected no loading indicator once loading completes successfully"
 
-sut.simulateLoadMoreAction()
+sut.simulateLoadMoreFeedAction()
 X.. True "Expected loading indicator on load more action"
 
 loader.completeLoadMore(at: 0)
@@ -3780,7 +3780,7 @@ var isShowingLoadMoreFeedIndicator: Bool {
 - add a helper private func loadMoreFeedCell() -> LoadMoreCell? {
     cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
 } replace previous 2 used cases with this TS
-[show..]
+[show loading more indicator while loading more]
 - in test_loadFeedCompletion_rendersSuccessfullyLoadedFeed
 
 
