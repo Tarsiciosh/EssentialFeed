@@ -41,7 +41,7 @@ final class FeedViewAdapter: ResourceView {
             return CellController(id: model, view)
         }
         
-        guard let loadMorePublisher = viewModel.loadMorePubliser else {
+        guard let loadMorePublisher = viewModel.loadMorePublisher else {
             controller?.display(feed)
             return
         }

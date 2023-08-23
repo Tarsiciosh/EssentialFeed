@@ -3722,9 +3722,10 @@ XCT ... 3 "Expected no request after loading all pages"
 func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int = 0) { ..idem }
 func completeLoadMoreWithError(at index: Int = 0)
 - we cannot use the feedRequests so create loadMoreRequests update loadMoreCallCount to be the count of requests
-- in completeFeedLoading( ... in load more create a publisher to return it before appendin it to loadMoreRequests
+- in completeFeedLoading( ... in load more closure create a an empty publisher (PassthoughtSubject) to return it 
+- before appending it to loadMoreRequests
 - do the same in completeLoadMore ..
-- but we cannot used the publisher we need to convert it to a closure   
+- but we cannot used the publisher we need to convert it to a closure the return type must be a closure  
 - in CombineHelpers:
 init(items: [Item], loadMorePublisher: (() -> AnyPublisher<Self, Error>)?) {
     self.init(items: items, loadMore: loadMorePublisher.map { publisher in 
@@ -3751,7 +3752,7 @@ func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at in
             return publisher.eraseToAnyPublisher()
         }))
 } BE fix name in test TS
-[does not ..]
+[does not load more after loading last page]
 T) test_loadMoreIndicator_isVisibleWhileLoadingMore (we copy the previous one an use it as a guide)
 sut.loadViewIfNeeded() 
 XCTAssertFalse(sut.isShowingLoadMoreFeedIndicator) "Expected no loading indicator once view is loaded"
