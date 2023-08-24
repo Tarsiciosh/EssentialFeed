@@ -3917,14 +3917,14 @@ case "/eseen..." "after_id=LAST_ID_FOR_SECOND_PAGE", makeLastEmptyFeedPageData (
 - add onlineFeed.simulateLoadMoreFeedAction()
 - onlineFeed.simulateFeedImageViewVisible(at: 2) ...
 - XCTAssert(offlineFeed.rende.... at 2 makeImageData2) TF we are caching the pages
-- in SceneDelegate: 
+- in SceneDelegate makeRemoteLoadMoreLoader: 
 - ...
     newItems.last))
 }
 .caching(to: localFeedLoader)
 .eraseToAnyPublisher() (capture the localFeedLoader)
 - in CombineHelpers:
-extension Publisher {
+extension Publisher (remove where Output == [FeedImage]) {
     ...
     func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> where Output == Paginated<FeedImage> {
         handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
