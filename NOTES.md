@@ -3861,7 +3861,7 @@ T) test_feed_endpointURLAfterGivenImage() { 
 - in FeedAcceptanceTests, test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity
 XCTAssertTrue(feed.canLoadMoreFeed)
 - in ListViewController+TestHelpers:
-var canLoadMoreFeed: Bool { loadMoreCell() != nil } TF
+var canLoadMoreFeed: Bool { loadMoreFeedCell() != nil } TF
 - in SceneDelegate: ... Paginated(items: $0, loadMorePublisher: { Empty().eraseToAnyPublisher() } TS
 - back in the test 
 feed.simulateLoadMoreFeedAction()
@@ -3870,13 +3870,13 @@ XCTAssertEqual ... numbOfRen ... 3
 XCTAssertTrue(feed.canLoadMoreFeed)
 - create makeImageData2 blue "/image-2"
 ... case "/essential-feed/v1/feed" where url.query?.contains("after_id") == false: return makeFirstFeedPageData() (rename)
-case "/essen.." where url.query?.contains("after_id=XXX_LAST_ID_XXX": return makeSecondPageData()
-- create makeSecondFeedPageData witha a new UUID TF
+case "/essen.." where url.query?.contains("after_id=XXX_LAST_ID_XXX") == true: return makeSecondFeedPageData()
+- create makeSecondFeedPageData with a new UUID (166FCDD7-C9F4-420A-B2D6-CE2EAFA3D82F) TF
 - in SceneDelegate: 
-...
+... makeRemoteFeedLoaderWithLocalFallback
 .map { [httpClient, baseURL] items in 
     Paginated(items: items, loadMorePublisher: items.last.map { lastItem in 
-        let url = FeedEndpoint.get(after: lastItem.id).url(baseURL: baseURL)
+        let url = FeedEndpoint.get(after: lastItem).url(baseURL: baseURL)
         return { [] in
             httpClient
                 .getPublisher(url: url)
@@ -3890,12 +3890,12 @@ case "/essen.." where url.query?.contains("after_id=XXX_LAST_ID_XXX": return mak
         }
     })
 } TS
-- add a test simulated the load request reaching the end
+- add a test simulating the load request reaching the end
 case "/eseen..." "after_id=LAST_ID_FOR_SECOND_PAGE", makeLastEmptyFeedPageData (returning []) TF
 - in SceneDelegate:
 - create makeRemoteLoadMoreLoader(items: [FeedImage], last: FeedImage?) -> (() -> AnyPublisher<Paginated<FeedImage>, Error>)? {
     last.map { lastItem in 
-    let url = FeedEndpoint.get(after: lastItem.id).url(baseURL: baseURL)
+    let url = FeedEndpoint.get(after: lastItem).url(baseURL: baseURL)
     return { [httpClient] in
         httpClient
             .getPublisher(url: url)
@@ -3911,7 +3911,7 @@ case "/eseen..." "after_id=LAST_ID_FOR_SECOND_PAGE", makeLastEmptyFeedPageData (
 - ... .map { items in 
     Paginated(items: items, loadMorePublisher: self.makeLoadRemoteLoadMoreLoader(items: items, last: items.last)
 } TS
-[load more..]
+[load more items until last page]
 - test the caching:
 - in test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity: 
 - add onlineFeed.simulateLoadMoreFeedAction()
