@@ -3941,10 +3941,10 @@ private extension {
 - refator in sceneDelegate:
 private func makeFirstPage(items: [FeedImage]) -> Paginated<FeedImage> {
     copy code from makerRemote... .map( x ) 
-} (use the funciton in the map) TS 
+} (use the function in the map) TS 
 
-private func makePage(itmes: [FeedImage], lastItem: FeedImage?) -> Paginated<FeedImage> {
-    copy code from  but pass the last 
+private func makePage(itmes: [FeedImage], last: FeedImage?) -> Paginated<FeedImage> {
+    copy code from makeRemoteLoadMoreLoader 
 } then 
 ... 
 .map { newItems in 
@@ -3953,34 +3953,19 @@ private func makePage(itmes: [FeedImage], lastItem: FeedImage?) -> Paginated<Fee
 .caching(to: localFeedLoader) TS
 - change makeFirstPage to call makePage and use itmes.last for last TS
 - to remove the nested closure:
-private func makeRemoteLoadMoreLoader(items: [FeedImage], last: FeedImage?) -> AnyPubliser<Paginated<FeedImage>, Error> {
-    let url = FeedEndpoint.get(after: last).url(baseURL: baseURL)
-    
-    return httpClient
-        .getPublisher(url: url)
-        .tryMap(FeedItemsMapper.map)
-        .map { newItems in 
-            (items + newItems, newItems.last)
-        }.map(makePage)
-        .caching(to: localFeedLoader)
-}
-
-private func makePage(items: [FeedItem], last: FeedImage?) -> Paginated<FeedIamge> {
-    Paginated(items: items, loadMorePublisher: last.map { last in 
-        { self.makeRemoteLoadMoreLoader(items: items, last: last) }
-    })
-} TS
-
 private func makeRemoteFeeLoader(after: FeedImage? = nil) -> AnyPublisher<[FeedImage], Error> {
     let url = FeedEndpoint.get(after: last).url(baseURL: baseURL)
-    
     return httpClient
         .getPublisher(url: url)
         .tryMap(FeedItemsMapper.map)
         .eraseToAnyPublisher()
 }
-in makeRemoteLoadMoreLoader and makeRemoteFeedLoaderWithLocalFallback use the makeRemoteFeedLoader TS
-[extract ..]
+- refactor makePage 
+loadMorePublisher: last.map{ last in
+    { self.makeRemoteLoadMoreLoader(items: items, last: last) }
+})
+- in makeRemoteLoadMoreLoader and makeRemoteFeedLoaderWithLocalFallback use the makeRemoteFeedLoader TS
+[extract logic into helper methods]
 - run the app to see how it works add
 ... makeRemoteLoadMoreLoader ... .map(makePage).delay(for: 2, scheduler: DispatchQueu.main)
 - simulate an error
