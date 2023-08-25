@@ -90,6 +90,34 @@ extension ListViewController {
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
+    func simulateLoadMoreFeedAction() {
+        guard let cell = loadMoreFeedCell() else { return }
+        
+        let delegate = tableView.delegate
+        delegate?.tableView?(tableView, willDisplay: cell, forRowAt: IndexPath(row: 0, section: feedLoadMoreSection))
+    }
+    
+    var isShowingLoadMoreFeedIndicator: Bool {
+        loadMoreFeedCell()?.isLoading == true
+    }
+    
+    var loadMoreFeedErrorMessage: String? {
+        loadMoreFeedCell()?.message
+    }
+    
+    func simulateTapOnLoadMoreFeedError() {
+        let delegate = tableView.delegate
+        delegate?.tableView?(tableView, didSelectRowAt: IndexPath(row: 0, section: feedLoadMoreSection))
+    }
+    
+    var canLoadMoreFeed: Bool {
+        loadMoreFeedCell() != nil
+    }
+    
+    private func loadMoreFeedCell() -> LoadMoreCell? {
+        cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
+    }
+    
     func renderedFeedImageData(at index: Int) -> Data? {
         return simulateFeedImageViewVisible(at: index)?.renderedImage
     }
@@ -109,5 +137,5 @@ extension ListViewController {
     }
   
     private var feedImagesSection: Int { 0 }
+    private var feedLoadMoreSection: Int { 1 }
 }
-

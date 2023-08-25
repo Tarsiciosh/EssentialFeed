@@ -3566,3 +3566,476 @@ public enum ImageCommentEndpoint {
 - in ListViewController+TestHelpers:
 [extract helper methods to remove duplication]
 ```
+
+### 5) Keyset Pagination with Caching Strategy
+```
+(this was made before the lecture)
+- forward willDisplayCell message
+[propagate willDisplayCell delegate method calls]
+- refactor init for CellController to use only one with as? for the optional parameters 
+[merge CellController initializers]
+- create makeImageData0 and makeImageData1 in FeedAcceptanceTests
+[improve coverage with distinct image data per index]
+- beginning of the lecture
+- limit page pagination explained in mentoring session #15
+- keyset based (aka  seek method)
+- after_key and before_key
+- the idea is to start with the UI - we need to add the activity indicator at the bottom - we could add it to the 
+- ListViewController 
+- (pull to refresh can be disabled in the stotyboard)
+- or we can inject it as a CellController
+- in FeedSnapshotTests (EssentialFeediOS scheme):
+T) test_feedWithLoadMoreIndicator
+- create feedWithLoadMoreIndicator (return array of CellController), record FEED_WITH_LOAD_MORE_INDICATOR_light and dark
+let loadMore = LoadMoreCellController 
+return [CellController(id: UUID, loadMore)]
+- create the LoadMoreCellController in production (in Feed UI for now because it's only used there so far)
+- is NSObject and UITableViewDataSource, items 1, UITableViewCell, record and grag files to the project
+- in LoadMoreCellController: create LoadMoreCell 
+private lazy var spinner: UIActivityIndicatorView = {
+    let spinner = UI...(style: .medium)
+    contenView.addSubview(spinner)
+    return spinner
+}
+- in LoadMoreCellController: ResourceLoadingView extension (same file): add the display func
+- in the test call that display func with the proper viewModel (isLoading)
+- feedWithLoadMoreIndicator
+- to make the spinner start animating instead of calling the spinner directly use a public computed var using a 
+- getter and a setter
+- cell.isLoading = viewModel.isLoading (add a reference to the cell private stored property) 
+- visual test failed: the spinner is not centered    
+- center the spinner using code (NSLayoutConstraint.activate) (centerXAnchor, centerYAnchor)
+- also contentView.heightAnchor.constraint(lessThanOrEqualToConstant: 40) now it's centered
+- but to see other image view cell, in feedWithLoadMoreIndicator:
+- create an FeedImageCellController with the last feedWithContent image stub 
+- and return the two cell controllers, change to assert TS
+- move the LoadMoreCell to the Views folder
+[add "Load more" cell controller with loading indicator]
+- the idea now is to add the error message
+T) test_feedWithLoadMoreError
+- use feedWithLoadingMoreError func, FEED_WITH_MORE_ERROR_light, dark and extraExtraExtraLarge (we are using text)
+- create the actual feedWithLoadMoreError (copy the previus but display an viewModel (ResourceErrorViewModel)
+- "This is a multiline\nerror message"
+- add to the extension the ResourceErrorView
+- set the error (not yet implemented)
+- in LoadMoreCell: add a computed var message String to set and get the message text to a messageLabel text
+- create the messageLabel (also a lazy var) UILabel textColor tertiaryLabel, .font = .prefe... .footnote, num of lines 0 
+- text alignment center, adjustFontForConten... true
+- leading anchor with contentView, trailing, top and bottom all with constant 8 (record and drag files)
+- in FeedSnapshotTests: create func feedWith(loadMore: LoadMoreCellController) -> [CellController] 
+(use it in previous indicator and error funcs)
+[add "Load more" message label]
+- now the idea is to write integration tests
+- in FeedUIComposer: create struct PaginatedFeed { let feed: [FeedImage], loadMore: (() -> AnyPublisher...)?}
+- (this way the UI is decouple from the real implementation it can be page based, etc)
+- even it can be a generic Paginated<Item> ... AnyPublisher<Paginated<Item> ..
+- move this new data model to the Shared API folder
+- but we cannot import Combine to not couple the shared model
+- createa a typealias LoadMoreCompletion (Result<Paginated<Item>, Error>) -> Void
+- let loadMore: ((@escaping LoadMoreCompletion) -> Void)? now we don't need to depend on Combine
+- change the feedLoader to return a Paginated<FeedImage> 
+- In FeedUIIntegrationTests LoaderSpy extension
+- change the feedRequests to handle Paginated<FeedImage> instead, make Paginated public
+- remplace it everywhere - in completeFeedLoading create a Paginated(item: feed)
+- add a public init to Paginated with a default value of nil to the loadMore closure
+- follow the compiler to change it also in FeedUIComposer FeedViewAdapter (display viewModel Paginated<FeedImage>
+- change the mapper of FeedViewAdapter to be a closure to forward the items
+- also change makeRemoteFeedLoaderWithLocalFallback in sceneDelegate add map to paginated type and eraseToAnyPublisher TS
+[make feed loader closure return Paginated<FeedImage>]
+- in FeedUIIntegrationTests: 
+T) test_loadMoreActions_requestMoreFromLoader (after test_loadFeedActions_requestFeedFromLoader)
+- add completeFeedLoading and assert loadMoreCallCount = 0 "expected no requests until load more action"
+- then simulateLoadMoreFeedAction "expected load more request"
+- in the LoaderSpy add private(set) var loadMoreCallCount = 0 increment it in loadMore closure of completeFeedLoading
+- in ListViewController+TestHelpers: add simulateLoadMoreFeedAction (after simulateFeedImageViewNotNearVisible)
+- the idea is to load when the load more cell is going to be visible (separate it into other section)
+- section 1 is now the feedLoadMoreSection 
+- send the message willDisplayCell to the delegate 
+- before get the cell if it exists guard let cell = cell(row: 0, section: feedLoadMoreSection) TF
+- in LoadMoreCellController:
+- add conformace to UITableViewDelegate and add willDisplay cell ...
+- there invoke a callback() stored property (set in the initializer)
+- we create the feed in the FeedViewAdapter 
+- extract cellcontroller array into a variable 'feed' 
+- let loadMore = LoadMoreCellController { _ in viewModel.loadMore?({ _ in }) }
+- let loadMoreSection = [CellController(id: UUID(), loadMore)]
+- controller?.display(feed, loadMoreSection)
+- in ListViewController: 
+- public func display(_ sections: [CellController]...) { 
+... 
+sections.enumerated().forEach { section, cellControllers in 
+    snapshot.appendSections([section])
+    snapshot.appendItems(cellControllers, toSection: section) 
+} TF memory leak -> wekify self TS
+- create a new init for LoadResourcePresenter for the case the ResourceViewModel is equal to Resource 
+- to be able not to include the mapper (this was added in the break?)
+[add default presentation mapper when the Resource type matches the ResourceViewModel type]
+- delete FeedViewModel, test_map_createsViewModel and FeedPresenter map
+[remove unused code]
+[load more items on will display LoadMoreCell]
+- in test_loadMoreActions_requestMoreFromLoader
+- add another assertion of loadMoreCallCount to be 1 after simulating load more action
+- "Expected no request while loading more" TF
+- in LoadMoreCellController: ... willDisplay
+- guard !cell.isLoading else { return } (remove cell parameter name TF never set it to isLoading
+- in FeedViewAdapter: add typealias LoadMorePresentationAdapter ... Paginated<FeedIamge> .. FeedViewAdapter
+- let loadMoreAdpater = LoadMorePresentationAdapter(loader: viewModel.loadMore) 
+- loadMoreAdpater.presenter = LoadResourcePresenter(resourceView: self ... )
+- but the loader expected in the adapter is a closure that returns an AnyPublisher
+- (we need to bridge the closure into the Combine world)
+- in CombineHelpers: (at the top)
+public extension Paginated {
+    var loadMorePublisher: (() -> AnyPublisher<Self, Error>)? {
+        guard let loadMore = self.loadMore else { return nil }
+        
+        return {
+            Deferred {
+                Future(loadMore)
+            }.eraseToAnyPublisher()
+        }
+    }
+} 
+- back in FeedViewAdapter: we can now use the publisher
+guard let loadMorePublisher = viewModel.loadMorePublisher else { controller?.display(feed) return }
+
+loadMoreAdapter.presenter = LoadResourcePresenter(
+    resourceView: self, 
+    loadingView: WeakRefVirtualProxy(loadMore)
+    errorView: WeakRefVirtualProxy(loadMore)
+    mapper: { $0 })
+) TF
+- change to let loadMore = LoadMoreCellController(callback: loadMoreAdapter.loadResource) TS
+[prevent load more action while loading more]
+- the idea now is to test the case where it need to call load more the second time (it should not be the last one)
+loader.completeLoadMore(lastPage: false, at: 0)
+sut.simulateLoadMoreFeedAction()
+XCT ... 2 "Expected request after load more completed with more pages"
+
+loader.completeLoadWithError(at: 1)
+sut.simulateLoadMoreFeedAction()
+XCT ... 3 "Expected request after load more failure"
+
+loader.completLoadMore(lastPage: true, at: 2)
+sut.simulateLoadMoreFeedAction()
+XCT ... 3 "Expected no request after loading all pages"
+- in FeedUIIntegrationTests+LoaderSpy
+func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int = 0) { ..idem }
+func completeLoadMoreWithError(at index: Int = 0)
+- we cannot use the feedRequests so create loadMoreRequests update loadMoreCallCount to be the count of requests
+- in completeFeedLoading( ... in load more closure create a an empty publisher (PassthoughtSubject) to return it 
+- before appending it to loadMoreRequests
+- do the same in completeLoadMore ..
+- but we cannot used the publisher we need to convert it to a closure the return type must be a closure  
+- in CombineHelpers:
+init(items: [Item], loadMorePublisher: (() -> AnyPublisher<Self, Error>)?) {
+    self.init(items: items, loadMore: loadMorePublisher.map { publisher in 
+        return { completion in //every time this closure is invoked we will:
+            publisher().subscribe(Subscribers.Sink(receiveCompletion: { result in
+                if case let .failure(error) = result {
+                    completion(.failure(error))
+                }
+            }, receiveValue: { result in 
+                completion(.success(result)
+            }))
+        }
+    })
+} 
+- we use the Subscriber.Sink and Combine will handle the cancellable for us 
+- (the subscription will be alive until we complete)
+- in the tests use the new loadMorePublisher 
+func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int = 0) {
+    loadMoreRequests[index].send(Paginated(
+        items: feed,
+        loadMorePublisher: lastPage ? nil : { [weak self] in
+            let publisher = PassthoughSubject<Paginated<FeedItem>, Error>()
+            self?.loadMoreRequests.append(publisher)
+            return publisher.eraseToAnyPublisher()
+        }))
+} BE fix name in test TS
+[does not load more after loading last page]
+T) test_loadMoreIndicator_isVisibleWhileLoadingMore (we copy the previous (loading feed indi) one an use it as a guide)
+sut.loadViewIfNeeded() 
+XCTAssertFalse(sut.isShowingLoadMoreFeedIndicator) "Expected no loading indicator once view is loaded"
+
+loader.copmleteFeedLoading(at: 0) 
+X.. False "Expected no loading indicator once loading completes successfully"
+
+sut.simulateLoadMoreFeedAction()
+X.. True "Expected loading indicator on load more action"
+
+loader.completeLoadMore(at: 0)
+X.. False "Expected no loading indicator once user initiated loading completes successfully"
+
+sut.simulateLoadMoreAction()
+X... True "Expected loading indicator on second load more action"
+
+loader.completeLoadMoreWithError(at: 1)
+X.. False "Expected no loading indicator once user initiated loading completes with error"
+
+- in ListViewController+TestHelpers:
+var isShowingLoadMoreFeedIndicator: Bool {
+    let view = cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
+    return view?.isLoading == true
+} TS
+- add a helper private func loadMoreFeedCell() -> LoadMoreCell? {
+    cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
+} replace previous 2 used cases with this TS
+[show loading more indicator while loading more]
+- in test_loadFeedCompletion_rendersSuccessfullyLoadedFeed
+- change loader.completeFeedLoding(with [image0]) to [image0, image1] 
+sut.simulateLoadMoreFeedAction()
+loader.completeLoadMore(with: [image0, image1, image2, image3], at: 0)
+assertThat(sut, isRendering: [image0, image1, image2, image3])
+sut.simulateUserInitiatedReload
+loader.completeFeedLoading(with: [image0, image1], at: 1)
+assertThat(sut, isRendering: [image0, image1]
+- in test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed
+add this in between existing tests (load only one image first)
+sut.simulateLoadMoreFeedAction()
+loader.completeLoadMore(with: [image0, image1], at: 0)
+assertThat(sut, isRendering: [image0, image1]) 
+- in test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError
+add at the end
+sut.simulateLoadMoreFeedAction()
+loader.copmpleteLoadMoreWithError(at: 0)
+assertThat(sut, isRendering: [image0]
+- create func_loadMoreCompletion_dispatches..
+loader.completeFeedLoading(at: 0)
+sut.simulateLoadMoreFeedAction()
+... loader.completeLoadMore
+[render items from "Load more" action]
+- now the idea is to show error message on failure
+- in FeedUIIntegrationTests: 
+T) testLoadMoreCompletion_rendersErrorMessageOnError (copy from previous)
+- add loader.completeFeedLoading, sut.simulateLoadMoreFeedAction() -> error should be nil
+- loader.completeLoadMoreRequestWithError -> assert error = loadError 
+- sut.simulateLoadMoreFeedAction -> error should be nil
+- in ListViewController+testHelpers:
+- add loadMoreFeedErrorMessage return loadMoreFeedCell()?.message TS
+[render load more error message]
+T) test_tapOnLoadMoreErrorView_loadsMore
+- copy first part of previous setup 
+- sut.simulateLoadMoreFeedAction -> loadMoreCallCount 1
+- sut.simulateTapOnLoadMoreFeedError -> loadMoreCallCount 1
+- loader.completeLoadMoreWithError, simulateTap.. -> count 2
+- in ListViewController+TestHelpers: simulateTapOnLoadMoreFeedError (use table view did select) TF
+- in LoadMoreCellController: create didSelect.. { guard !cell.isLoading else { return } callback() } TS
+- create a helper function reloadIfNeeded 
+[load more on error tap]
+- the idea is to implement the API now
+- in FeedEndpointTests: 
+- XCTAssertEqual(received.scheme, "http", "scheme")
+- XCTAssertEqual(received.host, "based-url.com", "host")
+- XCTAssertEqual(received.path, "/v1/feed", "path")
+- XCTAssertEqual(received.query, "limit=10", "query") [EssentialFeed] TF
+- in FeedEndpoint: 
+let url = baseURL.appendingPathComponent("/v1/feed")
+var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+components?.queryItems = [
+    URLQueryItem(name: "limit", value: "10")
+] 
+return components!.url! TS
+- refactor to return components.url! -> safe to force unwrap it because it is static (it would be a programmer mistake)
+var components = URLComponents()
+components.scheme = baseURL.scheme 
+components.host = baseURL.host
+components.path = baseURL.path + "/v1/feed" TS
+[set FeedEndpoint limit to 10]
+- run the app and see only 10 images
+- create a new case getAfter(FeedImage) or case get(after: FeedImage? = nil) (last case will break clients)
+- in FeedEndpointTests:
+T) test_feed_endpointURLAfterGivenImage() { 
+    let image = uniqueImage()
+    .. get(after: image)
+    ... "limit=10&after_id=\(image.id)", "query"
+} TF
+- in FeedEndpoint: ... .get(image) .. 
+    URLQueryItem(name: "limit", value: "10"),
+    image.map { URLQueryItems(name: "after_id", $0.id.uuidString } //done this way to handle the nil case
+    ].compactMap { $0 } TS
+- if the order change it will brake the test
+- change test to XCTAssertEqual(recieved.query.contains("limit=10"), true, "limit query param"
+- and "after_id" "after_id query param" TS
+[add feed endpoint with "after_id" param]
+- the idea now is to handle the composition
+- in FeedAcceptanceTests, test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity
+XCTAssertTrue(feed.canLoadMoreFeed)
+- in ListViewController+TestHelpers:
+var canLoadMoreFeed: Bool { loadMoreFeedCell() != nil } TF
+- in SceneDelegate: ... Paginated(items: $0, loadMorePublisher: { Empty().eraseToAnyPublisher() } TS
+- back in the test 
+feed.simulateLoadMoreFeedAction()
+XCTAssertEqual ... numbOfRen ... 3
+...at 0... makeImageData0 ... 2 .... 3
+XCTAssertTrue(feed.canLoadMoreFeed)
+- create makeImageData2 blue "/image-2"
+... case "/essential-feed/v1/feed" where url.query?.contains("after_id") == false: return makeFirstFeedPageData() (rename)
+case "/essen.." where url.query?.contains("after_id=XXX_LAST_ID_XXX") == true: return makeSecondFeedPageData()
+- create makeSecondFeedPageData with a new UUID (166FCDD7-C9F4-420A-B2D6-CE2EAFA3D82F) TF
+- in SceneDelegate: 
+... makeRemoteFeedLoaderWithLocalFallback
+.map { [httpClient, baseURL] items in 
+    Paginated(items: items, loadMorePublisher: items.last.map { lastItem in 
+        let url = FeedEndpoint.get(after: lastItem).url(baseURL: baseURL)
+        return { [] in
+            httpClient
+                .getPublisher(url: url)
+                .tryMap(FeedItemsMapper.map)
+                .map { newItems in 
+                    Paginated(items: items + newItems, loadMorePublisher: {
+                        Empty().eraseToAnyPublisher()
+                    }
+                }.eraseToAnyPublisher
+            }
+        }
+    })
+} TS
+- add a test simulating the load request reaching the end
+case "/eseen..." "after_id=LAST_ID_FOR_SECOND_PAGE", makeLastEmptyFeedPageData (returning []) TF
+- in SceneDelegate:
+- create makeRemoteLoadMoreLoader(items: [FeedImage], last: FeedImage?) -> (() -> AnyPublisher<Paginated<FeedImage>, Error>)? {
+    last.map { lastItem in 
+    let url = FeedEndpoint.get(after: lastItem).url(baseURL: baseURL)
+    return { [httpClient] in
+        httpClient
+            .getPublisher(url: url)
+            .tryMap(FeedItemsMapper.map)
+            .map { newItems in 
+                let allItems = items + newItems
+                return Paginated(items: allItems, loadMorePublisher: 
+                    self.makeRemoteLoadMoreLoader(items: allItems, last: newItems.last)
+            }.eraseToAnyPublisher()
+        }
+    }
+} 
+- ... .map { items in 
+    Paginated(items: items, loadMorePublisher: self.makeLoadRemoteLoadMoreLoader(items: items, last: items.last)
+} TS
+[load more items until last page]
+- test the caching:
+- in test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity: 
+- add onlineFeed.simulateLoadMoreFeedAction()
+- onlineFeed.simulateFeedImageViewVisible(at: 2) ...
+- XCTAssert(offlineFeed.rende.... at 2 makeImageData2) TF we are caching the pages
+- in SceneDelegate makeRemoteLoadMoreLoader: 
+- ...
+    newItems.last))
+}
+.caching(to: localFeedLoader)
+.eraseToAnyPublisher() (capture the localFeedLoader)
+- in CombineHelpers:
+extension Publisher (remove where Output == [FeedImage]) {
+    ...
+    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> where Output == Paginated<FeedImage> {
+        handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
+    }
+}
+...
+private extension {
+    ...
+    func saveIgnoringResult(_ page: Paginated<FeedImage>) {
+        saveIgnoringResult(page.items)
+    }
+} TS
+[cache page results]
+- refator in sceneDelegate:
+private func makeFirstPage(items: [FeedImage]) -> Paginated<FeedImage> {
+    copy code from makerRemote... .map( x ) 
+} (use the function in the map) TS 
+
+private func makePage(itmes: [FeedImage], last: FeedImage?) -> Paginated<FeedImage> {
+    copy code from makeRemoteLoadMoreLoader 
+} then 
+... 
+.map { newItems in 
+    (itmes + newItems, newItems.last)
+}.map(makePage) (capture makePage)
+.caching(to: localFeedLoader) TS
+- change makeFirstPage to call makePage and use itmes.last for last TS
+- to remove the nested closure:
+private func makeRemoteFeeLoader(after: FeedImage? = nil) -> AnyPublisher<[FeedImage], Error> {
+    let url = FeedEndpoint.get(after: last).url(baseURL: baseURL)
+    return httpClient
+        .getPublisher(url: url)
+        .tryMap(FeedItemsMapper.map)
+        .eraseToAnyPublisher()
+}
+- refactor makePage 
+loadMorePublisher: last.map{ last in
+    { self.makeRemoteLoadMoreLoader(items: items, last: last) }
+})
+- in makeRemoteLoadMoreLoader and makeRemoteFeedLoaderWithLocalFallback use the makeRemoteFeedLoader TS
+[extract logic into helper methods]
+- run the app to see how it works add
+... makeRemoteLoadMoreLoader ... .map(makePage).delay(for: 2, scheduler: DispatchQueu.main)
+- simulate an error
+... .delay ... .flatMap{ _ in Fail(error: NSError()} when tapping it shows a selection background
+in LoadMoreCellCotroller: cell for row
+cell.selectionStyle = .none
+[remove cell selection style] (only the selection style change)
+- to trigger reload when retrying to drag
+- in tableView willDisplay: 
+private var offsetObserver: NSKeyValueObservation?
+offsetObserver = tableView.observe(\.contentOffset, options: .new) { [weak self] (tableView, _) in 
+    guard tableView.isDragging else { return }
+    
+    self?.reloadIfNeeded()
+}
+in didEndDisplayingCell 
+    offsetObserver = nil -> now it reload also when scrolling
+[automatically load more items on scroll after an error] (don't commit the code to test)
+- remove the fail code for testing in the scene delegate
+- to prevent keeping all the items in memory: 
+- remove the items parameter from makeRemoteLoadMoreLoader and 
+... makeRemoteFeedLoader(after: last)
+    .flatMap { [localFeedLoader] newItems in
+        localFeedLoader.loadPublisher().map { cachedItems in
+            (newItems, cachedItems)
+        }
+        .map { (newItems, cachedItems) in
+            (cachedItems + newItems, newItems.last)
+        }.map(makePage)
+        .caching(to: localFeedLoader)
+    }
+- this is a memory optimization that will depend on the case
+- the flatMap can be replaced by 
+... .zip(localFeedLoader.loadPublisher()) TS
+- also we could invert the order:
+localFeedLoader.loadPublisher()
+    .zip(makeRemoteFeedLoader(after: last))
+    .map { (cachedItems, newItems) in
+        (cachedItems + newItems, newItems.last)
+    }.map(makePage)
+    .caching(to: localFeedLoader)
+- remove items from makeRemoteLoadMoreLoader and update code
+[fetch current items from cache when needed instead of keeping them in memory all the time]
+[group "Load more" tests]
+```
+
+### 6) logging strategies
+```
+- the idea is to use loggin to catch things that cannot be caought by tests or debugging
+- for example in the scene delegate we are using a try! to access the store
+- remove from CoreDataFeedStore init the hability to throw and instead print the error in the catch block
+} catch {
+    container = nil (they may failed)
+    context = nil
+    print("CoreData error: \(error)"
+}  
+- and handle the nil cases with guard let statements TS
+- doing this if it failed the app will be in a weird state (this code is less safe that the one that make the app crash) 
+- one idea s to ignore the cache from core data if it's not working and use in memory for example 
+- other solution is to use the Null stategy (NullStore) that provided neutral behavior 
+- for example for deleting, inserting the cache return .success
+- for retriving complete with .success(.none)
+- replace the try! with 
+do {
+    try CoreDataFeedStore(..
+} catch {
+    return NullStore()
+} (coment the so statment and see the app running with the null store
+- create a fallback instance where a non critical instance could not be created
+- move NullStore to its own file (below SceneDelegate)
+[use..]
+- 
+```
