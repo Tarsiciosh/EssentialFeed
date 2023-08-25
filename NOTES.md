@@ -4009,5 +4009,33 @@ localFeedLoader.loadPublisher()
     .caching(to: localFeedLoader)
 - remove items from makeRemoteLoadMoreLoader and update code
 [fetch current items from cache when needed instead of keeping them in memory all the time]
+[group "Load more" tests]
+```
+
+### 6) logging strategies
+```
+- the idea is to use loggin to catch things that cannot be caought by tests or debugging
+- for example in the scene delegate we are using a try! to access the store
+- remove from CoreDataFeedStore init the hability to throw and instead print the error in the catch block
+} catch {
+    container = nil (they may failed)
+    context = nil
+    print("CoreData error: \(error)"
+}  
+- and handle the nil cases with guard let statements TS
+- doing this if it failed the app will be in a weird state (this code is less safe that the one that make the app crash) 
+- one idea s to ignore the cache from core data if it's not working and use in memory for example 
+- other solution is to use the Null stategy (NullStore) that provided neutral behavior 
+- for example for deleting, inserting the cache return .success
+- for retriving complete with .success(.none)
+- replace the try! with 
+do {
+    try CoreDataFeedStore(..
+} catch {
+    return NullStore()
+} (coment the so statment and see the app running with the null store
+- create a fallback instance where a non critical instance could not be created
+- move NullStore to its own file (below SceneDelegate)
+[use..]
 - 
 ```
