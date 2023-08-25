@@ -3995,6 +3995,7 @@ in didEndDisplayingCell
         .map { (newItems, cachedItems) in
             (cachedItems + newItems, newItems.last)
         }.map(makePage)
+        .caching(to: localFeedLoader)
     }
 - this is a memory optimization that will depend on the case
 - the flatMap can be replaced by 
@@ -4006,6 +4007,7 @@ localFeedLoader.loadPublisher()
         (cachedItems + newItems, newItems.last)
     }.map(makePage)
     .caching(to: localFeedLoader)
-[fetch]
+- remove items from makeRemoteLoadMoreLoader and update code
+[fetch current items from cache when needed instead of keeping them in memory all the time]
 - 
 ```
