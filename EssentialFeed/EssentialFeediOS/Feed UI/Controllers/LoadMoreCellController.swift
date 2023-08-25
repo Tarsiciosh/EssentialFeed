@@ -3,6 +3,7 @@ import EssentialFeed
 
 public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITableViewDelegate {
     private let cell = LoadMoreCell()
+    private var offsetObserver: NSKeyValueObservation?
     
     var callback: () -> Void
     
@@ -20,7 +21,16 @@ public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITa
     }
     
     public func tableView(_ tableView: UITableView, willDisplay: UITableViewCell, forRowAt indexPath: IndexPath) {
+        offsetObserver = tableView.observe(\.contentOffset, options: .new) { [weak self] (tableView, _) in
+            guard tableView.isDragging else { return }
+            
+            self?.reloadIfNeeded()
+        }
         reloadIfNeeded()
+    }
+    
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        offsetObserver = nil
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -3972,7 +3972,8 @@ loadMorePublisher: last.map{ last in
 ... .delay ... .flatMap{ _ in Fail(error: NSError()} when tapping it shows a selection background
 in LoadMoreCellCotroller: cell for row
 cell.selectionStyle = .none
-[remove ..] (only the selection style change)
+[remove cell selection style] (only the selection style change)
+- to trigger reload when retrying to drag
 - in tableView willDisplay: 
 private var offsetObserver: NSKeyValueObservation?
 offsetObserver = tableView.observe(\.contentOffset, options: .new) { [weak self] (tableView, _) in 
@@ -3982,7 +3983,7 @@ offsetObserver = tableView.observe(\.contentOffset, options: .new) { [weak self]
 }
 in didEndDisplayingCell 
     offsetObserver = nil -> now it reload also when scrolling
-[automatically.. ]
+[automatically load more items on scroll after an error] (don't commit the code to test)
 - remove the fail code for testing in the scene delegate
 - to prevent keeping all the items in memory: 
 - remove the items parameter from makeRemoteLoadMoreLoader and 
