@@ -4016,6 +4016,7 @@ localFeedLoader.loadPublisher()
 ```
 - there other commits that happened between lectures
 [rename file] CoreDataFeedStore+FeedImageDataStore
+- in FeedAcceptanceTests: launch(httClient:,store:)
 [set small window frame to prevent loading content ahead of time during tests]
 [remove duplication]
 [add helper to find image data for a given URL]
