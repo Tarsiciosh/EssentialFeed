@@ -7,7 +7,7 @@ public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITa
     
     var callback: () -> Void
     
-    public init(callback: @escaping () -> Void) {
+    public init(callback: @escaping () -> Void = {} ) {
         self.callback = callback
     }
     

@@ -4018,7 +4018,12 @@ localFeedLoader.loadPublisher()
 [rename file] CoreDataFeedStore+FeedImageDataStore
 - in FeedAcceptanceTests: launch(httClient:,store:)
 [set small window frame to prevent loading content ahead of time during tests]
+- in ManagedCache: 
+- create deleteCache(in context: NSManagedObjectContext) use it there and in CoreDataFeedStore+FeedStore
 [remove duplication]
+- in ManagedFeedImage: 
+create data(with url: URL, in context: NSManagedObjectContext) throws -> Data?
+- and use it in CoreDataFeedStore+FeedImageDataStore
 [add helper to find image data for a given URL]
 - the idea is to use loggin to catch things that cannot be caought by tests or debugging
 - for example in the scene delegate we are using a try! to access the store
