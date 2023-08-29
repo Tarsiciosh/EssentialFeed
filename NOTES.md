@@ -4141,10 +4141,10 @@ static func images(from...
 - run the app -> no more cache misses 
 [optimize CoreData implementation to reduce cache misses] (don't commit the logs)
 - run the app again and go to the bottom very fast -> some images where loaded 5 times
-- in CellController 
-- there are loadings in cell for row, in prefetch rows and on retry
+- in FeedImageCellController:
+- there are loadings in cell for row, in prefetch rows and on retry (didRequestImage)
 - write a test to prove that we understand the problem and once it's resolved we won't have regressions
-- in FeedUIIntegrationTests (at the bottom: 
+- in FeedUIIntegrationTests (at the bottom)
 T) test_feedImageView_doesNotLoadImageAgainUntilPreviousRequestCompletes 
 (based on test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore)
 - refactor to have one image 
@@ -4154,16 +4154,15 @@ sut.simulateFeedImageViewNearVisible(at: 0)
 ..assertEqual(loader.loadedImageURLs, [image.url], "Expected first request when near visible")
   sut.simulateFeedImageViewVisible(at: 0)
   ..Equal(loader.loadedImageURLs, [image.url] "Expected no request until previous completes"
-loader.completImageLoadin(at: 0)
+loader.completeImageLoading(at: 0)
 sut.simulateFeedImageViewVisible(at: 0)
 ..Equal(loader.loadedImageURLs, [image.url, image.url] "Expected second request when visible after previous complete"
-  sut.simulateFeedViewNotVisible(at: 0)
-  sut.simulateFeedViewVisible(at: 0)
-  ..Equal(loader.cancelledImageURLs, [image.url, image.url, image.url] 
-  "Expected third request when visible after canceling previous complete" TF
-- in FeedImageCellController: 
-we could add a isLoading variable and update the state when need but instead of doing it here we could do it in
-- LoadResourcePresentationAdpater
+  sut.simulateFeedImageViewNotVisible(at: 0)
+  sut.simulateFeedImageViewVisible(at: 0)
+  ..Equal(loader.loadedImageURLs, [image.url, image.url, image.url] 
+  "Expected third request when visible after canceling previous complete" TF (only first test pass)
+- in FeedImageCellController we could add a isLoading variable and update the state when need but 
+- instead of doing it here we could do it in LoadResourcePresentationAdapter:
 private var isLoading = false
 .. func loadResource()
 guard !isLoading else { return }
@@ -4172,20 +4171,21 @@ isLoading = true
 .. receiveCompletion .. 
 self?.isLoading = false        
 - run the test -> crash index out of range
-- in FeedUIIntegrationTests+LoaderSpy:
-func completeFeedLoading...
-feedRequests[index].send(completion: .finished) to 'finish' the publisher
-- in CommentsUIIntegrationTests completeCommentsLoading .. requests[index].send(completion: .finished) TF
-- test_loadCommentsActions_requestsCommentsFromLoader
+- in FeedUIIntegrationTests+LoaderSpy: func completeFeedLoading... at the end
+    feedRequests[index].send(completion: .finished) to 'finish' the publisher
+}
+- in CommentsUIIntegrationTests completeCommentsLoading .. requests[index].send(completion: .finished) TF 
+- failings also in other places
+- test_loadCommentsActions_requestCommentsFromLoader
 add new test "Expected no request until previous completes" 
-then add loader.copmpleteCommentsLoading(at: 0) and then (at: 1)
+then add loader.completeCommentsLoading(at: 0) and then (at: 1) this test pass
 - in FeedUIIntegrationTests:
 - repeat the same add a new test "Expected no request until previous completes"
-- and then the completeFeedLoading(at: 0) and then (at: 1) TF 
+- and then the completeFeedLoading(at: 0) and then (at: 1) this tests pass TF
 - when cancelling we are not setting the value back to false
 - when you cancel a publisher the system does not call completion 
-add .handleEvents(receiveCancel: { [weak self] in self?.isLoading = false } TS
-[prevent ] don't commit logs messages
+add .dispatchOnMainQueue().handleEvents(receiveCancel: { [weak self] in self?.isLoading = false } TS
+[prevent loading resources again until a running request completes] don't commit logs messages
 - run the app still loading 3 images
 - evey time we load a new page we get all the items again the old ones and the new ones appended
 - it works but it is not efficient 
