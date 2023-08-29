@@ -4190,28 +4190,29 @@ add .dispatchOnMainQueue().handleEvents(receiveCancel: { [weak self] in self?.is
 - evey time we load a new page we get all the items again the old ones and the new ones appended
 - it works but it is not efficient 
 - the idea is that the adapter reuses the already created cell controllers
-- in FeedUIIntegrationTests, last added test
-the image is visible but we call load more and we recreate we shouln't load again to fetch the image
+- in FeedUIIntegrationTests, last added :
+the image is visible but when we call load more, we shouln't load again to fetch the image
+at the bottom of the test add:
 sut.simulateLoadMoreFeedAction()
 loader.completeLoadMore(with: [image, makeImage()]
 sut.simulateFeedImageViewVisible(at: 0)
 ..Equal(loader.loadedImageURLs, [image.url, image.url, image.url] 
 "Expected no request until the previous completes" TF
-- in FeedViewAdpater: add a look up table 
+- the idea is that when creating the cellControllers if we have already one created we can use that one
+- in FeedViewAdapter: add a look up table 
 private var currentFeed: [FeedImage: CellController]
 ..init(currentFeed: [FeedImage: CellController] = [:]
-self.currentFeed = currentFeed
-the idea is that when creating the cellController if we have already one created we use that one
-let feed: [CellController].. 
+self.currentFeed = currentFeed ...
+let feed = viewModel...map..
     if let controller = currentFeed[model] { return controller } 
 populate the dictionary at the end of display func:
 let controller = CellController(id: model, view)
 currentFeed[model] = controller
 return controller
 - later on in the display func instead of setting the resouceView of the loadMoreAdapter to self 
-- use a new FeedViewAdapter(currentFeed: currentFeed, controller: controller, )
+- use a new FeedViewAdapter(controller: controller, imageLoader: imageLoader, selection: selection, currentFeed: curr..)
 - add a guard let controller = controller at the top of the display func (if no controller then we cannot do anything) TS
-[reuse] don't commit the logs
+[reuse existing cell controllers to avoid unnecessary reallocation of resources] don't commit the logs
 - run the app total network bytes received 1.9 MB
 - once the issues are addressed with the tests we can remove the logs
 - 
