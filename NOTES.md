@@ -4027,27 +4027,30 @@ create data(with url: URL, in context: NSManagedObjectContext) throws -> Data?
 [add helper to find image data for a given URL]
 - the idea is to use loggin to catch things that cannot be caought by tests or debugging
 - for example in the scene delegate we are using a try! to access the store
+- remove the try!, in  
 - remove from CoreDataFeedStore init the hability to throw and instead print the error in the catch block
+- and aldo move the guard let inside the do block
 } catch {
     container = nil (they may failed)
     context = nil
     print("CoreData error: \(error)"
 }  
-- and handle the nil cases with guard let statements TS
+- and handle the container and context nil cases with guard let statements TS
 - doing this if it failed the app will be in a weird state (this code is less safe that the one that make the app crash) 
-- one idea s to ignore the cache from core data if it's not working and use in memory for example 
-- other solution is to use the Null stategy (NullStore) that provided neutral behavior 
+- one idea is to ignore the cache from core data if it's not working and use in memory cache for example 
+- other solution is to use the Null stategy (NullStore conforming to FeedStore & FeedImageDataStore) created in scene
+- delegate (this will provide neutral behavior)
 - for example for deleting, inserting the cache return .success
-- for retriving complete with .success(.none)
+- for retriving complete with .success(.none) add FeedImageDataStore to RetrievalResult to avoid compiler error
 - replace the try! with 
 do {
     try CoreDataFeedStore(..
 } catch {
     return NullStore()
-} (coment the so statment and see the app running with the null store
+} (coment the do statment and see the app running with the null store
 - create a fallback instance where a non critical instance could not be created
 - move NullStore to its own file (below SceneDelegate)
-[use..]
+[use NullStore when we can't create a CoreDataFeedStore instance]
 - if we need to use the NullStore we would need to notify this also (we could add a print statement)
 - "Failed to instantiate CoreData store with error \(error.localizedDescription)" the more messages in the console the
 - lees we pay attention to them
