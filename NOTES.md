@@ -4222,4 +4222,5 @@ return controller
 ```
 before the lecture there is another PR Project Clean Up
 [group protocol conformance in extensions] NullStore
+[port all LoaderSpy methods to Combine publishers]
 ```
