@@ -136,6 +136,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+
+//MARK: Loggers
+
 extension Publisher {
     func logCacheMises(url: URL, logger: Logger) -> AnyPublisher<Output, Failure> {
         return handleEvents(
