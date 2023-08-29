@@ -4055,7 +4055,7 @@ do {
 - "Failed to instantiate CoreData store with error \(error.localizedDescription)" the more messages in the console the
 - lees we pay attention to them
 - replace print with assertionFailure (will cause a crash in debug builds but it will no it production)
-[add..]
+[add `assertionFailure` to catch CoreData issues in Debug builds]
 - the idea is to use the logger library from apple framework (import os)
 - create a logger (below httpClient)
 private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
