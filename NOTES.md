@@ -4014,28 +4014,206 @@ localFeedLoader.loadPublisher()
 
 ### 6) logging strategies
 ```
+- there other commits that happened between lectures
+[rename file] CoreDataFeedStore+FeedImageDataStore
+- in FeedAcceptanceTests: launch(httClient:,store:)
+[set small window frame to prevent loading content ahead of time during tests]
+- in ManagedCache: 
+- create deleteCache(in context: NSManagedObjectContext) use it there and in CoreDataFeedStore+FeedStore
+[remove duplication]
+- in ManagedFeedImage: 
+create data(with url: URL, in context: NSManagedObjectContext) throws -> Data?
+- and use it in CoreDataFeedStore+FeedImageDataStore
+[add helper to find image data for a given URL]
 - the idea is to use loggin to catch things that cannot be caought by tests or debugging
 - for example in the scene delegate we are using a try! to access the store
+- remove the try!, in  
 - remove from CoreDataFeedStore init the hability to throw and instead print the error in the catch block
+- and aldo move the guard let inside the do block
 } catch {
     container = nil (they may failed)
     context = nil
     print("CoreData error: \(error)"
 }  
-- and handle the nil cases with guard let statements TS
+- and handle the container and context nil cases with guard let statements TS
 - doing this if it failed the app will be in a weird state (this code is less safe that the one that make the app crash) 
-- one idea s to ignore the cache from core data if it's not working and use in memory for example 
-- other solution is to use the Null stategy (NullStore) that provided neutral behavior 
+- one idea is to ignore the cache from core data if it's not working and use in memory cache for example 
+- other solution is to use the Null stategy (NullStore conforming to FeedStore & FeedImageDataStore) created in scene
+- delegate (this will provide neutral behavior)
 - for example for deleting, inserting the cache return .success
-- for retriving complete with .success(.none)
+- for retriving complete with .success(.none) add FeedImageDataStore to RetrievalResult to avoid compiler error
 - replace the try! with 
 do {
     try CoreDataFeedStore(..
 } catch {
     return NullStore()
-} (coment the so statment and see the app running with the null store
+} (coment the do statment and see the app running with the null store
 - create a fallback instance where a non critical instance could not be created
 - move NullStore to its own file (below SceneDelegate)
-[use..]
+[use NullStore when we can't create a CoreDataFeedStore instance]
+- if we need to use the NullStore we would need to notify this also (we could add a print statement)
+- "Failed to instantiate CoreData store with error \(error.localizedDescription)" the more messages in the console the
+- lees we pay attention to them
+- replace print with assertionFailure (will cause a crash in debug builds but it will no it production)
+[add `assertionFailure` to catch CoreData issues in Debug builds]
+- the idea is to use the logger library from apple framework (import os)
+- create a logger (below httpClient)
+private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
+- use the logger.fault("Failed to instantiate CoreData store with error \(error.localizedDescription)")
+[log fault when we can't create a `CoreDataFeedStore` instance]
+- we are using the logger in the composition root to avoid injecting loggers
+- now we will handle debug log tracing 
+- network debbugger (this shows data sent and recieve etc)
+- the idea is to inject the logging behaviour via a decorator to the httpClient
+private class HTTPClientProfilingDecorator: HTTPClient { (on bottom of scene delegate file)
+    private let decoratee: HttpClient
+    private let logger: Logger 
+    internal init(decoratee..
+    func get(from url: URL, completion: @escaping (HTTClient.Result) -> Void) -> HttpClientTask {
+        logger.trace("Started loading url: \(url)")
+        let startTime = CACurrentMediaTime() (Date() gets out of date)
+        return decoratee.get(from: url) { [logger] result in
+            if case let .failure(error) = result {
+                logger.trace("Failed to load url: \(url) with error: \(error.localizedDescription)")
+            }
+            let elapsedTime = CACurrentMediaTime() - startTime
+            logger.trace("Finished loading url: \(url) in \(elapsedTime) seconds")
+            completion(result)
+        }
+    }
+} 
+- create a new client (HTTPClientProfilingDecorator) used in the image loader (makeLocalImageLoaderWithRemoteFallback)
+- we can log how long the load took and also errors 
+- using Combine we can inject log behavior in the publisher chain
+- in makeLocalImageLoaderWithRemoteFallback:
+var startTime = CA..
+...
+.getPublisher(url: url)
+.handleEvents(
+    receiveSubscription: { _ in 
+        startTime = CA..
+        logger.trace("Starte.." 
+    },
+    receiveCompletion: { result in -copy code from before- }
+- we can add this to an extension 
+
+extension Publisher {
+    func logElapsedTime(url: URL, logger: Logger) -> AnyPublisher<Output, Failure> {
+        var startTime = ...
+        return handleEvents(
+            ...
+        ).eraseToAnyPublisher
+    }
+}
+- now it can be used:
+httpClient
+    .getPublisher
+    .logEllapsedTime(url: url, logger: logger)...
+- we can break down to types of logging 
+- func logError(.. ..only the error logging part
+- func logElapsedTime(..only elapsed time part
+- with the debugger we see that we load all images again when reloading, the cache should prevent that from happening
+- add a new logger to catch the cache misses .logCacheMisses(url: url, logger: logger)
+func logCacheMisses.. loger.trace("Cache miss for url: \(url)" (remove getting the error with case let)
+then apply it: 
+loadmageDataPublisher(from: url)
+    .logCacheMises..
+- run the app and we are missing a lot of caching
+- in LocalFeedLoader: FeedCache: not good to add performance improvements in services
+- instead it is good to add the improvements to the infrastructure
+- the idea is to store temporarly the data from the images when we are about to delete the cache
+- in ManageFeedImage:
+override func prepareForDeletion() {
+    super.prepareForDeletion()
+    managedObjectContext?.userInfo[url] = data
+})
+static func images(from...
+    let images = (added) ...
+        managed.data = context.userInfo[local.url] as? Data
+        return managed
+    })
+    context.userInfo.removeAllObjects()
+    return images    
+- with this we are performing the optimization in the infrastructure (we do not change the service layer)
+- also in static func data(with url:..
+    if let data = context.userInfo[url] as? Data { return data }
+- run test in [EssentialFeed] TS
+- run the app -> no more cache misses 
+[optimize CoreData implementation to reduce cache misses] (don't commit the logs)
+- run the app again and go to the bottom very fast -> some images where loaded 5 times
+- in FeedImageCellController:
+- there are loadings in cell for row, in prefetch rows and on retry (didRequestImage)
+- write a test to prove that we understand the problem and once it's resolved we won't have regressions
+- in FeedUIIntegrationTests (at the bottom)
+T) test_feedImageView_doesNotLoadImageAgainUntilPreviousRequestCompletes 
+(based on test_feedImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore)
+- refactor to have one image 
+sut.loadViewIfNeeded
+loader.completeFeedLoading(with: [Image])
+sut.simulateFeedImageViewNearVisible(at: 0)
+..assertEqual(loader.loadedImageURLs, [image.url], "Expected first request when near visible")
+  sut.simulateFeedImageViewVisible(at: 0)
+  ..Equal(loader.loadedImageURLs, [image.url] "Expected no request until previous completes"
+loader.completeImageLoading(at: 0)
+sut.simulateFeedImageViewVisible(at: 0)
+..Equal(loader.loadedImageURLs, [image.url, image.url] "Expected second request when visible after previous complete"
+  sut.simulateFeedImageViewNotVisible(at: 0)
+  sut.simulateFeedImageViewVisible(at: 0)
+  ..Equal(loader.loadedImageURLs, [image.url, image.url, image.url] 
+  "Expected third request when visible after canceling previous complete" TF (only first test pass)
+- in FeedImageCellController we could add a isLoading variable and update the state when need but 
+- instead of doing it here we could do it in LoadResourcePresentationAdapter:
+private var isLoading = false
+.. func loadResource()
+guard !isLoading else { return }
+.. presenter?.didStartLoading()
+isLoading = true
+.. receiveCompletion .. 
+self?.isLoading = false        
+- run the test -> crash index out of range
+- in FeedUIIntegrationTests+LoaderSpy: func completeFeedLoading... at the end
+    feedRequests[index].send(completion: .finished) to 'finish' the publisher
+}
+- in CommentsUIIntegrationTests completeCommentsLoading .. requests[index].send(completion: .finished) TF 
+- failings also in other places
+- test_loadCommentsActions_requestCommentsFromLoader
+add new test "Expected no request until previous completes" 
+then add loader.completeCommentsLoading(at: 0) and then (at: 1) this test pass
+- in FeedUIIntegrationTests:
+- repeat the same add a new test "Expected no request until previous completes"
+- and then the completeFeedLoading(at: 0) and then (at: 1) this tests pass TF
+- when cancelling we are not setting the value back to false
+- when you cancel a publisher the system does not call completion 
+add .dispatchOnMainQueue().handleEvents(receiveCancel: { [weak self] in self?.isLoading = false } TS
+[prevent loading resources again until a running request completes] don't commit logs messages
+- run the app still loading 3 images
+- evey time we load a new page we get all the items again the old ones and the new ones appended
+- it works but it is not efficient 
+- the idea is that the adapter reuses the already created cell controllers
+- in FeedUIIntegrationTests, last added :
+the image is visible but when we call load more, we shouln't load again to fetch the image
+at the bottom of the test add:
+sut.simulateLoadMoreFeedAction()
+loader.completeLoadMore(with: [image, makeImage()]
+sut.simulateFeedImageViewVisible(at: 0)
+..Equal(loader.loadedImageURLs, [image.url, image.url, image.url] 
+"Expected no request until the previous completes" TF
+- the idea is that when creating the cellControllers if we have already one created we can use that one
+- in FeedViewAdapter: add a look up table 
+private var currentFeed: [FeedImage: CellController]
+..init(currentFeed: [FeedImage: CellController] = [:]
+self.currentFeed = currentFeed ...
+let feed = viewModel...map..
+    if let controller = currentFeed[model] { return controller } 
+populate the dictionary at the end of display func:
+let controller = CellController(id: model, view)
+currentFeed[model] = controller
+return controller
+- later on in the display func instead of setting the resouceView of the loadMoreAdapter to self 
+- use a new FeedViewAdapter(controller: controller, imageLoader: imageLoader, selection: selection, currentFeed: curr..)
+- add a guard let controller = controller at the top of the display func (if no controller then we cannot do anything) TS
+[reuse existing cell controllers to avoid unnecessary reallocation of resources] don't commit the logs
+- run the app total network bytes received 1.9 MB
+- once the issues are addressed with the tests we can remove the logs
 - 
 ```
