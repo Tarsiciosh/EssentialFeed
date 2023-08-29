@@ -4121,22 +4121,25 @@ loadmageDataPublisher(from: url)
 - run the app and we are missing a lot of caching
 - in LocalFeedLoader: FeedCache: not good to add performance improvements in services
 - instead it is good to add the improvements to the infrastructure
+- the idea is to store temporarly the data from the images when we are about to delete the cache
 - in ManageFeedImage:
 override func prepareForDeletion() {
     super.prepareForDeletion()
     managedObjectContext?.userInfo[url] = data
 })
-in static func images(from...
-    managed.data = context.userInfo[local.url] as? Data
-    return managed
-})
-context.userInfo.removeAllObjects() and return images    
+static func images(from...
+    let images = (added) ...
+        managed.data = context.userInfo[local.url] as? Data
+        return managed
+    })
+    context.userInfo.removeAllObjects()
+    return images    
 - with this we are performing the optimization in the infrastructure (we do not change the service layer)
 - also in static func data(with url:..
-    if let data = context.userInfo[local.url] as? Data { return data }
+    if let data = context.userInfo[url] as? Data { return data }
 - run test in [EssentialFeed] TS
 - run the app -> no more cache misses 
-[optimi..] (don't commit the logs)
+[optimize CoreData implementation to reduce cache misses] (don't commit the logs)
 - run the app again and go to the bottom very fast -> some images where loaded 5 times
 - in CellController 
 - there are loadings in cell for row, in prefetch rows and on retry
