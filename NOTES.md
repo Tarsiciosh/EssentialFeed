@@ -4217,3 +4217,10 @@ return controller
 - once the issues are addressed with the tests we can remove the logs
 - 
 ```
+
+### 7) Async Injection: Decoupling the Domain from Infra Details
+```
+before the lecture there is another PR Project Clean Up
+[group protocol conformance in extensions] NullStore
+[port all LoaderSpy methods to Combine publishers]
+```
