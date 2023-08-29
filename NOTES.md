@@ -4060,8 +4060,8 @@ do {
 - create a logger (below httpClient)
 private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
 - use the logger.fault("Failed to instantiate CoreData store with error \(error.localizedDescription)")
-[log..]
-- we are using the logger in the composition root to avoid inject loggers
+[log fault when we can't create a `CoreDataFeedStore` instance]
+- we are using the logger in the composition root to avoid injecting loggers
 - now we will handle debug log tracing 
 - network debbugger (this shows data sent and recieve etc)
 - the idea is to inject the logging behaviour via a decorator to the httpClient
