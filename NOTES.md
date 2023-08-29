@@ -4065,9 +4065,9 @@ private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialApp
 - now we will handle debug log tracing 
 - network debbugger (this shows data sent and recieve etc)
 - the idea is to inject the logging behaviour via a decorator to the httpClient
-private class HTTPClientProfilingDecorator: HTTPClient {
+private class HTTPClientProfilingDecorator: HTTPClient { (on bottom of scene delegate file)
     private let decoratee: HttpClient
-    private let logger: logger 
+    private let logger: Logger 
     internal init(decoratee..
     func get(from url: URL, completion: @escaping (HTTClient.Result) -> Void) -> HttpClientTask {
         logger.trace("Started loading url: \(url)")
@@ -4082,7 +4082,7 @@ private class HTTPClientProfilingDecorator: HTTPClient {
         }
     }
 } 
-- decorate the httpClient use in the image loader (makeLocalImageLoaderWithRemoteFallback)
+- create a new client (HTTPClientProfilingDecorator) used in the image loader (makeLocalImageLoaderWithRemoteFallback)
 - we can log how long the load took and also errors 
 - using Combine we can inject log behavior in the publisher chain
 - in makeLocalImageLoaderWithRemoteFallback:
@@ -4112,13 +4112,15 @@ httpClient
 - we can break down to types of logging 
 - func logError(.. ..only the error logging part
 - func logElapsedTime(..only elapsed time part
-- with the debugger we see that we load all images again when reloading the cache should prevent that from happening
-- starting adding a new logger to cache misses .logCacheMisses(url: url, logger: logger)
-func logCacheMisses...
-.. loger.trace("Cache miss for url: \(url)" (remove getting the error with case let)
+- with the debugger we see that we load all images again when reloading, the cache should prevent that from happening
+- add a new logger to catch the cache misses .logCacheMisses(url: url, logger: logger)
+func logCacheMisses.. loger.trace("Cache miss for url: \(url)" (remove getting the error with case let)
+then apply it: 
+loadmageDataPublisher(from: url)
+    .logCacheMises..
 - run the app and we are missing a lot of caching
 - in LocalFeedLoader: FeedCache: not good to add performance improvements in services
-- instead add the improvement in the infrastructure
+- instead it is good to add the improvements to the infrastructure
 - in ManageFeedImage:
 override func prepareForDeletion() {
     super.prepareForDeletion()
