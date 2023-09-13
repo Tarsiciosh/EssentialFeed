@@ -4225,7 +4225,7 @@ before the lecture there is another PR Project Clean Up
 [port all LoaderSpy methods to Combine publishers]
 - we decouple the Feed API module from the Shared API module and compose them in the composition root
 - in the scene delegate we compose them using Combine (using FeedItemsMapper which is a pure function)
-- tests are much more simple without spys etc (we deleted the FeedLoader protocol with was async) e.g. FeedAPIMapperTests
+- tests are much more simple without spys etc (we deleted the FeedLoader protocol which was async) e.g. FeedAPIMapperTests
 - the idea is to use the same aproach and decouple modules from asychrony, the previous way was to  
 - decouple module from infrastructure details, make the module functions synchronous and then compose them
 - we will see another way
@@ -4236,13 +4236,13 @@ before the lecture there is another PR Project Clean Up
 - (we can see that in the debugger using break points)
 - in FeedImageDataStore: 
 - copy and paste the insert function and start refactoring it:
-func insert(_ data: Data, for url: URL) throws -> Void
+func insert(_ data: Data, for url: URL) throws -> Void or just throws
 func retrieve(dataForURL url: URL) throws -> Data?
 - other way would be to have it like this:
 func insert(_ data: Data, for url: URL) -> AnyPublisher<Void, Error>
 func retrieve(dataForURL url: URL) -> AnyPublisher<Data?, Error>
 - last version would also leak details 
-- create a public extension to not break clients 
+- create a public extension with defaults implementations to not break clients 
 - use internally the old ones using DispatchGroup or semaphores
 func retrieve(dataForURL url: URL) throws -> Data? {
     let group = DispatchGroup()
@@ -4258,8 +4258,9 @@ func retrieve(dataForURL url: URL) throws -> Data? {
 - repeat the same for the insert func
 - add @available(*, deprecated) to the old functions
 - add empty implementation of the old functions to be able to delete the old implementation without errors
+- it would be like a protocol with optional methods
 - run the tests [EssentialFeed] BS
-[deprecate.. ]
+[deprecate async APIs in favor of new sync APIs]
 - in LocalFeedImageDataLoader: FeedImageDataCache but first to the test
 - in CacheFeedImageDataUseCaseTests:
 - in FeedImageDataStorySpy: (we need to stub an insertion result before calling it)
@@ -4407,4 +4408,40 @@ public func retrieve...
 [make Inme] only in memory store
 [remove ..]
 - run the app and put a break point in the performSync func (the app will hang waiting for the response)
+- in sceneDelegate makeLocalImageLoaderWithRemoteFallback
+....
+.subscribe(on: DispatchQueue.global())
+.eraseToAnyPublisher()
+- run the app with the breakpoint and we see it dispatches in different threads 
+- we can use our own scheduller 
+private lazy var scheduler = DispatchQueue(label: "com.essentialdeveloper.infra.queue", qos: .userInitiated)
+- add the scheduller to the caching as well (httpClient... caching(to....).subscribe...
+- since core data is thread safe with can change to attributes: .concurrent
+- add the receive(on: DispatchQueue.main) were it will dispath the down stream 
+- now the integration tests are failing 
+- we can use an inmediate scheduller in tests to solve the problem but the scheduler cannot be passed as a param
+- because it needs two asociated types
+- we cannot also hold a reference to it
+- we can use type erasure to solve this problem
+- in CombineHelpers: 
+- copy the code of the AnyPublisher and create the AnyScheduler and define its associtated types with each 
+- conformance AnyScheduler<SchedulerTimeType: Stridable, SchedulerOptions>
+- also define the SchedulerTimeType.Stride: SchedulerTimeIntervalConvertible (where Schedul.)
+- change the init<S>(_ scheduler: S) and perform 
+- create an extension for the Scheduler to erase to AnyScheduler (calling the init method on AnyScheduler)
+- add a scheduler of type AnyScheduler<..,..> to the scene delegate init method and store it in the stored property 
+- use the erasure method on this store property (lazy)
+- in CombineHelpers:
+- create a typealias for AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions> called 
+- AnyDispatchQueueScheduler
+- replace in both places
+- create an extension on AnyDispatchQueueScheduler {
+    static var immediateInMainQueue: Self {
+        DispatchQueue.immediateWhenOnMainQueueScheduler.eraseToAnyScheduler()
+    }
+}
+- inject in the test the new scheduler: .immediateOnMainQueue
+[add any..] just the any scheduler
+[suscribe..]
+-  
 ```
