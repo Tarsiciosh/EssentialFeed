@@ -4275,15 +4275,17 @@ func completeInsertion(with error: Error, at index: Int = 0) {
 ... 
 - in the expect function in CacheFeedImageDataUseCaseTests: 
 - move the action before calling the operation TF
+- now it is executing the empty old implementation
 - in LocalFeeImageDataLoader: use the new functions
 public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
     completion(SaveResult {
         try store.insert(data, for: url)
     }.mapError { _ in SaveError.failed }) TF (only one)   
 }
+- now the LocalFeedImageDataLoade 'save' function will execute the new 'insert' function in the store
 - the test that is failing is test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - this can't happen anymore so we delete the test TS
-[save images ..]
+[save images synchronously]
 - next warning LocalFeedImageDataLoader: loadImageData
 - in LoadFeedImageDataFromUseCaseTests: -> FeedImageDataStoreSpy:
 private var retrievalResult: Result<Data?, Error>?
