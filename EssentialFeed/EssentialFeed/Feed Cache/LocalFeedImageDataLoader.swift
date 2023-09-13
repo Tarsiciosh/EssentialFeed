@@ -22,7 +22,7 @@ extension LocalFeedImageDataLoader: FeedImageDataCache{
     }
 }
 
-extension LocalFeedImageDataLoader: FeedImageDataLoader{
+extension LocalFeedImageDataLoader: FeedImageDataLoader {
     public typealias LoadResult = FeedImageDataLoader.Result
     
     public enum LoadError: Swift.Error {
@@ -53,14 +53,16 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader{
     public func loadImageData(from url: URL, completion: @escaping (LoadResult) -> Void) -> FeedImageDataLoaderTask {
         let task = LoadImageDataTask(completion)
         
-        store.retrieve(dataForURL: url) { [weak self] result in
-            guard self != nil else { return }
-            
-            task.complete(with: result
-                .mapError { _ in LoadError.failed }
-                .flatMap { data in data.map { .success($0) } ?? .failure(LoadError.notFound) }
-            )
-        }
+        task.complete(
+            with: Swift.Result {
+                try store.retrieve(dataForURL: url)
+            }
+            .mapError { _ in LoadError.failed }
+            .flatMap { data in
+                data.map { .success($0) } ?? .failure(LoadError.notFound)
+            }
+        )
+        
         return task
     }
 }

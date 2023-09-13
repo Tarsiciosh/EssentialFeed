@@ -4286,15 +4286,15 @@ public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) 
 - the test that is failing is test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
 - this can't happen anymore so we delete the test TS
 [save images synchronously]
-- next warning LocalFeedImageDataLoader: loadImageData
-- in LoadFeedImageDataFromUseCaseTests: -> FeedImageDataStoreSpy:
+- next warning LocalFeedImageDataLoader: FeedImageDataLoader
+- search for the callers of loadImageData -> 
+- in LoadFeedImageDataFromCacheUseCaseTests: -> FeedImageDataStoreSpy:
 private var retrievalResult: Result<Data?, Error>?
 func retrieve(dataForURL: ... repeat the same steps TF
-- remove deallocation, cancelling task test
+- remove deallocation and cancelling task tests
 - move the action before excecution TF
 - in LocalFeeImageDataLoader, loadImageData:
 let task = LoadImageDataTask(completion)
-
 task.complete(
     with: Swift.Result {
         try store.retrieve(dataForURL: url)
@@ -4303,7 +4303,7 @@ task.complete(
     .flatMap { data in 
         data.map { .success($0) } ?? .failure(LoadError.notFound)
     }) TS
-[load images ..]
+[load images synchronously]
 - in FeedImageDataCache: 
 - refactor the save function BE 
 - in LocalFeedImageDataLoader: FeedImageDataCache
