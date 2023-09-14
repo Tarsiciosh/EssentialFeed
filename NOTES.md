@@ -4361,7 +4361,7 @@ _ = try? sut.loadImageData(from: url) TS
 [make FeedImageDataLoader sync]
 - now the implementation can be synchronous as well
 - in CoreDataFeedStore: rename the perform method to performAsync
-[rename ..]
+[rename method to clarify intent]
 - in CoreDataFeedImageDataStoreTests:
 - change the expect:
 let receiveResult = Result { try .. } and remove the expectation
