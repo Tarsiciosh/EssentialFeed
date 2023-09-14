@@ -4400,14 +4400,14 @@ public func retrieve... - new version -
         }
     } TS
 [make CoreData FeedImageDataStore implementation sync]
-- remove the depricated apis RetrievalResult, helper extensions etc
+- remove the deprecated apis RetrievalResult, helper extensions etc
 - run the test in [EssentialFeed]
 - fix results types Result<Data?, Error>
-- remove test_sideEffects_runSerially
+- remove test_sideEffects_runSerially TS
 - run the test in [EssentialApp]
 - fix the NullStore with the new api 
-- fix InMemoryFeedStore append and retrieve the info to the dictionary 
-[make Null.. ] only the null store
+- fix InMemoryFeedStore append and retrieve the info to the dictionary TS
+[make NullStore FeedImageDataStore implementation sync] only the null store
 [make Inme] only in memory store
 [remove ..]
 - run the app and put a break point in the performSync func (the app will hang waiting for the response)
