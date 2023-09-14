@@ -4343,7 +4343,6 @@ do {
 } catch {
     throw LoadError.failed
 }
-
 throw LoadError.notFound
 - in LoadFeedImageDataFromCacheUseCaseTests:
 replace old result with Result<Data, Error>
@@ -4359,7 +4358,7 @@ _ = try? sut.loadImageData(from: url) TS
             try self.loadImageData(from: url)
         })
     } TS
-[make FeedImageDataLoader]
+[make FeedImageDataLoader sync]
 - now the implementation can be synchronous as well
 - in CoreDataFeedStore: rename the perform method to performAsync
 [rename ..]
