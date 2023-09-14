@@ -4453,6 +4453,7 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 - in FeedAcceptanceTests: 
 - inject the new .immediateOnMainQueue
 [add AnyScheduler] just the any scheduler
-[suscribe..]
+[subscribe upstream store subscriptions in a background queue to avoid blocking the main queue (tests still run
+  synchronously in the main queue with the immediate scheduler)]
 -  
 ```
