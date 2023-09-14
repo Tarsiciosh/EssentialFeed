@@ -4364,7 +4364,7 @@ _ = try? sut.loadImageData(from: url) TS
 [rename method to clarify intent]
 - in CoreDataFeedImageDataStoreTests:
 - change the expect:
-let receiveResult = Result { try .. } and remove the expectation
+let receiveResult = Result { try .. }, remove the expectation and switch directly 
 - change the insert:
 - move the sut.insert(data, for: url) outside of the block
 sut.insert([image], remove the success and replace to if case let .failure .. exp.fulfill()
@@ -4374,7 +4374,7 @@ do {
 } catch {
     XCTFaile(...
 }
-- TS becuase of the dispatch group
+- TS becuase of the dispatch group previous implementations that internally calls the old methods
 - in CoreDataFeedStore: 
 - create a new method performSync<R>(_ action: (NSManagedObjectContext) -> Result<R, Error> ) throws -> R { 
     //it does not retain the closure
@@ -4384,8 +4384,8 @@ do {
     context.performAndWait { result = action(context) }
     return try result.get()
 }
-- in CoreDataFeedStore: FeedImageDataStore: 
-public func insert...
+- in CoreDataFeedStore+FeedImageDataStore: 
+public func insert... - new version - 
     try performSync { context in 
         Result {
             try ManagedFeedImage.first(with: url, in: context)
@@ -4393,13 +4393,13 @@ public func insert...
                 .map(context.save)
         }
     }
-public func retrieve...
+public func retrieve... - new version - 
     try performSync { context in 
         Result {
             try ManagedFeedImage.data(with: url, in: context)
         }
     } TS
-[make CoreData]
+[make CoreData FeedImageDataStore implementation sync]
 - remove the depricated apis RetrievalResult, helper extensions etc
 - run the test in [EssentialFeed]
 - fix results types Result<Data?, Error>
