@@ -4416,9 +4416,9 @@ public func retrieve... - new version -
 .subscribe(on: DispatchQueue.global())
 .eraseToAnyPublisher()
 - run the app with the breakpoint and we see it dispatches in different threads 
-- we can use our own scheduller 
+- we can use our own scheduller (below window)
 private lazy var scheduler = DispatchQueue(label: "com.essentialdeveloper.infra.queue", qos: .userInitiated)
-- add the scheduller to the caching as well (httpClient... caching(to....).subscribe...
+- add the scheduller to the caching as well (httpClient... caching(to....).subscribe... capture scheduler
 - since core data is thread safe with can change to attributes: .concurrent
 - add the receive(on: DispatchQueue.main) were it will dispath the down stream 
 - now the integration tests are failing 
@@ -4428,23 +4428,31 @@ private lazy var scheduler = DispatchQueue(label: "com.essentialdeveloper.infra.
 - we can use type erasure to solve this problem
 - in CombineHelpers: 
 - copy the code of the AnyPublisher and create the AnyScheduler and define its associtated types with each 
-- conformance AnyScheduler<SchedulerTimeType: Stridable, SchedulerOptions>
+- conformance AnyScheduler<SchedulerTimeType: Strideable, SchedulerOptions>
 - also define the SchedulerTimeType.Stride: SchedulerTimeIntervalConvertible (where Schedul.)
-- change the init<S>(_ scheduler: S) and perform 
+- insert one by one the protocol stubs
+- change the  init<S>(_ scheduler: S) where SchedulerTimeType == S.SchedulerTimeType, SchedulerOptions == S.SchedulerOptions, S: Scheduler
+- hold a reference of the scheduler now varialbe but as a closure private let _now = () -> SchedulerTimeType
+- and use it for computed property var now: SchedulerTimeType { _now() }
+- repeate the same for each stub
 - create an extension for the Scheduler to erase to AnyScheduler (calling the init method on AnyScheduler)
-- add a scheduler of type AnyScheduler<..,..> to the scene delegate init method and store it in the stored property 
-- use the erasure method on this store property (lazy)
+func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> {
+    AnyScheduler.init(self)
+}
+- add a scheduler of type AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions>
+- to the scene delegate init method and store it in the stored property using the erasure method 
 - in CombineHelpers:
 - create a typealias for AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions> called 
 - AnyDispatchQueueScheduler
 - replace in both places
 - create an extension on AnyDispatchQueueScheduler {
-    static var immediateInMainQueue: Self {
+    static var immediateOnMainQueue: Self {
         DispatchQueue.immediateWhenOnMainQueueScheduler.eraseToAnyScheduler()
     }
 }
-- inject in the test the new scheduler: .immediateOnMainQueue
-[add any..] just the any scheduler
+- in FeedAcceptanceTests: 
+- inject the new .immediateOnMainQueue
+[add AnyScheduler] just the any scheduler
 [suscribe..]
 -  
 ```
