@@ -4409,7 +4409,7 @@ public func retrieve... - new version -
 - fix InMemoryFeedStore append and retrieve the info to the dictionary TS
 [make NullStore FeedImageDataStore implementation sync] only the null store
 [make in memory FeedImageDataStore implementation sync] only in memory store
-[remove ..]
+[remove unused async methods]
 - run the app and put a break point in the performSync func (the app will hang waiting for the response)
 - in sceneDelegate makeLocalImageLoaderWithRemoteFallback
 ....
