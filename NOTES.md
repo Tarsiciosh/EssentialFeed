@@ -4293,6 +4293,7 @@ private var retrievalResult: Result<Data?, Error>?
 func retrieve(dataForURL: ... repeat the same steps TF
 - remove deallocation and cancelling task tests
 - move the action before excecution TF
+- again the store is executing the old empty version of retrieve
 - in LocalFeeImageDataLoader, loadImageData:
 let task = LoadImageDataTask(completion)
 task.complete(
@@ -4305,10 +4306,10 @@ task.complete(
     }) TS
 [load images synchronously]
 - in FeedImageDataCache: 
-- refactor the save function BE 
+- refactor the save function to be also synchronous BE 
 - in LocalFeedImageDataLoader: FeedImageDataCache
-- remove the Result type 
-- implement the new API
+- remove the SaveResult type 
+- implement the new API using do catch blocks
 public func save(_ data: Data, for url: URL) throws {
     do {
         try store.insert(data, for: url)
@@ -4319,13 +4320,14 @@ public func save(_ data: Data, for url: URL) throws {
 - in CacheFeedImageDataUseCaseTests:
 - use Result<Void, Error>
 - in expect 
+- remove expectation (exp)
 let receivedResult = Result { try sut.save(anyData(), for: anyURL()) }
 switch ...
 - remove extra trailing for the test
 - try? sut.save(data, for: url) TS
-- run the tests in [EssnatialApp] BE
+- run the tests in [EssenatialApp] BE
 - in saveIgnoringResult remove trailing closure and try? save(data, for: url) TS
-[make feed image]
+[make FeedImageDataCache sync]
 - in FeedImageDataLoader: (it's much more complex because it has the cancellable task)
 - remove the Cancelable task and all other
 func loadImageData(from url: URL) throws -> Data
