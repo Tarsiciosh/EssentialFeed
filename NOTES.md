@@ -4487,5 +4487,8 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 [make NullStore FeedStore implementation sync]
 - in InMemoryFeedStore: FeedStore: implement new sync funcs
 [make in memory FeedStore implementation sync]
+- in FeedStore: remove no more used async code
+- in XCTestCase+FeedStoreSpecs: fix results types
+[remove unused async methods]
 - 
 ```
