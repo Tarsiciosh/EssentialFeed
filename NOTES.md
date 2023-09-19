@@ -4485,4 +4485,7 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 [make CoreData FeedStore implementation sync]
 - in NullStore: implement sync funcs
 [make NullStore FeedStore implementation sync]
+- in InMemoryFeedStore: FeedStore: implement new sync funcs
+[make in memory FeedStore implementation sync]
+- 
 ```
