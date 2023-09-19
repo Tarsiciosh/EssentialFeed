@@ -4492,4 +4492,5 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 [remove unused async methods]
 - in SceneDelegate: add subscribe(on: scheduler) to makeRemoteFeedLoaderWithLocalFallback and makeRemoteLoadMoreLoader
 [subscribe upstream store subscriptions in a background queue to avoid blocking the main queue (tests still run synchronously in the main queue with the immediate scheduler)]
+[fix EssentialFeedEndToEndTests]
 ```
