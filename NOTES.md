@@ -4462,5 +4462,10 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 - in FeedStoreSpy: refactor spy to stub results ( change deletionsCompletions to deletionResult etc)
 - in LoadFeedFromCacheUseCaseTests: refactor tests to complete before calling the func
 [perform feed cache operations synchronously]
-- 
+- in FeedCache: declare new sync api
+- in LocalFeedLoader: use new async api
+- in CombineHelper: fix save call
+- in EssentialFeedCacheIntegrationTests: refactor save func
+- in CacheFeedUseCaseTests: fix call issues refactor expect func 
+[make FeedCache sync] 
 ```
