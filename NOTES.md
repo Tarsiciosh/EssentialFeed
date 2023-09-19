@@ -4468,8 +4468,12 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 - in EssentialFeedCacheIntegrationTests: refactor save func
 - in CacheFeedUseCaseTests: fix call issues refactor expect func 
 [make FeedCache sync]
-- in LocalFeedLoader: implement new sync func
+- in LocalFeedLoader: implement new sync func for load 
 - in EssentialFeedCacheIntegrationTests: change expect to load func to use new sync func
 - in LoadFeedFromCacheUseCaseTests: refactor expect toCompleteWith function fix load calls
 [make LocalFeedLoader.load sync]
+- in LocalFeedLoader: implement new sync func for validateCache
+- in EssentialFeedCacheIntegrationTests: refactor validateCacheWith func
+- in ValidateFeedCacheUseCaseTests: fix validateCache calls
+[make LocalFeedLoader.validateCache sync]
 ```
