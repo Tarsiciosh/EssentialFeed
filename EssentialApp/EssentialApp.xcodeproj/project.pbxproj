@@ -40,8 +40,6 @@
 		57A0FA1629E4E38D0029C3A5 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57A0FA1529E4E38D0029C3A5 /* EssentialFeediOS.framework */; };
 		57A0FA1729E4E38D0029C3A5 /* EssentialFeediOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57A0FA1529E4E38D0029C3A5 /* EssentialFeediOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57A206A32A9E8C83009CAC77 /* NullStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A206A22A9E8C83009CAC77 /* NullStore.swift */; };
-		57A9E8D029F0933200E084E6 /* FeedImageDataLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A9E8CF29F0933200E084E6 /* FeedImageDataLoaderSpy.swift */; };
-		57A9E8D229F0940300E084E6 /* XCTestCase+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A9E8D129F0940300E084E6 /* XCTestCase+FeedImageDataLoader.swift */; };
 		57E6920529EE07790084A963 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E6920429EE07790084A963 /* XCTestCase+MemoryLeakTracking.swift */; };
 		57E6920729EE08560084A963 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E6920629EE08560084A963 /* SharedTestHelpers.swift */; };
 /* End PBXBuildFile section */
@@ -106,8 +104,6 @@
 		57A0FA1129E4E3890029C3A5 /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57A0FA1529E4E38D0029C3A5 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57A206A22A9E8C83009CAC77 /* NullStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullStore.swift; sourceTree = "<group>"; };
-		57A9E8CF29F0933200E084E6 /* FeedImageDataLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderSpy.swift; sourceTree = "<group>"; };
-		57A9E8D129F0940300E084E6 /* XCTestCase+FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FeedImageDataLoader.swift"; sourceTree = "<group>"; };
 		57E6920429EE07790084A963 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		57E6920629EE08560084A963 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -206,10 +202,8 @@
 				571B9DFD2A0075F60086B2C9 /* FeedUIIntegrationTests+Assertions.swift */,
 				57E6920429EE07790084A963 /* XCTestCase+MemoryLeakTracking.swift */,
 				578C820C29EF678A008516C5 /* XCTestCase+FeedLoader.swift */,
-				57A9E8D129F0940300E084E6 /* XCTestCase+FeedImageDataLoader.swift */,
 				57E6920629EE08560084A963 /* SharedTestHelpers.swift */,
 				578C820A29EF65FE008516C5 /* FeedLoaderStub.swift */,
-				57A9E8CF29F0933200E084E6 /* FeedImageDataLoaderSpy.swift */,
 				571B9E0E2A0089330086B2C9 /* HTTPClientStub.swift */,
 				571B9E102A0089CF0086B2C9 /* InMemoryFeedStore.swift */,
 			);
@@ -342,11 +336,9 @@
 				571B9E042A0075F60086B2C9 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				571B9E052A0075F60086B2C9 /* UIControl+TestHelpers.swift in Sources */,
 				578C820D29EF678A008516C5 /* XCTestCase+FeedLoader.swift in Sources */,
-				57A9E8D229F0940300E084E6 /* XCTestCase+FeedImageDataLoader.swift in Sources */,
 				571B9DD32A006E680086B2C9 /* SceneDelegateTests.swift in Sources */,
 				571B9E032A0075F60086B2C9 /* FeedUIIntegrationTests+Assertions.swift in Sources */,
 				571B9E112A0089CF0086B2C9 /* InMemoryFeedStore.swift in Sources */,
-				57A9E8D029F0933200E084E6 /* FeedImageDataLoaderSpy.swift in Sources */,
 				571B9E0F2A0089330086B2C9 /* HTTPClientStub.swift in Sources */,
 				571B9E022A0075F60086B2C9 /* FeedImageCell+TestHelpers.swift in Sources */,
 				578DAA502A09C2BB00BF1F77 /* UIView+TestHelpers.swift in Sources */,

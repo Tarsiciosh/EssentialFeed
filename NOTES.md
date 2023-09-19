@@ -4223,4 +4223,274 @@ return controller
 before the lecture there is another PR Project Clean Up
 [group protocol conformance in extensions] NullStore
 [port all LoaderSpy methods to Combine publishers]
+- we decouple the Feed API module from the Shared API module and compose them in the composition root
+- in the scene delegate we compose them using Combine (using FeedItemsMapper which is a pure function)
+- tests are much more simple without spys etc (we deleted the FeedLoader protocol which was async) e.g. FeedAPIMapperTests
+- the idea is to use the same aproach and decouple modules from asychrony, the previous way was to  
+- decouple module from infrastructure details, make the module functions synchronous and then compose them
+- we will see another way
+- there are other domain abstraction that are asynchronous (but only of the infrastructure implementation)
+- in CoreDataFeedStore+FeedImageDataStore:
+- we perform the retrieve function using the 'perform' funciton which receives a completion block
+- the 'perform' function is excecuted in the main thread but the completion is excecuted in another thread
+- (we can see that in the debugger using break points)
+- in FeedImageDataStore: 
+- copy and paste the insert function and start refactoring it:
+func insert(_ data: Data, for url: URL) throws -> Void or just throws
+func retrieve(dataForURL url: URL) throws -> Data?
+- other way would be to have it like this:
+func insert(_ data: Data, for url: URL) -> AnyPublisher<Void, Error>
+func retrieve(dataForURL url: URL) -> AnyPublisher<Data?, Error>
+- last version would also leak details 
+- create a public extension with defaults implementations to not break clients 
+- use internally the old ones using DispatchGroup or semaphores
+func retrieve(dataForURL url: URL) throws -> Data? {
+    let group = DispatchGroup()
+    group.enter()
+    var result: RetrievalResult!
+    retrieve(dataForURL: url, completion: {
+        result = $0
+        group.leave()
+    })
+    group.wait()
+    return try result.get()
+}
+- repeat the same for the insert func
+- add @available(*, deprecated) to the old functions
+- add empty implementation of the old functions to be able to delete the old implementation without errors
+- it would be like a protocol with optional methods
+- run the tests [EssentialFeed] BS
+[deprecate async APIs in favor of new sync APIs]
+- in LocalFeedImageDataLoader: FeedImageDataCache but first to the test
+- in CacheFeedImageDataUseCaseTests:
+- in FeedImageDataStorySpy: (we need to stub an insertion result before calling it)
+private var insertionResult: Result<Void, Error>? 
+func insert(_ data: Data, for url: URL) throws {
+    receivedMessages.append(.insert(data: data, for: url))
+    try insertionResult?.get()
+} 
+func completeInsertion(with error: Error, at index: Int = 0) {
+    insertionResult = .failure(error)
+}
+... 
+- in the expect function in CacheFeedImageDataUseCaseTests: 
+- move the action before calling the operation TF
+- now it is executing the empty old implementation
+- in LocalFeeImageDataLoader: use the new functions
+public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+    completion(SaveResult {
+        try store.insert(data, for: url)
+    }.mapError { _ in SaveError.failed }) TF (only one)   
+}
+- now the LocalFeedImageDataLoade 'save' function will execute the new 'insert' function in the store
+- the test that is failing is test_saveImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated
+- this can't happen anymore so we delete the test TS
+[save images synchronously]
+- next warning LocalFeedImageDataLoader: FeedImageDataLoader
+- search for the callers of loadImageData -> 
+- in LoadFeedImageDataFromCacheUseCaseTests: -> FeedImageDataStoreSpy:
+private var retrievalResult: Result<Data?, Error>?
+func retrieve(dataForURL: ... repeat the same steps TF
+- remove deallocation and cancelling task tests
+- move the action before excecution TF
+- again the store is executing the old empty version of retrieve
+- in LocalFeeImageDataLoader, loadImageData:
+let task = LoadImageDataTask(completion)
+task.complete(
+    with: Swift.Result {
+        try store.retrieve(dataForURL: url)
+    }
+    .mapError { _ in LoadError.failed }
+    .flatMap { data in 
+        data.map { .success($0) } ?? .failure(LoadError.notFound)
+    }) TS
+[load images synchronously]
+- in FeedImageDataCache: 
+- refactor the save function to be also synchronous BE 
+- in LocalFeedImageDataLoader: FeedImageDataCache
+- remove the SaveResult type 
+- implement the new API using do catch blocks
+public func save(_ data: Data, for url: URL) throws {
+    do {
+        try store.insert(data, for: url)
+    } catch {  
+        throw SaveError.failed
+    }
+} BE
+- in CacheFeedImageDataUseCaseTests:
+- use Result<Void, Error>
+- in expect 
+- remove expectation (exp)
+let receivedResult = Result { try sut.save(anyData(), for: anyURL()) }
+switch ...
+- remove extra trailing for the test
+- try? sut.save(data, for: url) TS
+- run the tests in [EssenatialApp] BE
+- in saveIgnoringResult remove trailing closure and try? save(data, for: url) TS
+[make FeedImageDataCache sync]
+- in FeedImageDataLoader: (it's much more complex because it has the cancellable task)
+- remove the Cancelable task and all other
+func loadImageData(from url: URL) throws -> Data
+- run the tests in EssentialFeed BE
+- in LocalFeedImageDataLoader: FeedImageDataLoader
+- remove the LoadResult
+- remove the task handling 
+use a do catch instead (using if let also)
+do {
+    if let imageData = try store.retrieve(dataForURL: url) {
+        return imageData
+    }
+} catch {
+    throw LoadError.failed
+}
+throw LoadError.notFound
+- in LoadFeedImageDataFromCacheUseCaseTests:
+replace old result with Result<Data, Error>
+- in expect remove the expectation
+let receiveResult = Result { try sut.loadImageData(from: anyURL()) }
+switch...
+- in LoadFeedImageDataFromCacheUseCaseTests: 
+_ = try? sut.loadImageData(from: url) TS
+- run the test in [EssentialApp] BE
+- in CombineHelpers loadImageDataPublisher: remove the task
+- ..Future { completion in  
+        completion( Result {
+            try self.loadImageData(from: url)
+        })
+    } TS
+[make FeedImageDataLoader sync]
+- now the implementation can be synchronous as well
+- in CoreDataFeedStore: rename the perform method to performAsync
+[rename method to clarify intent]
+- in CoreDataFeedImageDataStoreTests:
+- change the expect:
+let receiveResult = Result { try .. }, remove the expectation and switch directly 
+- change the insert:
+- move the sut.insert(data, for: url) outside of the block
+sut.insert([image], remove the success and replace to if case let .failure .. exp.fulfill()
+wait(for: [exp], ...
+do {
+    try sut.insert(data, for: url)
+} catch {
+    XCTFaile(...
+}
+- TS becuase of the dispatch group previous implementations that internally calls the old methods
+- in CoreDataFeedStore: 
+- create a new method performSync<R>(_ action: (NSManagedObjectContext) -> Result<R, Error> ) throws -> R { 
+    //it does not retain the closure
+    //use the generic to return Void or other type
+    let context = self.context
+    var result: Result<R, Error>!
+    context.performAndWait { result = action(context) }
+    return try result.get()
+}
+- in CoreDataFeedStore+FeedImageDataStore: 
+public func insert... - new version - 
+    try performSync { context in 
+        Result {
+            try ManagedFeedImage.first(with: url, in: context)
+                .map { $0.data = data }
+                .map(context.save)
+        }
+    }
+public func retrieve... - new version - 
+    try performSync { context in 
+        Result {
+            try ManagedFeedImage.data(with: url, in: context)
+        }
+    } TS
+[make CoreData FeedImageDataStore implementation sync]
+- remove the deprecated apis RetrievalResult, helper extensions etc
+- run the test in [EssentialFeed]
+- fix results types Result<Data?, Error>
+- remove test_sideEffects_runSerially TS
+- run the test in [EssentialApp]
+- fix the NullStore with the new api 
+- fix InMemoryFeedStore append and retrieve the info to the dictionary TS
+[make NullStore FeedImageDataStore implementation sync] only the null store
+[make in memory FeedImageDataStore implementation sync] only in memory store
+[remove unused async methods]
+- run the app and put a break point in the performSync func (the app will hang waiting for the response)
+- in sceneDelegate makeLocalImageLoaderWithRemoteFallback
+....
+.subscribe(on: DispatchQueue.global())
+.eraseToAnyPublisher()
+- run the app with the breakpoint and we see it dispatches in different threads 
+- we can use our own scheduller (below window)
+private lazy var scheduler = DispatchQueue(label: "com.essentialdeveloper.infra.queue", qos: .userInitiated)
+- add the scheduller to the caching as well (httpClient... caching(to....).subscribe... capture scheduler
+- since core data is thread safe with can change to attributes: .concurrent
+- add the receive(on: DispatchQueue.main) were it will dispath the down stream 
+- now the integration tests are failing 
+- we can use an inmediate scheduller in tests to solve the problem but the scheduler cannot be passed as a param
+- because it needs two asociated types
+- we cannot also hold a reference to it
+- we can use type erasure to solve this problem
+- in CombineHelpers: 
+- copy the code of the AnyPublisher and create the AnyScheduler and define its associtated types with each 
+- conformance AnyScheduler<SchedulerTimeType: Strideable, SchedulerOptions>
+- also define the SchedulerTimeType.Stride: SchedulerTimeIntervalConvertible (where Schedul.)
+- insert one by one the protocol stubs
+- change the  init<S>(_ scheduler: S) where SchedulerTimeType == S.SchedulerTimeType, SchedulerOptions == S.SchedulerOptions, S: Scheduler
+- hold a reference of the scheduler now varialbe but as a closure private let _now = () -> SchedulerTimeType
+- and use it for computed property var now: SchedulerTimeType { _now() }
+- repeate the same for each stub
+- create an extension for the Scheduler to erase to AnyScheduler (calling the init method on AnyScheduler)
+func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> {
+    AnyScheduler.init(self)
+}
+- add a scheduler of type AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions>
+- to the scene delegate init method and store it in the stored property using the erasure method 
+- in CombineHelpers:
+- create a typealias for AnyScheduler<DispatchQueue.SchedulerTimeType, DispatchQueue.SchedulerOptions> called 
+- AnyDispatchQueueScheduler
+- replace in both places
+- create an extension on AnyDispatchQueueScheduler {
+    static var immediateOnMainQueue: Self {
+        DispatchQueue.immediateWhenOnMainQueueScheduler.eraseToAnyScheduler()
+    }
+}
+- in FeedAcceptanceTests: 
+- inject the new .immediateOnMainQueue
+[add AnyScheduler] just the any scheduler
+[subscribe upstream store subscriptions in a background queue to avoid blocking the main queue (tests still run
+  synchronously in the main queue with the immediate scheduler)]
+- in FeedStore: add new sync version, with implementation using old func and empty implementation for old versions
+[deprecate async APIs in favor of new sync APIs]
+- in LocalFeedLoader: use new funcs
+- in CacheFeedUseCaseTests: delete test_save_requestsCacheDeletion and move completion before also action from exepect
+- in FeedStoreSpy: refactor spy to stub results ( change deletionsCompletions to deletionResult etc)
+- in LoadFeedFromCacheUseCaseTests: refactor tests to complete before calling the func
+[perform feed cache operations synchronously]
+- in FeedCache: declare new sync api
+- in LocalFeedLoader: use new async api
+- in CombineHelper: fix save call
+- in EssentialFeedCacheIntegrationTests: refactor save func
+- in CacheFeedUseCaseTests: fix call issues refactor expect func 
+[make FeedCache sync]
+- in LocalFeedLoader: implement new sync func for load 
+- in EssentialFeedCacheIntegrationTests: change expect to load func to use new sync func
+- in LoadFeedFromCacheUseCaseTests: refactor expect toCompleteWith function fix load calls
+[make LocalFeedLoader.load sync]
+- in LocalFeedLoader: implement new sync func for validateCache
+- in EssentialFeedCacheIntegrationTests: refactor validateCacheWith func
+- in ValidateFeedCacheUseCaseTests: fix validateCache calls
+[make LocalFeedLoader.validateCache sync]
+- in CoreDataFeedStore+FeedStore: convert funcs to be sync
+- in CoreDataFeedStore remove performAsync:
+- in CoreDataFeedImageDataStoreTests: use new insert sync func
+- in CoreDataFeedStoreTests: remove test_storeSideEffects_runSerially
+- in FeedStoreSpecs: remove assertThatSideEffectsRunSerially
+- in XCTestCase+FeedStoreSpecs: remove assertThatSideEffectsRunSerially, refactor deleteCache and expect toRetrieve
+[make CoreData FeedStore implementation sync]
+- in NullStore: implement sync funcs
+[make NullStore FeedStore implementation sync]
+- in InMemoryFeedStore: FeedStore: implement new sync funcs
+[make in memory FeedStore implementation sync]
+- in FeedStore: remove no more used async code
+- in XCTestCase+FeedStoreSpecs: fix results types
+[remove unused async methods]
+- in SceneDelegate: add subscribe(on: scheduler) to makeRemoteFeedLoaderWithLocalFallback and makeRemoteLoadMoreLoader
+[subscribe upstream store subscriptions in a background queue to avoid blocking the main queue (tests still run synchronously in the main queue with the immediate scheduler)]
+[fix EssentialFeedEndToEndTests]
 ```
