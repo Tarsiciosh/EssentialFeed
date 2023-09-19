@@ -4483,4 +4483,6 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 - in FeedStoreSpecs: remove assertThatSideEffectsRunSerially
 - in XCTestCase+FeedStoreSpecs: remove assertThatSideEffectsRunSerially, refactor deleteCache and expect toRetrieve
 [make CoreData FeedStore implementation sync]
+- in NullStore: implement sync funcs
+[make NullStore FeedStore implementation sync]
 ```
