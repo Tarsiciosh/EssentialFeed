@@ -4457,5 +4457,10 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
   synchronously in the main queue with the immediate scheduler)]
 - in FeedStore: add new sync version, with implementation using old func and empty implementation for old versions
 [deprecate async APIs in favor of new sync APIs]
+- in LocalFeedLoader: use new funcs
+- in CacheFeedUseCaseTests: delete test_save_requestsCacheDeletion and move completion before also action from exepect
+- in FeedStoreSpy: refactor spy to stub results ( change deletionsCompletions to deletionResult etc)
+- in LoadFeedFromCacheUseCaseTests: refactor tests to complete before calling the func
+[perform feed cache operations synchronously]
 - 
 ```
