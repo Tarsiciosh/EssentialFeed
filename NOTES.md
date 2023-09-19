@@ -4476,4 +4476,11 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 - in EssentialFeedCacheIntegrationTests: refactor validateCacheWith func
 - in ValidateFeedCacheUseCaseTests: fix validateCache calls
 [make LocalFeedLoader.validateCache sync]
+- in CoreDataFeedStore+FeedStore: convert funcs to be sync
+- in CoreDataFeedStore remove performAsync:
+- in CoreDataFeedImageDataStoreTests: use new insert sync func
+- in CoreDataFeedStoreTests: remove test_storeSideEffects_runSerially
+- in FeedStoreSpecs: remove assertThatSideEffectsRunSerially
+- in XCTestCase+FeedStoreSpecs: remove assertThatSideEffectsRunSerially, refactor deleteCache and expect toRetrieve
+[make CoreData FeedStore implementation sync]
 ```
