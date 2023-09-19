@@ -4455,5 +4455,7 @@ func eraseToAnyScheduler() -> AnyScheduler<SchedulerTimeType, SchedulerOptions> 
 [add AnyScheduler] just the any scheduler
 [subscribe upstream store subscriptions in a background queue to avoid blocking the main queue (tests still run
   synchronously in the main queue with the immediate scheduler)]
--  
+- in FeedStore: add new sync version, with implementation using old func and empty implementation for old versions
+[deprecate async APIs in favor of new sync APIs]
+- 
 ```
